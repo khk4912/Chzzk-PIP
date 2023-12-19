@@ -1,0 +1,7 @@
+{
+  "editor.tabSize": 2,
+
+  "[typescript]": {
+    "editor.defaultFormatter": "standard.vscode-standard"
+  }
+}

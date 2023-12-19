@@ -1,0 +1,14 @@
+{
+  "name": "Chzzk-PIP",
+  "version": "0.0.1",
+  "description": "치지직 PIP 활성화",
+  "manifest_version": 3,
+  "content_scripts": [
+    {
+      "matches": ["https://chzzk.naver.com/*"],
+      "js": ["js/content_script.js"]
+    }
+  ],
+
+  "icons": {}
+}
