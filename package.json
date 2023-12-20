@@ -12,6 +12,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@types/chrome": "^0.0.254",
     "@types/node": "^20.10.5",
     "@typescript-eslint/eslint-plugin": "^6.4.0",
     "copy-webpack-plugin": "^11.0.0",
