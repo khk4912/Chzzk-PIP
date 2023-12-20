@@ -1,14 +1,16 @@
-import type * as webpack from 'webpack'
+import type { Configuration } from 'webpack'
 import * as path from 'path'
 import CopyPlugin = require('copy-webpack-plugin')
 
 const mode =
   process.env.NODE_ENV === 'production' ? 'production' : 'development'
 
-const config: webpack.Configuration = {
+const config: Configuration = {
   mode,
+  devtool: 'inline-source-map',
   entry: {
-    content_script: path.resolve(__dirname, 'src/scripts/content_script.ts')
+    content_script: path.resolve(__dirname, 'src/scripts/content_script.ts'),
+    record_result: path.resolve(__dirname, 'src/scripts/record_result.ts')
   },
   output: {
     path: path.resolve(__dirname, 'dist/js'),

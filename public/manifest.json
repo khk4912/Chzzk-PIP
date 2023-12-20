@@ -9,6 +9,12 @@
       "js": ["js/content_script.js"]
     }
   ],
-
-  "icons": {}
+  "permissions": ["storage", "tabs"],
+  "icons": {},
+  "web_accessible_resources": [
+    {
+      "resources": ["js/content_script.js", "record.html"],
+      "matches": ["https://chzzk.naver.com/*"]
+    }
+  ]
 }
