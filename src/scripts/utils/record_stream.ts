@@ -2,11 +2,16 @@ export interface Video extends HTMLMediaElement {
   captureStream: () => MediaStream
 }
 
+export interface StreamInfo {
+  streamerName: string
+  streamTitle: string
+}
+
 const checkIsMuted = (video: Video): boolean => {
   return video.muted || video.volume === 0
 }
 
-export async function startRecord (video: Video): Promise<MediaRecorder> {
+export async function startRecord (video: Video, streamInfo: StreamInfo): Promise<MediaRecorder> {
   const isMuted = checkIsMuted(video)
 
   if (isMuted) {
@@ -17,7 +22,7 @@ export async function startRecord (video: Video): Promise<MediaRecorder> {
   const stream = video.captureStream()
   const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' })
 
-  await chrome.storage.local.set({ recorderBlob: [] })
+  await chrome.storage.local.set({ recorderBlob: [], streamInfo })
 
   recorder.ondataavailable = async (event) => {
     if (event.data.size === 0) return
