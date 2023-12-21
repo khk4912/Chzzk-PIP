@@ -14,7 +14,7 @@ async function main (): Promise<void> {
       video.currentTime = 0
       await createDownloadLink(video, recorderBlob, streamInfo)
     })()
-  })
+  }, { once: true })
 }
 
 async function createDownloadLink (video: HTMLVideoElement, recorderBlob: any, streamInfo: StreamInfo): Promise<void> {
