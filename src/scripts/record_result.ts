@@ -1,4 +1,5 @@
 import type { StreamInfo } from './utils/record_stream'
+
 async function main (): Promise<void> {
   const { recorderBlob } = await chrome.storage.local.get('recorderBlob')
   const { streamInfo } = await chrome.storage.local.get('streamInfo') as { streamInfo: StreamInfo }

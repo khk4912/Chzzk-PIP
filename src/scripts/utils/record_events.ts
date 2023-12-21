@@ -1,7 +1,7 @@
 import { type Video, startRecord, stopRecord } from './record_stream'
 
 export async function evtStartRecord (target: HTMLButtonElement): Promise<void> {
-  const video = document.querySelector('.webplayer-internal-video')
+  const video: Video | null = document.querySelector('.webplayer-internal-video')
 
   const streamerName = document.querySelector("[class^='video_information'] > [class^='name_ellipsis']")?.textContent ?? 'streamer'
   const streamTitle = document.querySelector("[class^='video_information_title']")?.textContent ?? 'title'
@@ -10,7 +10,13 @@ export async function evtStartRecord (target: HTMLButtonElement): Promise<void> 
     return
   }
 
-  const recorder = await startRecord(video as Video, { streamerName, streamTitle })
+  video.addEventListener('volumechange', () => {
+    if (video.muted || video.volume === 0) {
+      void evtStopRecord(target, recorder)
+    }
+  })
+
+  const recorder = await startRecord(video, { streamerName, streamTitle })
 
   const svg = document.querySelector('#chzzk-rec-icon')
   svg?.setAttribute('fill', 'red')
