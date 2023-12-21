@@ -1,3 +1,4 @@
+import { injectOverlay, removeOverlay, updateOverlay } from './overlay'
 import { type Video, startRecord, stopRecord } from './record_stream'
 
 export function startRecordListener (e: Event): void {
@@ -15,9 +16,18 @@ export function startRecordListener (e: Event): void {
     const recordSVG = document.querySelector('#chzzk-rec-icon')
     recordSVG?.setAttribute('fill', 'red')
 
+    // inject Overlay
+    let sec = 0
+
+    injectOverlay()
+    updateOverlay(sec++)
+    const overlayInterval = setInterval(() => {
+      updateOverlay(sec++)
+    }, 1000)
+
     // Add stop EventListener
     const recordButton = document.querySelector('.chzzk-record-button')
-    recordButton?.addEventListener('click', () => { stopRecordListener(recorder) }, { once: true })
+    recordButton?.addEventListener('click', () => { stopRecordListener(recorder, overlayInterval) }, { once: true })
   })()
     .then()
     .catch(() => {
@@ -25,7 +35,7 @@ export function startRecordListener (e: Event): void {
     })
 }
 
-export function stopRecordListener (recorder: MediaRecorder): void {
+export function stopRecordListener (recorder: MediaRecorder, intervalID: NodeJS.Timeout): void {
   (async (): Promise<void> => {
     // TODO: Remove volume watcher
     const recordButton = document.querySelector('.chzzk-record-button')
@@ -36,6 +46,11 @@ export function stopRecordListener (recorder: MediaRecorder): void {
     recordSVG?.setAttribute('fill', '#ffffff')
 
     const clonedBtn = document.querySelector('.chzzk-record-button')
+
+    // claer Overlay
+    clearInterval(intervalID)
+    removeOverlay()
+
     // Add start EventListener
     clonedBtn?.addEventListener('click', startRecordListener, { once: true })
   })()
