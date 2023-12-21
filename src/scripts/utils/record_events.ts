@@ -14,7 +14,7 @@ export async function evtStartRecord (target: HTMLButtonElement): Promise<void> 
     if (video.muted || video.volume === 0) {
       void evtStopRecord(target, recorder)
     }
-  })
+  }, { once: true })
 
   const recorder = await startRecord(video, { streamerName, streamTitle })
 
