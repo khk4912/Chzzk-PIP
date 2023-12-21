@@ -1,4 +1,4 @@
-import { evtStartRecord } from './record_events'
+import { startRecordListener } from './record_events'
 
 const pipIcon = `
 <svg viewBox="-6.4 -6.4 28.80 28.80" xmlns="http://www.w3.org/2000/svg" fill="#ffffff" class="bi bi-pip" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h13A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 12.5v-9zM1.5 3a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-13z"></path> <path d="M8 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1-.5-.5v-3z"></path> </g></svg>
@@ -51,10 +51,8 @@ function createPIPButton (): HTMLButtonElement {
 
 function createRecordButton (): HTMLButtonElement {
   const recordButton = document.createElement('button')
-  recordButton.classList.add('pzp-button', 'pzp-pc-fullscreen-button', 'pzp-pc__fullscreen-button', 'pzp-pc-ui-button')
-  recordButton.addEventListener('click', (e) => {
-    void evtStartRecord(e.target as HTMLButtonElement)
-  }, { once: true })
+  recordButton.classList.add('pzp-button', 'pzp-pc__fullscreen-button', 'pzp-pc-ui-button', 'chzzk-record-button')
+  recordButton.addEventListener('click', startRecordListener, { once: true })
 
   const recordToolTip = document.createElement('span')
   recordToolTip.classList.add('pzp-pc-ui-button__tooltip', 'pzp-pc-ui-button__tooltip--top')
