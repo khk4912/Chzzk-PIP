@@ -1,7 +1,7 @@
 {
   "name": "Chzzk-PIP",
-  "version": "0.0.1",
-  "description": "치지직 PIP 활성화",
+  "version": "0.0.2",
+  "description": "치지직 PIP, 녹화 활성화",
   "manifest_version": 3,
   "content_scripts": [
     {
