@@ -89,12 +89,12 @@ async function evtStartRecord (target: HTMLButtonElement): Promise<void> {
 }
 
 async function evtStopRecord (target: HTMLButtonElement, recorder: MediaRecorder): Promise<void> {
-  const svg = document.querySelector('#chzzk-rec-icon')
-  svg?.setAttribute('fill', '#ffffff')
-
   await stopRecord(recorder)
 
   target.addEventListener('click', (e) => {
     void evtStartRecord(e.target as HTMLButtonElement)
-  }, {once: true})
+  }, { once: true })
+
+  const svg = document.querySelector('#chzzk-rec-icon')
+  svg?.setAttribute('fill', '#ffffff')
 }
