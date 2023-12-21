@@ -32,7 +32,5 @@ export async function startRecord (video: Video): Promise<MediaRecorder> {
 
 export async function stopRecord (recorder: MediaRecorder): Promise<void> {
   recorder.stop()
-
-  // open record.html in a new window
   window.open(chrome.runtime.getURL('record.html'))
 }
