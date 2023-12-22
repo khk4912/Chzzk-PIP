@@ -64,6 +64,7 @@ function createRecordButton (): HTMLButtonElement {
 
   recordButton.appendChild(recordToolTip)
   recordButton.appendChild(recordIcon)
+
   return recordButton
 }
 
@@ -77,5 +78,16 @@ async function makeVideoPIP (): Promise<void> {
   video.disablePictureInPicture = false
   if (video !== null) {
     await video.requestPictureInPicture()
+  }
+}
+
+export function recordShortcut (e: KeyboardEvent): void {
+  if (e.key === 'r') {
+    const recordButton = document.querySelector('.chzzk-record-button')
+    console.log(recordButton)
+
+    if (recordButton instanceof HTMLButtonElement) {
+      recordButton.click()
+    }
   }
 }
