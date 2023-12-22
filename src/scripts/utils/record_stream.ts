@@ -12,15 +12,23 @@ const checkIsMuted = (video: Video): boolean => {
 }
 
 export async function startRecord (video: Video, streamInfo: StreamInfo): Promise<MediaRecorder> {
-  const isMuted = checkIsMuted(video)
+  if (video instanceof HTMLVideoElement) {
+    const isMuted = checkIsMuted(video)
 
-  if (isMuted) {
-    video.muted = false
-    video.volume = 0.5
+    if (isMuted) {
+      video.muted = false
+      video.volume = 0.5
+    }
   }
 
   const stream = video.captureStream()
-  const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' })
+  const recorder = new MediaRecorder(
+    stream,
+    {
+      mimeType: 'video/webm',
+      videoBitsPerSecond: 8000000
+    }
+  )
 
   await chrome.storage.local.set({ recorderBlob: '', streamInfo })
 
