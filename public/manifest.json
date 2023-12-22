@@ -9,7 +9,7 @@
       "js": ["js/content_script.js"]
     }
   ],
-  "permissions": ["storage", "tabs"],
+  "permissions": ["storage"],
   "icons": {},
   "web_accessible_resources": [
     {
