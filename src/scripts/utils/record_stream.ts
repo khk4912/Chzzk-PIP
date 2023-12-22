@@ -22,7 +22,7 @@ export async function startRecord (video: Video, streamInfo: StreamInfo): Promis
   const stream = video.captureStream()
   const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' })
 
-  await chrome.storage.local.set({ recorderBlob: [], streamInfo })
+  await chrome.storage.local.set({ recorderBlob: '', streamInfo })
 
   recorder.ondataavailable = async (event) => {
     if (event.data.size === 0) return
