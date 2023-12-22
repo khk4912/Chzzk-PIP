@@ -31,7 +31,7 @@ export async function waitForElement (selector: string): Promise<HTMLElement> {
 
 function createPIPButton (): HTMLButtonElement {
   const pipButton = document.createElement('button')
-  pipButton.classList.add('pzp-button', 'pzp-pc-fullscreen-button', 'pzp-pc__fullscreen-button', 'pzp-pc-ui-button')
+  pipButton.classList.add('pzp-button', 'pzp-pc-setting-button', 'pzp-pc__setting-button', 'pzp-pc-ui-button')
   pipButton.addEventListener('click', () => {
     void makeVideoPIP()
   })
@@ -51,12 +51,12 @@ function createPIPButton (): HTMLButtonElement {
 
 function createRecordButton (): HTMLButtonElement {
   const recordButton = document.createElement('button')
-  recordButton.classList.add('pzp-button', 'pzp-pc__fullscreen-button', 'pzp-pc-ui-button', 'chzzk-record-button')
+  recordButton.classList.add('pzp-button', 'pzp-pc-setting-button', 'pzp-pc__setting-button', 'pzp-pc-ui-button', 'chzzk-record-button')
   recordButton.addEventListener('click', startRecordListener, { once: true })
 
   const recordToolTip = document.createElement('span')
   recordToolTip.classList.add('pzp-pc-ui-button__tooltip', 'pzp-pc-ui-button__tooltip--top')
-  recordToolTip.innerText = '녹화'
+  recordToolTip.innerText = '녹화 (r)'
 
   const recordIcon = document.createElement('span')
   recordIcon.classList.add('pzp-ui-icon', 'pzp-pc-fullscreen-button__icon')
@@ -82,9 +82,15 @@ async function makeVideoPIP (): Promise<void> {
 }
 
 export function recordShortcut (e: KeyboardEvent): void {
-  if (e.key === 'r') {
+  if (e.key === 'r' || e.key === 'R' || e.key === 'ㄱ') {
+    const activeElement = document.activeElement
+    if (activeElement instanceof HTMLInputElement ||
+      activeElement instanceof HTMLTextAreaElement ||
+      activeElement instanceof HTMLPreElement) {
+      return
+    }
+
     const recordButton = document.querySelector('.chzzk-record-button')
-    console.log(recordButton)
 
     if (recordButton instanceof HTMLButtonElement) {
       recordButton.click()
