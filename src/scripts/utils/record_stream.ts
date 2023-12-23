@@ -26,7 +26,7 @@ export async function startRecord (video: Video, streamInfo: StreamInfo): Promis
     stream,
     {
       mimeType: 'video/webm',
-      videoBitsPerSecond: 8000000
+      videoBitsPerSecond: 7000000
     }
   )
 
