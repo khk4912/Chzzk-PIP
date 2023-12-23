@@ -3,59 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="record_style.css" />
     <title>녹화 완료!</title>
   </head>
 
-  <style>
-    body {
-      background-color: #01021eff;
-      color: white;
-
-      display: grid;
-      place-items: center;
-    }
-
-    h1 {
-      margin-top: 5vh;
-    }
-
-    video {
-      margin-top: 3vh;
-      width: 50vw;
-    }
-
-    .buttons {
-      width: 100%;
-      display: grid;
-      place-items: center;
-      margin-top: 5vh;
-      grid-template-rows: 1fr 1fr;
-    }
-
-    button {
-      margin-top: 2vh;
-      padding: 1rem 2rem;
-      background-color: rgba(0, 255, 163, 0.9);
-      border: none;
-      border-radius: 2rem;
-    }
-
-    button:hover {
-      background-color: rgba(0, 255, 163, 1);
-      cursor: pointer;
-    }
-  </style>
-
   <body>
     <h1>녹화 완료!</h1>
-    <video autoplay muted controls id="vid"></video>
+    <video muted controls id="vid"></video>
 
     <div class="buttons">
       <button id="downloadBtn">다운로드</button>
       <button id="mp4DownloadBtn">.mp4로 다운로드 <br /></button>
     </div>
 
-    <h4 style="margin-top: 5vh">
+    <h4 id="note">
       MP4로 다운로드는 webm 영상을 브라우저 내에서 변환 후 다운로드합니다.
       <br />
       불안정하고, 변환에 시간이 걸릴 수 있습니다.

@@ -1,0 +1,42 @@
+body {
+  background-color: #01021eff;
+  color: white;
+
+  display: grid;
+  place-items: center;
+}
+
+h1 {
+  margin-top: 5vh;
+}
+
+video {
+  margin-top: 2vh;
+  width: 50vw;
+}
+
+.buttons {
+  width: 100%;
+  display: grid;
+  place-items: center;
+  margin-top: 5vh;
+  grid-template-rows: 1fr 1fr;
+}
+
+button {
+  width: 17vw;
+  margin-top: 2vh;
+  padding: 1rem 2rem;
+  background-color: rgba(0, 255, 163, 0.9);
+  border: none;
+  border-radius: 2rem;
+}
+
+button:hover {
+  background-color: rgba(0, 255, 163, 1);
+  cursor: pointer;
+}
+
+#note {
+  margin-top: 5vh;
+}
