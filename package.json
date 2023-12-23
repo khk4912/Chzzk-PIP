@@ -11,6 +11,10 @@
   "keywords": [],
   "author": "",
   "license": "MIT",
+  "dependencies": {
+    "@ffmpeg/ffmpeg": "0.11.6",
+    "@ffmpeg/core": "0.11.0"
+  },
   "devDependencies": {
     "@types/chrome": "^0.0.254",
     "@types/node": "^20.10.5",
