@@ -1,4 +1,5 @@
 import type { StreamInfo } from './utils/record_stream'
+import { transcode } from './utils/transcode'
 
 async function main (): Promise<void> {
   const { recorderBlob } = await chrome.storage.local.get('recorderBlob')
@@ -15,6 +16,9 @@ async function main (): Promise<void> {
 
       if (typeof recorderBlob === 'string') {
         await createDownloadLink(video, recorderBlob, streamInfo)
+
+        const mp4DonwloadBtn = document.getElementById('mp4DownloadBtn') as HTMLButtonElement
+        mp4DonwloadBtn.addEventListener('click', () => { void transcodeAndDownload(video, recorderBlob, streamInfo) })
       }
     })()
   }, { once: true })
@@ -30,8 +34,17 @@ async function createDownloadLink (video: HTMLVideoElement, recorderBlobURL: str
     a.download = `${streamInfo.streamerName}_${videoDuration}s.webm`
     a.click()
   })
+}
 
-  await chrome.storage.local.set({ recorderBlob: '' })
+async function transcodeAndDownload (video: HTMLVideoElement, recorderBlobURL: string, streamInfo: StreamInfo): Promise<void> {
+  const videoDuration = video.duration
+
+  const mp4BlobURL = await transcode(recorderBlobURL)
+
+  const a = document.createElement('a')
+  a.href = mp4BlobURL
+  a.download = `${streamInfo.streamerName}_${videoDuration}s.mp4`
+  a.click()
 }
 
 void main()
