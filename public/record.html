@@ -8,19 +8,19 @@
   </head>
 
   <body>
-    <h1>녹화 완료!</h1>
+    <span id="header">녹화 완료!</span>
     <video muted controls id="vid"></video>
 
     <div class="buttons">
       <button id="downloadBtn">다운로드</button>
-      <button id="mp4DownloadBtn">.mp4로 다운로드 <br /></button>
+      <button id="mp4DownloadBtn">MP4로 다운로드 <br /></button>
     </div>
 
-    <h4 id="note">
+    <span id="note">
       MP4로 다운로드는 webm 영상을 브라우저 내에서 변환 후 다운로드합니다.
       <br />
       불안정하고, 변환에 시간이 걸릴 수 있습니다.
-    </h4>
+    </span>
 
     <script src="./ffmpeg/ffmpeg.min.js"></script>
     <script src="ffmpeg/ffmpeg-core.js"></script>

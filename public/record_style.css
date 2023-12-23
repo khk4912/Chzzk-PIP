@@ -1,18 +1,25 @@
-body {
-  background-color: #01021eff;
-  color: white;
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 
+body {
+  background-color: #141517;
+  color: white;
   display: grid;
   place-items: center;
+  font-family: "Pretendard Variable", Pretendard, -apple-system,
+    BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
+    "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
 }
 
-h1 {
-  margin-top: 5vh;
+#header {
+  margin-top: 4vh;
+  font-size: 1.9rem;
+  font-weight: bolder;
 }
 
 video {
-  margin-top: 2vh;
-  width: 50vw;
+  margin-top: 10vh;
+  height: 40vh;
 }
 
 .buttons {
@@ -20,16 +27,17 @@ video {
   display: grid;
   place-items: center;
   margin-top: 5vh;
-  grid-template-rows: 1fr 1fr;
 }
 
 button {
-  width: 17vw;
+  width: 15vw;
   margin-top: 2vh;
-  padding: 1rem 2rem;
+  padding: 1.5%;
   background-color: rgba(0, 255, 163, 0.9);
   border: none;
-  border-radius: 2rem;
+  border-radius: 4vh;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 button:hover {
@@ -39,4 +47,5 @@ button:hover {
 
 #note {
   margin-top: 5vh;
+  font-size: 1rem;
 }
