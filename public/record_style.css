@@ -20,6 +20,7 @@ body {
 video {
   margin-top: 10vh;
   height: 40vh;
+  aspect-ratio: 16/9;
 }
 
 .buttons {
@@ -31,8 +32,9 @@ video {
 
 button {
   width: 15vw;
+  aspect-ratio: 6/1;
   margin-top: 2vh;
-  padding: 1.5%;
+  padding: 1.3%;
   background-color: rgba(0, 255, 163, 0.9);
   border: none;
   border-radius: 4vh;
