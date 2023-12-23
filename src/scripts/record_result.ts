@@ -5,45 +5,53 @@ async function main (): Promise<void> {
   const { recorderBlob } = await chrome.storage.local.get('recorderBlob')
   const { streamInfo } = await chrome.storage.local.get('streamInfo') as { streamInfo: StreamInfo }
 
+  const downloadButton = document.getElementById('downloadBtn') as HTMLButtonElement
+  const mp4DownloadBtn = document.getElementById('mp4DownloadBtn') as HTMLButtonElement
+
   const video = document.getElementById('vid') as HTMLVideoElement
   video.src = recorderBlob
+  video.preload = 'metadata'
 
   video.addEventListener('loadedmetadata', () => {
     void (async () => {
-      video.currentTime = 1e101
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      video.currentTime = Number.MAX_SAFE_INTEGER
+      await new Promise(resolve => setTimeout(resolve, 500))
       video.currentTime = 0
 
-      if (typeof recorderBlob === 'string') {
-        await createDownloadLink(video, recorderBlob, streamInfo)
-
-        const mp4DonwloadBtn = document.getElementById('mp4DownloadBtn') as HTMLButtonElement
-        mp4DonwloadBtn.addEventListener('click', () => { void transcodeAndDownload(video, recorderBlob, streamInfo) })
+      if (typeof recorderBlob !== 'string') {
+        return
       }
+
+      const fileName = `${streamInfo.streamerName}_${video.duration}s`
+
+      downloadButton.addEventListener('click', () => {
+        downloadVideo(recorderBlob, `${fileName}.webm`)
+      })
+
+      mp4DownloadBtn.addEventListener('click', () => {
+        void downloadMP4Video(recorderBlob, `${fileName}.mp4`)
+      })
+
+      window.addEventListener('beforeunload', () => {
+        URL.revokeObjectURL(recorderBlob)
+      })
     })()
   }, { once: true })
 }
 
-async function createDownloadLink (video: HTMLVideoElement, recorderBlobURL: string, streamInfo: StreamInfo): Promise<void> {
-  const downloadButton = document.getElementById('downloadBtn') as HTMLButtonElement
-  const videoDuration = video.duration
-
-  downloadButton.addEventListener('click', () => {
-    const a = document.createElement('a')
-    a.href = recorderBlobURL
-    a.download = `${streamInfo.streamerName}_${videoDuration}s.webm`
-    a.click()
-  })
+function downloadVideo (recorderBlobURL: string, fileName: string): void {
+  const a = document.createElement('a')
+  a.href = recorderBlobURL
+  a.download = fileName
+  a.click()
 }
 
-async function transcodeAndDownload (video: HTMLVideoElement, recorderBlobURL: string, streamInfo: StreamInfo): Promise<void> {
-  const videoDuration = video.duration
-
+async function downloadMP4Video (recorderBlobURL: string, fileName: string): Promise<void> {
   const mp4BlobURL = await transcode(recorderBlobURL)
 
   const a = document.createElement('a')
   a.href = mp4BlobURL
-  a.download = `${streamInfo.streamerName}_${videoDuration}s.mp4`
+  a.download = fileName
   a.click()
 }
 
