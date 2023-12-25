@@ -7,11 +7,11 @@ const mode =
 
 const config: Configuration = {
   mode,
-  devtool: 'inline-source-map',
+  devtool: mode === 'development' ? 'inline-source-map' : false,
   entry: {
     content_script: path.resolve(__dirname, 'src/scripts/content_script.ts'),
     record_result: path.resolve(__dirname, 'src/scripts/record_result.ts'),
-    popup_script: path.resolve(__dirname, 'src/scripts/popup_script.ts'),
+    popup_script: path.resolve(__dirname, 'src/scripts/popup_script.ts')
   },
   output: {
     path: path.resolve(__dirname, 'dist/js'),
