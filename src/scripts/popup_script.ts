@@ -13,15 +13,6 @@ function init (): void {
   void (async () => {
     const option: Option = (await chrome.storage.local.get('option'))?.option ?? {}
 
-    if (option === undefined) {
-      const newOption: Option = {
-        pip: true,
-        rec: true,
-        fastRec: false
-      }
-      await chrome.storage.local.set({ option: newOption })
-    }
-
     pipSwitch.checked = option?.pip ?? true
     recSwitch.checked = option?.rec ?? true
     fastSaveSwitch.checked = option?.fastRec ?? false
