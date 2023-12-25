@@ -10,7 +10,11 @@
     }
   ],
   "permissions": ["storage"],
-  "icons": {},
+  "icons": {
+    "16": "logos/logo_16x16.png",
+    "48": "logos/logo_48x48.png",
+    "128": "logos/logo_128x128.png"
+  },
   "web_accessible_resources": [
     {
       "resources": ["js/*", "ffmpeg/*", "pages/record.html"],
