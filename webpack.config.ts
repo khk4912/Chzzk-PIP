@@ -10,7 +10,8 @@ const config: Configuration = {
   devtool: 'inline-source-map',
   entry: {
     content_script: path.resolve(__dirname, 'src/scripts/content_script.ts'),
-    record_result: path.resolve(__dirname, 'src/scripts/record_result.ts')
+    record_result: path.resolve(__dirname, 'src/scripts/record_result.ts'),
+    popup_script: path.resolve(__dirname, 'src/scripts/popup_script.ts'),
   },
   output: {
     path: path.resolve(__dirname, 'dist/js'),
@@ -39,6 +40,10 @@ const config: Configuration = {
         {
           from: 'public',
           to: '..'
+        },
+        {
+          from: 'ffmpeg',
+          to: '../ffmpeg/'
         }
       ]
     })
