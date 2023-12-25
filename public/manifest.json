@@ -13,7 +13,7 @@
   "icons": {},
   "web_accessible_resources": [
     {
-      "resources": ["js/*", "ffmpeg/*", "record.html"],
+      "resources": ["js/*", "ffmpeg/*", "pages/record.html"],
       "matches": ["<all_urls>"]
     }
   ],
