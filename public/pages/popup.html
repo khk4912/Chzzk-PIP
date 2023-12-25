@@ -1,9 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="popup_style.css" />
     <title>Chzzk-PIP</title>
   </head>
-  <body></body>
+  <body>
+    <div class="header">
+      <img
+        src="../logos/logo.png"
+        alt="Chzzk-PIP 로고"
+        srcset=""
+        id="logo_img"
+      />
+      <h2>Chzzk-PIP</h2>
+    </div>
+
+    <div class="options">
+      <div class="item">
+        <div class="item-name">
+          <span>PIP</span>
+          <span class="desc">영상의 오른쪽 하단에 PIP 버튼을 추가합니다.</span>
+        </div>
+        <input role="switch" type="checkbox" id="pipSwitch" />
+      </div>
+      <div class="item">
+        <div class="item-name">
+          <span>녹화</span>
+          <span class="desc">영상의 오른쪽 하단에 녹화 버튼을 추가합니다.</span>
+        </div>
+        <input role="switch" type="checkbox" id="recSwitch" />
+      </div>
+      <div class="item">
+        <div class="item-name">
+          <span>빠른 저장</span>
+          <span class="desc"
+            >녹화 완료 시 webm 파일을 결과창 표출 없이 즉시 저장합니다.</span
+          >
+        </div>
+        <input role="switch" type="checkbox" id="fastSaveSwitch" />
+      </div>
+    </div>
+
+    <script src="../js/popup_script.js"></script>
+  </body>
 </html>
