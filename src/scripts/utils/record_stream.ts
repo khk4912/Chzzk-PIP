@@ -72,6 +72,8 @@ export async function stopRecord (recorder: MediaRecorder): Promise<void> {
       a.download = `${fileName}.webm`
 
       a.click()
+
+      URL.revokeObjectURL(recorderBlob)
     })()
   })
 }
