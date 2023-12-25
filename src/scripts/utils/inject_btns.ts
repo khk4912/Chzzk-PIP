@@ -1,3 +1,4 @@
+import type { Option } from '../types/option'
 import { startRecordListener } from './record_events'
 
 const pipIcon = `
@@ -9,12 +10,21 @@ const recIcon = `
 `
 
 export function addButton (btn: HTMLDivElement): void {
-  const pipButton = createPIPButton()
+  void (async () => {
+    const option: Option = (await chrome.storage.local.get('option'))?.option ?? {}
 
-  const recordButton = createRecordButton()
+    const [pip, rec] = [option?.pip ?? true, option?.rec ?? true]
 
-  btn.insertBefore(pipButton, btn.firstChild)
-  btn.insertBefore(recordButton, btn.firstChild)
+    if (pip) {
+      const pipButton = createPIPButton()
+      btn.insertBefore(pipButton, btn.firstChild)
+    }
+
+    if (rec) {
+      const recordButton = createRecordButton()
+      btn.insertBefore(recordButton, btn.firstChild)
+    }
+  })()
 }
 
 export async function waitForElement (selector: string): Promise<HTMLElement> {
