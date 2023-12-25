@@ -1,4 +1,4 @@
-import type { StreamInfo } from './utils/record_stream'
+import type { StreamInfo } from './types/record'
 import { transcode } from './utils/transcode'
 
 async function main (): Promise<void> {
