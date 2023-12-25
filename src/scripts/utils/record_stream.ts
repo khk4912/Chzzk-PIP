@@ -1,11 +1,4 @@
-export interface Video extends HTMLMediaElement {
-  captureStream: () => MediaStream
-}
-
-export interface StreamInfo {
-  streamerName: string
-  streamTitle: string
-}
+import type { Video, StreamInfo } from '../types/record'
 
 const checkIsMuted = (video: Video): boolean => {
   return video.muted || video.volume === 0
