@@ -51,7 +51,7 @@ function createPIPButton (): HTMLButtonElement {
   toolTip.innerText = 'PIP'
 
   const icon = document.createElement('span')
-  icon.classList.add('pzp-ui-icon', 'pzp-pc-fullscreen-button__icon')
+  icon.classList.add('pzp-ui-icon', 'pzp-pc-setting-button__icon')
   icon.innerHTML = pipIcon
 
   pipButton.appendChild(toolTip)
@@ -69,7 +69,7 @@ function createRecordButton (): HTMLButtonElement {
   recordToolTip.innerText = '녹화 (r)'
 
   const recordIcon = document.createElement('span')
-  recordIcon.classList.add('pzp-ui-icon', 'pzp-pc-fullscreen-button__icon')
+  recordIcon.classList.add('pzp-ui-icon', 'pzp-pc-setting-button__icon')
   recordIcon.innerHTML = recIcon
 
   recordButton.appendChild(recordToolTip)
