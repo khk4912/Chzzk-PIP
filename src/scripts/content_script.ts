@@ -1,4 +1,4 @@
-import { addButton, recordShortcut, waitForElement } from './utils/inject_btns'
+import { addButton, recordShortcut, waitForElement } from './utils/inject/inject_btns'
 
 async function main (): Promise<void> {
   const btn = await waitForElement('.pzp-pc__bottom-buttons-right')

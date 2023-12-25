@@ -1,5 +1,5 @@
-import type { Video, StreamInfo } from '../types/record'
-import type { Option } from '../types/option'
+import type { Video, StreamInfo } from '../../types/record'
+import type { Option } from '../../types/option'
 
 const checkIsMuted = (video: Video): boolean => {
   return video.muted || video.volume === 0

@@ -1,5 +1,5 @@
 import type { StreamInfo } from './types/record'
-import { transcode } from './utils/transcode'
+import { transcode } from './utils/record/transcode'
 
 async function main (): Promise<void> {
   const { recorderBlob } = await chrome.storage.local.get('recorderBlob')

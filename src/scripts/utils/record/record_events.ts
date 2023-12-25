@@ -1,6 +1,6 @@
-import { injectOverlay, removeOverlay, updateOverlay } from './overlay'
+import { injectOverlay, removeOverlay, updateOverlay } from '../inject/overlay'
 import { startRecord, stopRecord } from './record_stream'
-import type { Video } from '../types/record'
+import type { Video } from '../../types/record'
 
 export function startRecordListener (e: Event): void {
   (async (): Promise<void> => {
