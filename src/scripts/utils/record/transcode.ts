@@ -1,3 +1,5 @@
+import type { SupportedType } from '../../types/record'
+
 // @ts-expect-error FFmpeg would be imported
 const { createFFmpeg, fetchFile } = FFmpeg
 
@@ -6,18 +8,26 @@ const ffmpeg = createFFmpeg({
   corePath: chrome.runtime.getURL('ffmpeg/ffmpeg-core.js')
 })
 
-export const transcode = async (inputFile: string): Promise<string> => {
+export const transcode = async (
+  inputFile: string,
+  outputType: SupportedType
+): Promise<string> => {
   if (ffmpeg.isLoaded() === true) {
     ffmpeg.exit()
   }
 
   await ffmpeg.load()
 
-  ffmpeg.FS('writeFile', 'input.webm', await fetchFile(inputFile))
-  await ffmpeg.run('-i', 'input.webm', '-c', 'copy', 'output.mp4')
+  const outputFileName = `output.${outputType}`
+  const blobType = outputType === 'gif'
+    ? 'image/gif'
+    : 'video/{outputType}'
 
-  const data = ffmpeg.FS('readFile', 'output.mp4')
-  const url = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }))
+  ffmpeg.FS('writeFile', 'input.webm', await fetchFile(inputFile))
+  await ffmpeg.run('-i', 'input.webm', '-c', 'copy', outputFileName)
+
+  const data = ffmpeg.FS('readFile', outputFileName)
+  const url = URL.createObjectURL(new Blob([data.buffer], { type: blobType }))
 
   return url
 }
