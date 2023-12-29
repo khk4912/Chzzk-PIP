@@ -1,0 +1,58 @@
+import { injectWithTimeout, seekOverlay } from '../inject/seek_overlay'
+
+const FRAGMENT_DURATION = 1.96
+const SEEK_SECONDS = 5
+
+export function registerSeekHandler (): void {
+  const video = document.querySelector('.webplayer-internal-video')
+
+  if (!(video instanceof HTMLVideoElement)) {
+    return
+  }
+
+  document.addEventListener('keydown', (e) => {
+    const activeElement = document.activeElement
+
+    if (activeElement instanceof HTMLInputElement ||
+      activeElement instanceof HTMLTextAreaElement ||
+      activeElement instanceof HTMLPreElement) {
+      return
+    }
+
+    console.log('e.key', e)
+
+    const video = document.querySelector('.webplayer-internal-video')
+
+    if (!(video instanceof HTMLVideoElement)) {
+      return
+    }
+
+    if (video.buffered.length === 0) {
+      return
+    }
+
+    if (e.key === 'ArrowLeft') {
+      seekLeft(video)
+    } else if (e.key === 'ArrowRight') {
+      seekRight(video)
+    }
+  })
+}
+
+function seekLeft (video: HTMLVideoElement): void {
+  void injectWithTimeout(seekOverlay, 1000)
+
+  if (video.currentTime - SEEK_SECONDS <= video.buffered.start(0)) {
+    video.currentTime = video.buffered.start(0) + FRAGMENT_DURATION
+  } else {
+    video.currentTime -= SEEK_SECONDS
+  }
+}
+
+function seekRight (video: HTMLVideoElement): void {
+  if (video.currentTime + SEEK_SECONDS - FRAGMENT_DURATION >= video.buffered.end(video.buffered.length - 1)) {
+    video.currentTime = video.buffered.end(video.buffered.length - 1) - FRAGMENT_DURATION
+  } else {
+    video.currentTime += SEEK_SECONDS
+  }
+}
