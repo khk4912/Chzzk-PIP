@@ -1,12 +1,11 @@
-import { addButton, recordShortcut, waitForElement } from './utils/inject/inject_btns'
+import { addButton, waitForElement } from './utils/inject/inject_btns'
 import { registerSeekHandler } from './utils/seek/seek'
 
 async function main (): Promise<void> {
-  const btn = await waitForElement('.pzp-pc__bottom-buttons-right')
-  addButton(btn as HTMLDivElement)
+  await waitForElement('.pzp-pc__bottom-buttons-right')
 
-  document.addEventListener('keydown', recordShortcut)
-  registerSeekHandler()
+  addButton()
+  void registerSeekHandler()
 }
 
 void main()

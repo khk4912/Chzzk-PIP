@@ -1,10 +1,19 @@
+import type { Option } from '../../types/option'
+import { waitForElement } from '../inject/inject_btns'
 import { injectWithTimeout, seekOverlayLeft, seekOverlayRight } from '../inject/seek_overlay'
 
 const FRAGMENT_DURATION = 1.96
 const SEEK_SECONDS = 5
 
-export function registerSeekHandler (): void {
-  const video = document.querySelector('.webplayer-internal-video')
+export async function registerSeekHandler (): Promise<void> {
+  const option: Option = (await chrome.storage.local.get('option'))?.option ?? {}
+  const seek = option?.seek ?? false
+
+  if (!seek) {
+    return
+  }
+
+  const video = await waitForElement('.webplayer-internal-video')
 
   if (!(video instanceof HTMLVideoElement)) {
     return
