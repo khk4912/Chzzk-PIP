@@ -52,7 +52,7 @@ function download (
   type: SupportedType = 'webm'): void {
   switch (type) {
     case 'webm':
-      startDownload(recorderBlobURL, `${fileName}.webm`)
+      startDownload(recorderBlobURL, fileName)
       break
     case 'webp':
     case 'gif':
