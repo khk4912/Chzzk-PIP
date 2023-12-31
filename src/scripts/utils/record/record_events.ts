@@ -1,4 +1,4 @@
-import { injectOverlay, removeOverlay, updateOverlay } from '../inject/overlay'
+import { injectOverlay, removeOverlay, updateOverlay } from '../inject/rec_overlay'
 import { startRecord, stopRecord } from './record_stream'
 import type { Video } from '../../types/record'
 

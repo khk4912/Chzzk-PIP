@@ -9,8 +9,14 @@ const recIcon = `
 <svg id="chzzk-rec-icon" fill="#ffffff" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-19.99 -19.99 79.97 79.97" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path id="XMLID_155_" d="M19.994,0C8.952,0,0,8.952,0,19.995c0,11.043,8.952,19.994,19.994,19.994s19.995-8.952,19.995-19.994 C39.989,8.952,31.037,0,19.994,0z M19.994,27.745c-4.28,0-7.75-3.47-7.75-7.75s3.47-7.75,7.75-7.75s7.75,3.47,7.75,7.75 S24.275,27.745,19.994,27.745z"></path> </g></svg>
 `
 
-export function addButton (btn: HTMLDivElement): void {
+export function addButton (): void {
   void (async () => {
+    const btn = await waitForElement('.pzp-pc__bottom-buttons-right')
+
+    if (btn === null) {
+      return
+    }
+
     const option: Option = (await chrome.storage.local.get('option'))?.option ?? {}
 
     const [pip, rec] = [option?.pip ?? true, option?.rec ?? true]
@@ -23,6 +29,7 @@ export function addButton (btn: HTMLDivElement): void {
     if (rec) {
       const recordButton = createRecordButton()
       btn.insertBefore(recordButton, btn.firstChild)
+      document.addEventListener('keydown', recordShortcut)
     }
   })()
 }
@@ -91,7 +98,7 @@ async function makeVideoPIP (): Promise<void> {
   }
 }
 
-export function recordShortcut (e: KeyboardEvent): void {
+function recordShortcut (e: KeyboardEvent): void {
   if (e.key === 'r' || e.key === 'R' || e.key === 'ㄱ') {
     const activeElement = document.activeElement
     if (activeElement instanceof HTMLInputElement ||

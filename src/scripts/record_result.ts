@@ -1,12 +1,11 @@
-import type { StreamInfo } from './types/record'
+import { isSupportedType, type StreamInfo, type SupportedType } from './types/record'
 import { transcode } from './utils/record/transcode'
 
 async function main (): Promise<void> {
   const { recorderBlob } = await chrome.storage.local.get('recorderBlob')
   const { streamInfo } = await chrome.storage.local.get('streamInfo') as { streamInfo: StreamInfo }
 
-  const downloadButton = document.getElementById('downloadBtn') as HTMLButtonElement
-  const mp4DownloadBtn = document.getElementById('mp4DownloadBtn') as HTMLButtonElement
+  const downloadButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.download')
 
   const video = document.getElementById('vid') as HTMLVideoElement
   video.src = recorderBlob
@@ -24,12 +23,20 @@ async function main (): Promise<void> {
 
       const fileName = `${streamInfo.streamerName}_${video.duration}s`
 
-      downloadButton.addEventListener('click', () => {
-        downloadVideo(recorderBlob, `${fileName}.webm`)
-      })
+      downloadButtons.forEach((btn) => {
+        const dataType = btn.getAttribute('data-type') ?? ''
 
-      mp4DownloadBtn.addEventListener('click', () => {
-        void downloadMP4Video(recorderBlob, `${fileName}.mp4`)
+        if (!isSupportedType(dataType)) {
+          return
+        }
+
+        btn.addEventListener('click', () => {
+          download(
+            recorderBlob,
+            `${fileName}.${dataType}`,
+            dataType
+          )
+        })
       })
 
       window.addEventListener('beforeunload', () => {
@@ -39,20 +46,37 @@ async function main (): Promise<void> {
   }, { once: true })
 }
 
-function downloadVideo (recorderBlobURL: string, fileName: string): void {
+function download (
+  recorderBlobURL: string,
+  fileName: string,
+  type: SupportedType = 'webm'): void {
+  switch (type) {
+    case 'webm':
+      startDownload(recorderBlobURL, fileName)
+      break
+    case 'webp':
+    case 'gif':
+    case 'mp4':
+      void donwloadAfterTranscode(recorderBlobURL, fileName, type)
+      break
+  }
+}
+
+function startDownload (recorderBlobURL: string, fileName: string): void {
   const a = document.createElement('a')
   a.href = recorderBlobURL
   a.download = fileName
   a.click()
 }
 
-async function downloadMP4Video (recorderBlobURL: string, fileName: string): Promise<void> {
-  const mp4BlobURL = await transcode(recorderBlobURL)
+async function donwloadAfterTranscode (
+  recorderBlobURL: string,
+  fileName: string,
+  dataType: SupportedType
+): Promise<void> {
+  const transcodeBlobURL = await transcode(recorderBlobURL, dataType)
 
-  const a = document.createElement('a')
-  a.href = mp4BlobURL
-  a.download = fileName
-  a.click()
+  startDownload(transcodeBlobURL, fileName)
 }
 
 void main()

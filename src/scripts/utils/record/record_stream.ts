@@ -41,14 +41,15 @@ export async function stopRecord (recorder: MediaRecorder): Promise<void> {
   recorder.stop()
 
   const option: Option = (await chrome.storage.local.get('option'))?.option ?? {}
+  const { recorderBlob } = await chrome.storage.local.get('recorderBlob')
 
   const fastRec = option?.fastRec ?? false
-  if (!fastRec) {
+
+  if (!fastRec && recorderBlob !== '') {
     window.open(chrome.runtime.getURL('pages/record.html'))
     return
   }
 
-  const { recorderBlob } = await chrome.storage.local.get('recorderBlob')
   const { streamInfo } = await chrome.storage.local.get('streamInfo') as { streamInfo: StreamInfo }
 
   if (typeof recorderBlob !== 'string') {
