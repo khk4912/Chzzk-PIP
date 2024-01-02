@@ -14,10 +14,25 @@
     <div class="buttons">
       <button class="download" data-type="webm">다운로드</button>
 
-      <span id="note"> WEBM 외 다른 포맷으로 다운로드 </span>
+      <span id="note"> 변환 후 다운로드(베타) </span>
       <button class="download" data-type="mp4">MP4</button>
+      <button id="showSegmentModalBtn">분할 다운로드</button>
       <!-- <button class="download" data-type="gif">GIF</button>
       <button class="download" data-type="webp">WEBP</button> -->
+    </div>
+
+    <div class="segment-overlay">
+      <div class="header">
+        <h3>분할 후 다운로드</h3>
+        <span>녹화 된 영상을 아래 초를 기준으로 분할 후 다운로드합니다.</span>
+      </div>
+
+      <div class="segment-input">
+        <input name="" id="segmentSec" value="45" /> 초
+        <br />
+        <button id="segmentDownloadBtn">분할 후 다운로드</button>
+        <button id="hideSegmentModalBtn">닫기</button>
+      </div>
     </div>
 
     <script src="..//ffmpeg/ffmpeg.min.js"></script>
