@@ -1,4 +1,4 @@
-import type { Option } from './types/option'
+import { getOption, setOption } from './utils/options/option_handler'
 
 const [pipSwitch, recSwitch, screenshotSwitch, fastSaveSwitch, seekSwitch] =
   document.querySelectorAll('input[type="checkbox"]')
@@ -18,13 +18,13 @@ function init (): void {
     return
   }
   void (async () => {
-    const option: Option = (await chrome.storage.local.get('option'))?.option ?? {}
+    const option = await getOption()
 
-    pipSwitch.checked = option?.pip ?? true
-    recSwitch.checked = option?.rec ?? true
-    screenshotSwitch.checked = option?.screenshot ?? false
-    fastSaveSwitch.checked = option?.fastRec ?? false
-    seekSwitch.checked = option?.seek ?? false
+    pipSwitch.checked = option.pip
+    recSwitch.checked = option.rec
+    screenshotSwitch.checked = option.screenshot
+    fastSaveSwitch.checked = option.fastRec
+    seekSwitch.checked = option.seek
   })()
 }
 
@@ -33,29 +33,21 @@ async function handleChange (e: Event): Promise<void> {
     return
   }
 
-  const option: Option = (await chrome.storage.local.get('option'))?.option ?? {}
-
   switch (e.target) {
     case pipSwitch:
-      option.pip = e.target.checked
-      await chrome.storage.local.set({ option })
+      await setOption('pip', e.target.checked)
       break
     case recSwitch:
-      console.log('recSwitch')
-      option.rec = e.target.checked
-      await chrome.storage.local.set({ option })
+      await setOption('rec', e.target.checked)
       break
     case fastSaveSwitch:
-      option.fastRec = e.target.checked
-      await chrome.storage.local.set({ option })
+      await setOption('fastRec', e.target.checked)
       break
     case seekSwitch:
-      option.seek = e.target.checked
-      await chrome.storage.local.set({ option })
+      await setOption('seek', e.target.checked)
       break
     case screenshotSwitch:
-      option.screenshot = e.target.checked
-      await chrome.storage.local.set({ option })
+      await setOption('screenshot', e.target.checked)
       break
   }
 }

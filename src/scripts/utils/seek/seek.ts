@@ -1,13 +1,12 @@
-import type { Option } from '../../types/option'
 import { waitForElement } from '../inject/inject_btns'
 import { injectWithTimeout, seekOverlayLeft, seekOverlayRight } from '../inject/seek_overlay'
+import { getOption } from '../options/option_handler'
 
 const FRAGMENT_DURATION = 1.96
 const SEEK_SECONDS = 5
 
 export async function registerSeekHandler (): Promise<void> {
-  const option: Option = (await chrome.storage.local.get('option'))?.option ?? {}
-  const seek = option?.seek ?? false
+  const { seek } = await getOption()
 
   if (!seek) {
     return

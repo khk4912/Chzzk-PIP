@@ -1,5 +1,5 @@
 import type { Video, StreamInfo } from '../../types/record'
-import type { Option } from '../../types/option'
+import { getOption } from '../options/option_handler'
 
 const checkIsMuted = (video: Video): boolean => {
   return video.muted || video.volume === 0
@@ -40,10 +40,8 @@ export async function startRecord (video: Video, streamInfo: StreamInfo): Promis
 export async function stopRecord (recorder: MediaRecorder): Promise<void> {
   recorder.stop()
 
-  const option: Option = (await chrome.storage.local.get('option'))?.option ?? {}
+  const { fastRec } = await getOption()
   const { recorderBlob } = await chrome.storage.local.get('recorderBlob')
-
-  const fastRec = option?.fastRec ?? false
 
   if (!fastRec && recorderBlob !== '') {
     window.open(chrome.runtime.getURL('pages/record.html'))

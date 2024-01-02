@@ -1,4 +1,4 @@
-import type { Option } from '../../types/option'
+import { getOption } from '../options/option_handler'
 import { startRecordListener } from '../record/record_events'
 import { screenshot } from '../screenshot/screenshot'
 
@@ -22,9 +22,8 @@ export function addButton (): void {
       return
     }
 
-    const option: Option = (await chrome.storage.local.get('option'))?.option ?? {}
-
-    const [pip, rec, screenshot] = [option?.pip ?? true, option?.rec ?? true, option?.screenshot ?? false]
+    const option = await getOption()
+    const { pip, rec, screenshot } = option
 
     if (pip) {
       const pipButton = createPIPButton()
