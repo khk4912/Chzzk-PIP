@@ -3,4 +3,5 @@ export interface Option {
   rec?: boolean
   fastRec?: boolean
   seek?: boolean
+  screenshot?: boolean
 }

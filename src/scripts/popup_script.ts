@@ -1,21 +1,28 @@
 import type { Option } from './types/option'
 
-const [pipSwitch, recSwitch, fastSaveSwitch, seekSwitch] =
+const [pipSwitch, recSwitch, screenshotSwitch, fastSaveSwitch, seekSwitch] =
   document.querySelectorAll('input[type="checkbox"]')
 
+const isInputElement = (element: Element): element is HTMLInputElement => {
+  return element instanceof HTMLInputElement
+}
+
 function init (): void {
-  if (!(pipSwitch instanceof HTMLInputElement &&
-    recSwitch instanceof HTMLInputElement &&
-    fastSaveSwitch instanceof HTMLInputElement &&
-    seekSwitch instanceof HTMLInputElement)) {
+  if (
+    !(
+      isInputElement(pipSwitch) && isInputElement(recSwitch) &&
+      isInputElement(screenshotSwitch) && isInputElement(fastSaveSwitch) &&
+      isInputElement(seekSwitch)
+    )
+  ) {
     return
   }
-
   void (async () => {
     const option: Option = (await chrome.storage.local.get('option'))?.option ?? {}
 
     pipSwitch.checked = option?.pip ?? true
     recSwitch.checked = option?.rec ?? true
+    screenshotSwitch.checked = option?.screenshot ?? false
     fastSaveSwitch.checked = option?.fastRec ?? false
     seekSwitch.checked = option?.seek ?? false
   })()
@@ -23,13 +30,6 @@ function init (): void {
 
 async function handleChange (e: Event): Promise<void> {
   if (!(e.target instanceof HTMLInputElement)) {
-    return
-  }
-
-  if (!(pipSwitch instanceof HTMLInputElement &&
-    recSwitch instanceof HTMLInputElement &&
-    fastSaveSwitch instanceof HTMLInputElement &&
-    seekSwitch instanceof HTMLInputElement)) {
     return
   }
 
@@ -51,6 +51,10 @@ async function handleChange (e: Event): Promise<void> {
       break
     case seekSwitch:
       option.seek = e.target.checked
+      await chrome.storage.local.set({ option })
+      break
+    case screenshotSwitch:
+      option.screenshot = e.target.checked
       await chrome.storage.local.set({ option })
       break
   }
