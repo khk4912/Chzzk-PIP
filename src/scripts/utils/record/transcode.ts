@@ -1,23 +1,33 @@
 import type { SupportedType } from '../../types/record'
 
-// @ts-expect-error FFmpeg would be imported
-const { createFFmpeg, fetchFile } = FFmpeg
+import { FFmpeg } from '@ffmpeg/ffmpeg'
+import { fetchFile } from '@ffmpeg/util'
 
-const ffmpeg = createFFmpeg({
-  log: true,
-  mainName: 'main',
-  corePath: chrome.runtime.getURL('ffmpeg/ffmpeg-core.js')
+// // @ts-expect-error FFmpeg would be imported
+// const { createFFmpeg, fetchFile } = FFmpeg
+
+const FFMPEG_OPTION = {
+  coreURL: chrome.runtime.getURL('ffmpeg/ffmpeg-core.js'),
+  wasmURL: chrome.runtime.getURL('ffmpeg/ffmpeg-core.wasm'),
+  workerURL: chrome.runtime.getURL('ffmpeg/ffmpeg-core.worker.js')
+}
+const ffmpeg = new FFmpeg()
+ffmpeg.on('log', ({ type, message }) => {
+  console.log(`[${type}] ${message}`)
+})
+ffmpeg.on('progress', ({ progress, time }) => {
+  console.log(`progress: ${progress}, time: ${time}`)
 })
 
 export const transcode = async (
   inputFile: string,
   outputType: SupportedType
 ): Promise<string> => {
-  if (ffmpeg.isLoaded() === true) {
-    ffmpeg.exit()
+  if (ffmpeg.loaded) {
+    ffmpeg.terminate()
   }
 
-  await ffmpeg.load()
+  await ffmpeg.load({ ...FFMPEG_OPTION })
 
   switch (outputType) {
     case 'gif':
@@ -32,11 +42,11 @@ export const transcode = async (
 const transcodeGIF = async (inputFileURL: string): Promise<string> => {
   const inputFile = await fetchFile(inputFileURL)
 
-  ffmpeg.FS('writeFile', 'input.webm', inputFile)
-  await ffmpeg.run('-i', 'input.webm', '-ss', '30', '-t', '3', '-vf', 'fps=10,scale=320:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse"', '-c', 'copy', 'output.gif')
+  await ffmpeg.writeFile('input.webm', inputFile)
+  await ffmpeg.exec(['-i', 'input.webm', 'output.gif'])
 
-  const data = ffmpeg.FS('readFile', 'output.gif')
-  const url = URL.createObjectURL(new Blob([data.buffer], { type: 'image/gif' }))
+  const data = await ffmpeg.readFile('output.gif')
+  const url = URL.createObjectURL(new Blob([data], { type: 'image/gif' }))
 
   return url
 }
@@ -44,11 +54,14 @@ const transcodeGIF = async (inputFileURL: string): Promise<string> => {
 const transcodeWebP = async (inputFileURL: string): Promise<string> => {
   const inputFile = await fetchFile(inputFileURL)
 
-  ffmpeg.FS('writeFile', 'input.webm', inputFile)
-  const vFilter = 'fps=' + '10' + ',scale=iw/100*' + '50' + ':-1:flags=lanczos'
-  await ffmpeg.run('-i', 'input.webm', '-vf', vFilter, '-vcodec', 'libwebp', '-lossless', '0', '-compression_level', '6', '-q:v', '50', '-loop', '0', '-preset', 'picture', '-an', '-vsync', '0', 'output.webp')
-  const data = ffmpeg.FS('readFile', 'output.webp')
-  const url = URL.createObjectURL(new Blob([data.buffer], { type: 'image/webp' }))
+  await ffmpeg.writeFile('input.webm', inputFile)
+  const vFilter = 'fps=' + '20' + ',scale=iw/100*' + '50' + ':-1:flags=lanczos'
+  await ffmpeg.exec(['-i', 'input.webm', '-vf', vFilter, '-vcodec', 'libwebp', '-lossless', '0', '-compression_level', '5', '-q:v', '50', '-loop', '0', '-preset', 'picture', '-an', '-vsync', '0', 'output.webp'])
+
+  // await ffmpeg.exec(['-i', 'input.webm', '-c:v', 'libwebp', '-compression_level', '6', 'output.webp'])
+
+  const data = await ffmpeg.readFile('output.webp')
+  const url = URL.createObjectURL(new Blob([data], { type: 'image/webp' }))
 
   return url
 }
@@ -56,41 +69,36 @@ const transcodeWebP = async (inputFileURL: string): Promise<string> => {
 const transcodeMP4 = async (inputFileURL: string): Promise<string> => {
   const inputFile = await fetchFile(inputFileURL)
 
-  ffmpeg.FS('writeFile', 'input.webm', inputFile)
-  await ffmpeg.run('-i', 'input.webm', '-c', 'copy', 'output.mp4')
+  await ffmpeg.writeFile('input.webm', inputFile)
+  await ffmpeg.exec(['-i', 'input.webm', '-c', 'copy', 'output.mp4'])
 
-  const data = ffmpeg.FS('readFile', 'output.mp4')
-  const url = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }))
+  const data = await ffmpeg.readFile('output.mp4')
+  const url = URL.createObjectURL(new Blob([data], { type: 'video/mp4' }))
 
   return url
 }
-f
-export const segmentize = async (inputFileURL: string, targetDuration: number): Promise<string[]> => {
-  if (ffmpeg.isLoaded() === true) {
-    ffmpeg.exit()
-  }
 
-  await ffmpeg.load()
+export const segmentize = async (inputFileURL: string, targetDuration: number): Promise<string[]> => {
+  if (ffmpeg.loaded) {
+    ffmpeg.terminate()
+  }
+  await ffmpeg.load({ ...FFMPEG_OPTION })
 
   const inputFile = await fetchFile(inputFileURL)
+  await ffmpeg.writeFile('input.webm', inputFile)
 
-  ffmpeg.FS('writeFile', 'input.webm', inputFile)
-
-  await ffmpeg.run('-i', 'input.webm', '-c:v', 'libx264', '-crf', '22', '-f', 'segment', '-force_key_frames', '"expr:gte(t,n_forced*9)"', '-segment_time', targetDuration.toString(), '-reset_timestamps', '1', '-map', '0', 'output%03d.webm')
+  await ffmpeg.exec(['-i', 'input.webm', '-c', 'copy', '-f', 'segment', '-segment_time', targetDuration.toString(), '-reset_timestamps', '1', 'output%03d.mp4'])
 
   const urls: string[] = []
 
-  const files = ffmpeg.FS('readdir', '.')
-  files.forEach((fileName: string) => {
-    console.log(fileName)
-
-    if (!fileName.startsWith('output')) {
-      return
+  const files = await ffmpeg.listDir('.')
+  for (const file of files) {
+    if (file.name.startsWith('output') && file.name.endsWith('.mp4')) {
+      const data = await ffmpeg.readFile(file.name)
+      const url = URL.createObjectURL(new Blob([data], { type: 'video/mp4' }))
+      urls.push(url)
     }
-
-    const data = ffmpeg.FS('readFile', fileName)
-    urls.push(URL.createObjectURL(new Blob([data.buffer], { type: 'video/webm' })))
-  })
+  }
 
   return urls
 }
