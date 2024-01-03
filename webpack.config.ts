@@ -44,6 +44,10 @@ const config: Configuration = {
         {
           from: 'ffmpeg',
           to: '../ffmpeg/'
+        },
+        {
+          from: 'vendors',
+          to: '../js/.'
         }
       ]
     })
