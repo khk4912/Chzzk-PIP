@@ -100,11 +100,14 @@ function registerSegmentModalHandler (
   const segmentDownloadBtn = document.querySelector('#segmentDownloadBtn')
   const modalShowBtn = document.getElementById('showSegmentModalBtn')
   const modalHideBtn = document.getElementById('hideSegmentModalBtn')
+  const segmentSecInput = document.getElementById('segmentSec') as HTMLInputElement
 
   const showModal = (): void => {
     if (!(segmentModal instanceof HTMLDivElement)) {
       return
     }
+
+    segmentSecInput.value = String(Math.floor(originalVideoDuration))
 
     segmentModal.style.visibility = 'visible'
     segmentModal.style.opacity = '1'
@@ -120,6 +123,7 @@ function registerSegmentModalHandler (
   }
 
   segmentDownloadBtn?.addEventListener('click', () => {
+    hideModal()
     void segmentDownload(recorderBlobURL, fileName, originalVideoDuration)
   })
   modalShowBtn?.addEventListener('click', showModal)
