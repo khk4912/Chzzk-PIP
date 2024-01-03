@@ -215,3 +215,4 @@ build
 *.zip
 deploy.py
 Chzzk-*
+vendors
