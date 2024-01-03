@@ -15,10 +15,12 @@
       <button class="download" data-type="webm">다운로드</button>
 
       <span id="note"> 변환 후 다운로드(베타) </span>
-      <button class="download" data-type="mp4">MP4</button>
-      <button id="showSegmentModalBtn">분할 다운로드</button>
-      <!-- <button class="download" data-type="gif">GIF</button>
-      <button class="download" data-type="webp">WEBP</button> -->
+      <div class="after-transcode">
+        <button class="download" data-type="mp4">MP4</button>
+        <button class="download" data-type="gif">GIF</button>
+        <button class="download" data-type="webp">WEBP</button>
+        <button id="showSegmentModalBtn">분할 다운로드</button>
+      </div>
     </div>
 
     <div class="segment-overlay">
@@ -35,8 +37,6 @@
       </div>
     </div>
 
-    <script src="..//ffmpeg/ffmpeg.min.js"></script>
-    <script src="../ffmpeg/ffmpeg-core.js"></script>
     <script src="../js/record_result.js"></script>
   </body>
 </html>

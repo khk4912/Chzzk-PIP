@@ -18,7 +18,7 @@ body {
 }
 
 video {
-  margin-top: 10vh;
+  margin-top: 5vh;
   height: 40vh;
   aspect-ratio: 16/9;
 }
@@ -49,7 +49,9 @@ button:hover {
 
 #note {
   margin-top: 5vh;
-  font-size: 1rem;
+  margin-bottom: 2vh;
+  font-size: 1.3rem;
+  font-weight: bold;
 }
 
 .segment-overlay {
@@ -86,4 +88,15 @@ button:hover {
 
 .segment-overlay button {
   padding: 2%;
+}
+
+.after-transcode {
+  display: flex;
+  width: 40vw;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.after-transcode button {
+  margin: 2%;
 }
