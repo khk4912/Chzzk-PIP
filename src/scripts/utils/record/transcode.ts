@@ -6,26 +6,31 @@ import { fetchFile } from '@ffmpeg/util'
 // // @ts-expect-error FFmpeg would be imported
 // const { createFFmpeg, fetchFile } = FFmpeg
 
+let videoDuration: number = 1
+
 const FFMPEG_OPTION = {
   coreURL: chrome.runtime.getURL('ffmpeg/ffmpeg-core.js'),
   wasmURL: chrome.runtime.getURL('ffmpeg/ffmpeg-core.wasm'),
   workerURL: chrome.runtime.getURL('ffmpeg/ffmpeg-core.worker.js')
 }
+// 1.234 -> 1234000
 const ffmpeg = new FFmpeg()
-ffmpeg.on('log', ({ type, message }) => {
-  console.log(`[${type}] ${message}`)
-})
 ffmpeg.on('progress', ({ progress, time }) => {
-  console.log(`progress: ${progress}, time: ${time}`)
+  console.log(videoDuration, time)
+  updateLoadBar(Math.floor(time / (videoDuration * 1000000) * 100))
 })
 
 export const transcode = async (
   inputFile: string,
-  outputType: SupportedType
+  outputType: SupportedType,
+  originalVideoDuration: number
 ): Promise<string> => {
   if (ffmpeg.loaded) {
     ffmpeg.terminate()
   }
+  showLoadBar()
+
+  videoDuration = originalVideoDuration
 
   await ffmpeg.load({ ...FFMPEG_OPTION })
 
@@ -78,11 +83,14 @@ const transcodeMP4 = async (inputFileURL: string): Promise<string> => {
   return url
 }
 
-export const segmentize = async (inputFileURL: string, targetDuration: number): Promise<string[]> => {
+export const segmentize = async (inputFileURL: string, targetDuration: number, originalVideoDuration: number): Promise<string[]> => {
   if (ffmpeg.loaded) {
     ffmpeg.terminate()
   }
   await ffmpeg.load({ ...FFMPEG_OPTION })
+
+  videoDuration = originalVideoDuration
+  showLoadBar()
 
   const inputFile = await fetchFile(inputFileURL)
   await ffmpeg.writeFile('input.webm', inputFile)
@@ -100,5 +108,41 @@ export const segmentize = async (inputFileURL: string, targetDuration: number): 
     }
   }
 
+  hideLoadBar()
   return urls
+}
+
+function showLoadBar (): void {
+  const loadBar = document.querySelector('.transcode-loadbar')
+  console.log(loadBar)
+  if (!(loadBar instanceof HTMLDivElement)) {
+    return
+  }
+  updateLoadBar(0)
+  loadBar.style.visibility = 'visible'
+  loadBar.style.opacity = '1'
+}
+
+function updateLoadBar (progress: number): void {
+  const loadBar = document.querySelector('#loadbar-inner')
+  const loadPercentSpan = document.querySelector('#loadPercent')
+
+  if (!(loadBar instanceof HTMLDivElement &&
+    loadPercentSpan instanceof HTMLSpanElement)) {
+    return
+  }
+
+  loadPercentSpan.innerText = `${progress}%`
+  loadBar.style.width = `${progress}%`
+}
+
+export function hideLoadBar (): void {
+  const loadBar = document.querySelector('.transcode-loadbar')
+
+  if (!(loadBar instanceof HTMLDivElement)) {
+    return
+  }
+
+  loadBar.style.visibility = 'hidden'
+  loadBar.style.opacity = '0'
 }

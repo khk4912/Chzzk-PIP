@@ -26,7 +26,13 @@
     <div class="segment-overlay">
       <div class="header">
         <h3>분할 후 다운로드</h3>
-        <span>녹화 된 영상을 아래 초를 기준으로 분할 후 다운로드합니다.</span>
+        <span
+          >영상이 예상보다 길게 녹화되었나요?<br />
+          녹화 된 영상을 아래 초를 기준으로 분할 후 다운로드할 수 있어요.
+          <br />
+          <br />
+          (브라우저의 한계로, 몇 초의 오차가 발생할 수 있어요.)
+        </span>
       </div>
 
       <div class="segment-input">
@@ -34,6 +40,14 @@
         <br />
         <button id="segmentDownloadBtn">분할 후 다운로드</button>
         <button id="hideSegmentModalBtn">닫기</button>
+      </div>
+    </div>
+
+    <div class="transcode-loadbar">
+      <h3>변환 중...</h3>
+      <div id="loadbar">
+        <span id="loadPercent">0 % </span>
+        <div id="loadbar-inner"></div>
       </div>
     </div>
 

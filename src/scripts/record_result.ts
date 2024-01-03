@@ -1,5 +1,5 @@
 import { isSupportedType, type StreamInfo, type SupportedType } from './types/record'
-import { segmentize, transcode } from './utils/record/transcode'
+import { hideLoadBar, segmentize, transcode } from './utils/record/transcode'
 
 async function main (): Promise<void> {
   const { recorderBlob } = await chrome.storage.local.get('recorderBlob')
@@ -21,15 +21,16 @@ async function main (): Promise<void> {
       }
 
       const fileName = `${streamInfo.streamerName}_${video.duration}s`
-      registerDownloadHandler(recorderBlob, fileName)
-      registerSegmentModalHandler(recorderBlob, fileName)
+      registerDownloadHandler(recorderBlob, fileName, video.duration)
+      registerSegmentModalHandler(recorderBlob, fileName, video.duration)
     })()
   }, { once: true })
 }
 
 function registerDownloadHandler (
   recorderBlobURL: string,
-  fileName: string
+  fileName: string,
+  originalVideoDuration: number
 ): void {
   const downloadButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.download')
   downloadButtons.forEach((btn) => {
@@ -43,7 +44,8 @@ function registerDownloadHandler (
       download(
         recorderBlobURL,
         `${fileName}.${dataType}`,
-        dataType
+        dataType,
+        originalVideoDuration
       )
     })
   })
@@ -56,7 +58,8 @@ function registerDownloadHandler (
 function download (
   recorderBlobURL: string,
   fileName: string,
-  type: SupportedType = 'webm'): void {
+  type: SupportedType = 'webm',
+  originalVideoDuration: number): void {
   switch (type) {
     case 'webm':
       startDownload(recorderBlobURL, fileName)
@@ -64,7 +67,7 @@ function download (
     case 'webp':
     case 'gif':
     case 'mp4':
-      void donwloadAfterTranscode(recorderBlobURL, fileName, type)
+      void donwloadAfterTranscode(recorderBlobURL, fileName, type, originalVideoDuration)
       break
   }
 }
@@ -79,16 +82,19 @@ function startDownload (recorderBlobURL: string, fileName: string): void {
 async function donwloadAfterTranscode (
   recorderBlobURL: string,
   fileName: string,
-  dataType: SupportedType
+  dataType: SupportedType,
+  originalVideoDuration: number
 ): Promise<void> {
-  const transcodeBlobURL = await transcode(recorderBlobURL, dataType)
+  const transcodeBlobURL = await transcode(recorderBlobURL, dataType, originalVideoDuration)
+  hideLoadBar()
 
   startDownload(transcodeBlobURL, fileName)
 }
 
 function registerSegmentModalHandler (
   recorderBlobURL: string,
-  fileName: string
+  fileName: string,
+  originalVideoDuration: number
 ): void {
   const segmentModal = document.querySelector('.segment-overlay')
   const segmentDownloadBtn = document.querySelector('#segmentDownloadBtn')
@@ -114,7 +120,7 @@ function registerSegmentModalHandler (
   }
 
   segmentDownloadBtn?.addEventListener('click', () => {
-    void segmentDownload(recorderBlobURL, fileName)
+    void segmentDownload(recorderBlobURL, fileName, originalVideoDuration)
   })
   modalShowBtn?.addEventListener('click', showModal)
   modalHideBtn?.addEventListener('click', hideModal)
@@ -122,17 +128,18 @@ function registerSegmentModalHandler (
 
 async function segmentDownload (
   recorderBlobURL: string,
-  fileName: string
+  fileName: string,
+  originalVideoDuration: number
 ): Promise<void> {
   const segmentSecInput = document.getElementById('segmentSec') as HTMLInputElement
   const sec = Number(segmentSecInput.value)
 
-  const urls = await segmentize(recorderBlobURL, sec)
+  const urls = await segmentize(recorderBlobURL, sec, originalVideoDuration)
 
   urls.forEach((url, idx) => {
     const a = document.createElement('a')
     a.href = url
-    a.download = `${fileName}_${idx}.webm`
+    a.download = `${fileName}_${idx}.mp4`
     a.click()
   })
 }
