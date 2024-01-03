@@ -11,10 +11,6 @@
   "keywords": [],
   "author": "",
   "license": "MIT",
-  "dependencies": {
-    "@ffmpeg/ffmpeg": "0.11.6",
-    "@ffmpeg/core": "0.11.0"
-  },
   "devDependencies": {
     "@types/chrome": "^0.0.254",
     "@types/node": "^20.10.5",
@@ -31,5 +27,9 @@
     "typescript": "^5.3.3",
     "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "@ffmpeg/ffmpeg": "^0.12.10",
+    "@ffmpeg/util": "^0.12.1"
   }
 }
