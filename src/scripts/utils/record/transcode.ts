@@ -64,3 +64,33 @@ const transcodeMP4 = async (inputFileURL: string): Promise<string> => {
 
   return url
 }
+f
+export const segmentize = async (inputFileURL: string, targetDuration: number): Promise<string[]> => {
+  if (ffmpeg.isLoaded() === true) {
+    ffmpeg.exit()
+  }
+
+  await ffmpeg.load()
+
+  const inputFile = await fetchFile(inputFileURL)
+
+  ffmpeg.FS('writeFile', 'input.webm', inputFile)
+
+  await ffmpeg.run('-i', 'input.webm', '-c:v', 'libx264', '-crf', '22', '-f', 'segment', '-force_key_frames', '"expr:gte(t,n_forced*9)"', '-segment_time', targetDuration.toString(), '-reset_timestamps', '1', '-map', '0', 'output%03d.webm')
+
+  const urls: string[] = []
+
+  const files = ffmpeg.FS('readdir', '.')
+  files.forEach((fileName: string) => {
+    console.log(fileName)
+
+    if (!fileName.startsWith('output')) {
+      return
+    }
+
+    const data = ffmpeg.FS('readFile', fileName)
+    urls.push(URL.createObjectURL(new Blob([data.buffer], { type: 'video/webm' })))
+  })
+
+  return urls
+}
