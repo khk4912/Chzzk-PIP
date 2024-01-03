@@ -3,9 +3,6 @@ import type { SupportedType } from '../../types/record'
 import { FFmpeg } from '@ffmpeg/ffmpeg'
 import { fetchFile } from '@ffmpeg/util'
 
-// // @ts-expect-error FFmpeg would be imported
-// const { createFFmpeg, fetchFile } = FFmpeg
-
 let videoDuration: number = 1
 
 const FFMPEG_OPTION = {
@@ -13,10 +10,9 @@ const FFMPEG_OPTION = {
   wasmURL: chrome.runtime.getURL('ffmpeg/ffmpeg-core.wasm'),
   workerURL: chrome.runtime.getURL('ffmpeg/ffmpeg-core.worker.js')
 }
-// 1.234 -> 1234000
+
 const ffmpeg = new FFmpeg()
 ffmpeg.on('progress', ({ progress, time }) => {
-  console.log(videoDuration, time)
   updateLoadBar(Math.floor(time / (videoDuration * 1000000) * 100))
 })
 
@@ -114,7 +110,6 @@ export const segmentize = async (inputFileURL: string, targetDuration: number, o
 
 function showLoadBar (): void {
   const loadBar = document.querySelector('.transcode-loadbar')
-  console.log(loadBar)
   if (!(loadBar instanceof HTMLDivElement)) {
     return
   }
