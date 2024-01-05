@@ -26,18 +26,9 @@ export const injectButton = (): void => {
   const body = document.querySelector('body') as HTMLElement
 
   const inject = (): void => {
-    // const vod = isVOD()
-    // const stream = isStream()
-
-    // if ((vod && !injectState.vod) ||
-    // (stream)
-    // ) {
-    //   injectState.vod = vod
-    //   injectState.stream = stream
-
-    //   void main()
-    // }
-    void main()
+    if (window.location.pathname.startsWith('/live') || window.location.pathname.startsWith('/video')) {
+      void main()
+    }
   }
 
   inject()
