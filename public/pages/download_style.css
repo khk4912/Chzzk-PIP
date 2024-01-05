@@ -24,6 +24,10 @@ body {
   font-weight: 400;
 }
 
+#thumbnail {
+  width: 50vw;
+}
+
 .available-quality {
   margin-top: 10vh;
   display: grid;
