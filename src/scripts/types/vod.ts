@@ -81,6 +81,7 @@ export interface VideoInfo {
   videoTitle: string
   inKey: string
   videoID: string
+  thumbnailURL: string
 }
 
 export interface PlayBackURL {

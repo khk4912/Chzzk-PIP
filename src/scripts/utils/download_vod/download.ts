@@ -11,7 +11,8 @@ export async function openDownloadVODPage (): Promise<void> {
   const playBackURL = await getPlayBackURL(videoInfo.videoID, videoInfo.inKey)
 
   await chrome.storage.local.set({ playBackURL })
-  window.open(chrome.runtime.getURL('pages/download_vod.html'))
+  await chrome.storage.local.set({ videoInfo })
+  window.open(chrome.runtime.getURL('page/download_vod.html'))
 }
 
 async function getVideoInfo (videoNumber: number): Promise<VideoInfo> {
@@ -21,8 +22,9 @@ async function getVideoInfo (videoNumber: number): Promise<VideoInfo> {
   const videoTitle = data.content.videoTitle
   const inKey = data.content.inKey
   const videoID = data.content.videoId
+  const thumbnailURL = data.content.thumbnailImageUrl
 
-  return { videoTitle, inKey, videoID }
+  return { videoTitle, inKey, videoID, thumbnailURL }
 }
 
 async function getPlayBackURL (videoID: string, inKey: string): Promise<PlayBackURL[]> {
