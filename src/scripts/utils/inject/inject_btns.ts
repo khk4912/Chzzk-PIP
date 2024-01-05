@@ -1,6 +1,11 @@
+import { isVODPage } from '../download_vod/download'
 import { getOption } from '../options/option_handler'
 import { startRecordListener } from '../record/record_events'
 import { screenshot } from '../screenshot/screenshot'
+
+const downloadIcon = `
+<svg fill="#ffffff"  version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-249.39 -249.39 987.78 987.78" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M329.2,327.2c-4.5,0-8.1,3.4-8.6,7.9c-3.9,38.6-36.5,68.7-76.2,68.7c-39.6,0-72.2-30.1-76.2-68.7 c-0.5-4.4-4.1-7.9-8.6-7.9h-104c-21.8,0-39.5,17.7-39.5,39.5v82.8c0,21.8,17.7,39.5,39.5,39.5h377.8c21.8,0,39.5-17.7,39.5-39.5 v-82.7c0-21.8-17.7-39.5-39.5-39.5H329.2V327.2z"></path> <path d="M303.5,198.6l-30.9,30.9V28.1C272.6,12.6,260,0,244.5,0l0,0c-15.5,0-28.1,12.6-28.1,28.1v201.4l-30.9-30.9 c-9.5-9.5-24.7-11.9-35.9-4.4c-15.3,10.2-16.8,31.1-4.5,43.4l82.8,82.8c9.2,9.2,24.1,9.2,33.3,0l82.8-82.8 c12.3-12.3,10.8-33.2-4.5-43.4C328.2,186.6,313,189,303.5,198.6z"></path> </g> </g> </g></svg>
+`
 
 const pipIcon = `
 <svg viewBox="-6.4 -6.4 28.80 28.80" xmlns="http://www.w3.org/2000/svg" fill="#ffffff" class="bi bi-pip" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h13A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 12.5v-9zM1.5 3a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-13z"></path> <path d="M8 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1-.5-.5v-3z"></path> </g></svg>
@@ -24,6 +29,11 @@ export function addButton (): void {
 
     const option = await getOption()
     const { pip, rec, screenshot } = option
+
+    if (isVODPage()) {
+      const vodDownloadButton = createVODDownloadButton()
+      btn.insertBefore(vodDownloadButton, btn.firstChild)
+    }
 
     if (pip) {
       const pipButton = createPIPButton()
@@ -54,6 +64,23 @@ export async function waitForElement (selector: string): Promise<HTMLElement> {
       }
     }, 100)
   })
+}
+
+function createVODDownloadButton (): HTMLButtonElement {
+  const vodDownloadButton = document.createElement('button')
+  vodDownloadButton.classList.add('pzp-button', 'pzp-pc-setting-button', 'pzp-pc__setting-button', 'pzp-pc-ui-button')
+
+  const toolTip = document.createElement('span')
+  toolTip.classList.add('pzp-pc-ui-button__tooltip', 'pzp-pc-ui-button__tooltip--top')
+  toolTip.innerText = '다운로드'
+
+  const icon = document.createElement('span')
+  icon.classList.add('pzp-ui-icon', 'pzp-pc-setting-button__icon')
+  icon.innerHTML = downloadIcon
+
+  vodDownloadButton.appendChild(toolTip)
+  vodDownloadButton.appendChild(icon)
+  return vodDownloadButton
 }
 
 function createPIPButton (): HTMLButtonElement {

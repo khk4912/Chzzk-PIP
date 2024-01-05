@@ -1,11 +1,3 @@
-import { addButton, waitForElement } from './utils/inject/inject_btns'
-import { registerSeekHandler } from './utils/seek/seek'
+import { injectButton } from './utils/inject/url_watcher'
 
-async function main (): Promise<void> {
-  await waitForElement('.pzp-pc__bottom-buttons-right')
-
-  addButton()
-  void registerSeekHandler()
-}
-
-void main()
+window.onload = injectButton
