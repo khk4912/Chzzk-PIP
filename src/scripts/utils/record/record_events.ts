@@ -24,7 +24,15 @@ export function startRecordListener (e: Event): void {
 
     injectOverlay()
     updateOverlay(sec++)
+
+    const oldHref = window.location.href
+
     const overlayInterval = setInterval(() => {
+      if (oldHref !== window.location.href) {
+        clearInterval(overlayInterval)
+        recorder.stop()
+        return
+      }
       updateOverlay(sec++)
     }, 1000)
 
