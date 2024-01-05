@@ -1,4 +1,4 @@
-import { isVODPage } from '../download_vod/download'
+import { isVODPage, openDownloadVODPage } from '../download_vod/download'
 import { getOption } from '../options/option_handler'
 import { startRecordListener } from '../record/record_events'
 import { screenshot } from '../screenshot/screenshot'
@@ -69,6 +69,9 @@ export async function waitForElement (selector: string): Promise<HTMLElement> {
 function createVODDownloadButton (): HTMLButtonElement {
   const vodDownloadButton = document.createElement('button')
   vodDownloadButton.classList.add('pzp-button', 'pzp-pc-setting-button', 'pzp-pc__setting-button', 'pzp-pc-ui-button')
+  vodDownloadButton.addEventListener('click', () => {
+    void openDownloadVODPage()
+  })
 
   const toolTip = document.createElement('span')
   toolTip.classList.add('pzp-pc-ui-button__tooltip', 'pzp-pc-ui-button__tooltip--top')
