@@ -19,7 +19,7 @@ export async function openDownloadVODPage (): Promise<void> {
 }
 
 async function getVideoInfo (videoNumber: number): Promise<VideoInfo> {
-  const r = await fetch(`https://api.chzzk.naver.com/service/v1/videos/${videoNumber}`)
+  const r = await fetch(`https://api.chzzk.naver.com/service/v2/videos/${videoNumber}`)
   const data: Video = await r.json()
 
   const videoTitle = data.content.videoTitle
@@ -31,7 +31,7 @@ async function getVideoInfo (videoNumber: number): Promise<VideoInfo> {
 }
 
 async function getPlayBackURL (videoID: string, inKey: string): Promise<PlayBackURL[]> {
-  const r = await fetch(`https://apis.naver.com/neonplayer/vodplay/v1/playback/${videoID}?key=${inKey}&sid=2099&env=real&lc=ko&cpl=ko`,
+  const r = await fetch(`https://apis.naver.com/neonplayer/vodplay/v2/playback/${videoID}?key=${inKey}&sid=2099&env=real&lc=ko&cpl=ko`,
     {
       headers: {
         Accept: 'application/xml'
