@@ -23,6 +23,12 @@ export function addButton (): void {
   void (async () => {
     const btn = await waitForElement('.pzp-pc__bottom-buttons-right')
 
+    if (btn.classList.contains('chzzk-pip-injected')) {
+      return
+    }
+
+    btn.classList.add('chzzk-pip-injected')
+
     if (btn === null) {
       return
     }

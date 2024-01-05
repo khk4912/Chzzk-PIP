@@ -1,23 +1,10 @@
 import { waitForElement, addButton } from './inject_btns'
 import { registerSeekHandler } from '../seek/seek'
 
-// const injectState = {
-//   stream: false,
-//   vod: false
-// }
-
-// const isStream = (): boolean => {
-//   return window.location.pathname.startsWith('/live')
-// }
-
-// const isVOD = (): boolean => {
-//   return window.location.pathname.startsWith('/video')
-// }
-
 async function main (): Promise<void> {
   await waitForElement('.pzp-pc__bottom-buttons-right')
-  addButton()
 
+  addButton()
   void registerSeekHandler()
 }
 
@@ -26,9 +13,7 @@ export const injectButton = (): void => {
   const body = document.querySelector('body') as HTMLElement
 
   const inject = (): void => {
-    if (window.location.pathname.startsWith('/live') || window.location.pathname.startsWith('/video')) {
-      void main()
-    }
+    void main()
   }
 
   inject()
