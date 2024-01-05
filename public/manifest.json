@@ -20,7 +20,7 @@
   "permissions": ["storage"],
   "web_accessible_resources": [
     {
-      "resources": ["js/*", "ffmpeg/*", "pages/record.html"],
+      "resources": ["js/*", "ffmpeg/*", "pages/*"],
       "matches": ["<all_urls>"]
     }
   ],
