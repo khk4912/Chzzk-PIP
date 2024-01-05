@@ -30,7 +30,7 @@ export function startRecordListener (e: Event): void {
     const overlayInterval = setInterval(() => {
       if (oldHref !== window.location.href) {
         clearInterval(overlayInterval)
-        recorder.stop()
+        stopRecordListener(recorder, overlayInterval)
         return
       }
       updateOverlay(sec++)
