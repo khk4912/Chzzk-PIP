@@ -17,7 +17,7 @@
       "js": ["js/content_script.js"]
     }
   ],
-  "permissions": ["storage"],
+  "permissions": ["storage", "downloads"],
   "web_accessible_resources": [
     {
       "resources": ["js/*", "ffmpeg/*", "pages/*"],
