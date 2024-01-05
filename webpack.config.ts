@@ -11,7 +11,8 @@ const config: Configuration = {
   entry: {
     content_script: path.resolve(__dirname, 'src/scripts/content_script.ts'),
     record_result: path.resolve(__dirname, 'src/scripts/record_result.ts'),
-    popup_script: path.resolve(__dirname, 'src/scripts/popup_script.ts')
+    popup_script: path.resolve(__dirname, 'src/scripts/popup_script.ts'),
+    download_vod: path.resolve(__dirname, 'src/scripts/download_vod.ts')
   },
   output: {
     path: path.resolve(__dirname, 'dist/js'),
