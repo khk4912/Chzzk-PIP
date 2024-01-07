@@ -41,8 +41,8 @@ async function main (): Promise<void> {
       }
 
       const fileName = `${streamInfo.streamerName}_${duration}s`
-      registerDownloadHandler(recorderBlob, fileName, video.duration)
-      registerSegmentModalHandler(recorderBlob, fileName, video.duration)
+      registerDownloadHandler(recorderBlob, fileName, duration)
+      registerSegmentModalHandler(recorderBlob, fileName, duration)
     })()
   }, { once: true })
 }
