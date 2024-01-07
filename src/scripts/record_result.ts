@@ -2,8 +2,23 @@ import { isSupportedType, type StreamInfo, type SupportedType } from './types/re
 import { hideLoadBar, segmentize, transcode } from './utils/record/transcode'
 
 async function main (): Promise<void> {
-  const { recorderBlob } = await chrome.storage.local.get('recorderBlob')
-  const { streamInfo } = await chrome.storage.local.get('streamInfo') as { streamInfo: StreamInfo }
+  const {
+    recorderBlob,
+    streamInfo,
+    recorderStartTime,
+    recorderStopTime
+  } = await chrome.storage.local.get(
+    [
+      'recorderBlob',
+      'streamInfo',
+      'recorderStartTime',
+      'recorderStopTime'
+    ]) as {
+    recorderBlob: string
+    streamInfo: StreamInfo
+    recorderStartTime: number
+    recorderStopTime: number
+  }
 
   const video = document.getElementById('vid') as HTMLVideoElement
 
@@ -20,7 +35,12 @@ async function main (): Promise<void> {
         return
       }
 
-      const fileName = `${streamInfo.streamerName}_${video.duration}s`
+      let duration = video.duration
+      if (duration === Infinity) {
+        duration = (recorderStopTime - recorderStartTime) / 1000 - 0.1
+      }
+
+      const fileName = `${streamInfo.streamerName}_${duration}s`
       registerDownloadHandler(recorderBlob, fileName, video.duration)
       registerSegmentModalHandler(recorderBlob, fileName, video.duration)
     })()

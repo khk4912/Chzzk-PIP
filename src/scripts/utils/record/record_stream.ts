@@ -24,7 +24,8 @@ export async function startRecord (video: Video, streamInfo: StreamInfo): Promis
     }
   )
 
-  await chrome.storage.local.set({ recorderBlob: '', streamInfo })
+  const date = new Date()
+  await chrome.storage.local.set({ recorderBlob: '', streamInfo, recorderStartTime: date.getTime() })
 
   recorder.ondataavailable = async (event) => {
     if (event.data.size === 0) return
@@ -39,16 +40,25 @@ export async function startRecord (video: Video, streamInfo: StreamInfo): Promis
 
 export async function stopRecord (recorder: MediaRecorder): Promise<void> {
   recorder.stop()
+  const recorderStopTime = new Date().getTime()
+  await chrome.storage.local.set({ recorderStopTime })
 
   const { fastRec } = await getOption()
-  const { recorderBlob } = await chrome.storage.local.get('recorderBlob')
+  const {
+    recorderBlob,
+    streamInfo,
+    recorderStartTime
+  } = await chrome.storage.local.get(
+    [
+      'recorderBlob',
+      'streamInfo',
+      'recorderStartTime'
+    ]) as { recorderBlob: string, streamInfo: StreamInfo, recorderStartTime: number }
 
   if (!fastRec && recorderBlob !== '') {
     window.open(chrome.runtime.getURL('pages/record.html'))
     return
   }
-
-  const { streamInfo } = await chrome.storage.local.get('streamInfo') as { streamInfo: StreamInfo }
 
   if (typeof recorderBlob !== 'string') {
     return
@@ -64,7 +74,12 @@ export async function stopRecord (recorder: MediaRecorder): Promise<void> {
       await new Promise(resolve => setTimeout(resolve, 500))
       video.currentTime = 0
 
-      const fileName = `${streamInfo.streamerName}_${video.duration}s`
+      let duration = video.duration
+      if (duration === Infinity) {
+        duration = (recorderStopTime - recorderStartTime) / 1000 - 0.1
+      }
+
+      const fileName = `${streamInfo.streamerName}_${duration}s`
 
       const a = document.createElement('a')
       a.href = recorderBlob
