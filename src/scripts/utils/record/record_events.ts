@@ -12,7 +12,9 @@ export function startRecordListener (e: Event): void {
     const streamerName = document.querySelector("[class^='video_information'] > [class^='name_ellipsis']")?.textContent ??
                          document.querySelector("[class^='live_information'] > [class^='name_ellipsis']")?.textContent ??
                          'streamer'
-    const streamTitle = document.querySelector("[class^='video_information_title']")?.textContent ?? 'title'
+    const streamTitle = document.querySelector("[class^='video_information_title']")?.textContent ??
+                        document.querySelector("[class^='live_information_player_title']")?.textContent ??
+                        'title'
 
     const recorder = await startRecord(video, { streamerName, streamTitle })
 

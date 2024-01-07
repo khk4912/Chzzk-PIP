@@ -6,7 +6,9 @@ export function screenshot (): void {
   const streamerName = document.querySelector("[class^='video_information'] > [class^='name_ellipsis']")?.textContent ??
                        document.querySelector("[class^='live_information'] > [class^='name_ellipsis']")?.textContent ??
                        'streamer'
-  const streamTitle = document.querySelector("[class^='video_information_title']")?.textContent ?? 'title'
+  const streamTitle = document.querySelector("[class^='video_information_title']")?.textContent ??
+                       document.querySelector("[class^='live_information_player_title']")?.textContent ??
+                       'title'
 
   const video = document.querySelector('video')
   if (!(video instanceof HTMLVideoElement)) {
