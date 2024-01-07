@@ -18,7 +18,7 @@ function createItem (playBackURLs: PlayBackURL[], title: string): void {
   const donwnloadVideo = (url: string, fileName: string): void => {
     void chrome.downloads.download({
       url,
-      filename: fileName
+      filename: fileName.replace(/[/\\?%*:|"<>]/g, '_')
     })
   }
 
