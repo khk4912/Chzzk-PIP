@@ -143,6 +143,12 @@ function registerSegmentModalHandler (
   }
 
   segmentDownloadBtn?.addEventListener('click', () => {
+    const parsedSecInput = Number(segmentSecInput.value)
+
+    if (Number.isNaN(parsedSecInput) || parsedSecInput <= 0) {
+      return
+    }
+
     hideModal()
     void segmentDownload(recorderBlobURL, fileName, originalVideoDuration)
   })
