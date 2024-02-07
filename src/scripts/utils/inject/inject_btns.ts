@@ -140,7 +140,9 @@ async function makeVideoPIP (): Promise<void> {
   }
 
   video.disablePictureInPicture = false
-  if (video !== null) {
+  if (document.pictureInPictureElement != null) {
+    await document.exitPictureInPicture()
+  } else {
     await video.requestPictureInPicture()
   }
 }
