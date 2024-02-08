@@ -31,10 +31,10 @@ video {
 }
 
 button {
-  width: 15vw;
-  aspect-ratio: 6/1;
+  width: 17vw;
+  aspect-ratio: 7/1;
   margin-top: 2vh;
-  padding: 1%;
+  padding: 0.8%;
   background-color: rgba(0, 255, 163, 0.9);
   border: none;
   border-radius: 4vh;
@@ -101,12 +101,15 @@ button:hover {
   margin: 2%;
 }
 
+.after-transcode .sole {
+  margin: 5% auto;
+}
+
 .transcode-loadbar {
   position: absolute;
   display: grid;
   visibility: hidden;
   opacity: 0;
-
   background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(100px);
   border-radius: 10%;
