@@ -63,7 +63,7 @@ function registerDownloadHandler (
     btn.addEventListener('click', () => {
       download(
         recorderBlobURL,
-        `${fileName}.${dataType}`,
+        `${fileName}.${dataType === 'mp4-aac' ? 'mp4' : dataType}`,
         dataType,
         originalVideoDuration
       )
@@ -80,16 +80,12 @@ function download (
   fileName: string,
   type: SupportedType = 'webm',
   originalVideoDuration: number): void {
-  switch (type) {
-    case 'webm':
-      startDownload(recorderBlobURL, fileName)
-      break
-    case 'webp':
-    case 'gif':
-    case 'mp4':
-      void donwloadAfterTranscode(recorderBlobURL, fileName, type, originalVideoDuration)
-      break
+  if (type === 'webm') {
+    startDownload(recorderBlobURL, fileName)
+    return
   }
+
+  void donwloadAfterTranscode(recorderBlobURL, fileName, type, originalVideoDuration)
 }
 
 function startDownload (recorderBlobURL: string, fileName: string): void {

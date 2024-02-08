@@ -7,7 +7,7 @@ export interface StreamInfo {
   streamTitle: string
 }
 
-const SupportedTypeList = ['webm', 'webp', 'gif', 'mp4'] as const
+const SupportedTypeList = ['webm', 'webp', 'gif', 'mp4', 'mp4-aac'] as const
 
 export type SupportedType = typeof SupportedTypeList[number]
 export const isSupportedType = (type: string): type is SupportedType =>
