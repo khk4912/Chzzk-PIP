@@ -28,10 +28,11 @@ export function getMemoizedState (
 }
 
 export function getCorePlayer (): any {
-  const x = document.querySelector('[class^=live_information_player_header]')
+  const x = document.querySelector('[class^=live_information_player_header]') ??
+            document.querySelector('[class^=od_tooltip_video_tooltip]')
 
-  if (x === null) {
-    return
+  if (x === null || x === undefined) {
+    return null
   }
 
   const player = getMemoizedState(x, '_corePlayer')

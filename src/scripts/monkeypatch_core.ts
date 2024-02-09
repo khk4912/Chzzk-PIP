@@ -4,6 +4,11 @@ import { getCorePlayer } from './utils/seek/react_helper'
 
 (() => {
   const player = getCorePlayer()
+
+  if (player === null) {
+    return
+  }
+
   const hls = player.player._mediaController._hls
 
   hls.config.backBufferLength = Infinity // 브라우저에게 관리 맡기기
