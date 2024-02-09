@@ -18,6 +18,10 @@ export async function registerSeekHandler (): Promise<void> {
     return
   }
 
+  const script = document.createElement('script')
+  script.src = chrome.runtime.getURL('js/monkeypatch_core.js')
+  document.head.appendChild(script)
+
   document.addEventListener('keydown', (e) => {
     const activeElement = document.activeElement
 
