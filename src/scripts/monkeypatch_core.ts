@@ -7,4 +7,5 @@ import { getCorePlayer } from './utils/seek/react_helper'
   const hls = player.player._mediaController._hls
 
   hls.config.backBufferLength = Infinity // 브라우저에게 관리 맡기기
+  hls.config.maxMaxBufferLength = 1200
 })()
