@@ -1,19 +1,15 @@
-import type { Video, StreamInfo } from '../../types/record'
+import type { Video, StreamInfo, HighFPSRecorder } from '../../types/record'
 import { getOption } from '../options/option_handler'
 
-const checkIsMuted = (video: Video): boolean => {
-  return video.muted || video.volume === 0
+const mutedHandler = (video: Video): void => {
+  if (video.muted || video.volume === 0) {
+    video.muted = false
+    video.volume = 0.5
+  }
 }
 
 export async function startRecord (video: Video, streamInfo: StreamInfo): Promise<MediaRecorder> {
-  if (video instanceof HTMLVideoElement) {
-    const isMuted = checkIsMuted(video)
-
-    if (isMuted) {
-      video.muted = false
-      video.volume = 0.5
-    }
-  }
+  mutedHandler(video)
 
   const stream = video.captureStream()
   const recorder = new MediaRecorder(
@@ -25,7 +21,12 @@ export async function startRecord (video: Video, streamInfo: StreamInfo): Promis
   )
 
   const date = new Date()
-  await chrome.storage.local.set({ recorderBlob: '', streamInfo, recorderStartTime: date.getTime() })
+  await chrome.storage.local.set({
+    recorderBlob: '',
+    streamInfo,
+    recorderStartTime: date.getTime(),
+    highFPS: false
+  })
 
   recorder.ondataavailable = async (event) => {
     if (event.data.size === 0) return
@@ -90,4 +91,80 @@ export async function stopRecord (recorder: MediaRecorder): Promise<void> {
       URL.revokeObjectURL(recorderBlob)
     })()
   })
+}
+
+export async function startHighFPSRecord (
+  video: Video,
+  streamInfo: StreamInfo
+): Promise<HighFPSRecorder> {
+  mutedHandler(video)
+
+  const canvas = document.createElement('canvas')
+  canvas.width = video.videoWidth
+  canvas.height = video.videoHeight
+
+  const canvasInterval = setInterval(() => {
+    const ctx = canvas.getContext('2d')
+    if (ctx === null) return
+
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+  }, 1000 / 60)
+
+  const videoRecorder = new MediaRecorder(canvas.captureStream(), {
+    mimeType: 'video/webm',
+    videoBitsPerSecond: 7000000
+  })
+  const audioRecorder = new MediaRecorder(video.captureStream(), {
+    mimeType: 'audio/webm'
+  })
+
+  const date = new Date()
+  await chrome.storage.local.set({
+    recorderBlob: '',
+    auidoRecorderBlob: '',
+    streamInfo,
+    recorderStartTime: date.getTime()
+    highFPS: true
+  })
+
+  videoRecorder.ondataavailable = async (event) => {
+    if (event.data.size === 0) return
+
+    const url = URL.createObjectURL(event.data)
+    await chrome.storage.local.set({ recorderBlob: url })
+  }
+
+  audioRecorder.ondataavailable = async (event) => {
+    if (event.data.size === 0) return
+
+    const url = URL.createObjectURL(event.data)
+    await chrome.storage.local.set({ auidoRecorderBlob: url })
+  }
+
+  return { videoRecorder, audioRecorder, canvasInterval }
+}
+
+export async function stopHighFPSRecord (
+  videoRecorder: MediaRecorder,
+  audioRecorder: MediaRecorder,
+  canvasInterval: NodeJS.Timeout): Promise<void> {
+  videoRecorder.stop()
+  audioRecorder.stop()
+  clearInterval(canvasInterval)
+
+  const {
+    recorderBlob,
+    audioRecorderBlob
+  } = await chrome.storage.local.get(
+    [
+      'recorderBlob',
+      'audioRecorderBlob'
+    ]) as {
+    recorderBlob: string
+    audioRecorderBlob: string
+  }
+
+  if (recorderBlob !== '' && audioRecorderBlob !== '') {
+    window.open(chrome.runtime.getURL('pages/record.html'))
+  }
 }
