@@ -1,10 +1,16 @@
-export interface Video extends HTMLMediaElement {
+export interface Video extends HTMLVideoElement {
   captureStream: () => MediaStream
 }
 
 export interface StreamInfo {
   streamerName: string
   streamTitle: string
+}
+
+export interface HighFPSRecorder {
+  videoRecorder: MediaRecorder
+  audioRecorder: MediaRecorder
+  canvasInterval: NodeJS.Timeout
 }
 
 const SupportedTypeList = ['webm', 'webp', 'gif', 'mp4', 'mp4-aac'] as const
