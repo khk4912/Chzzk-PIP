@@ -1,6 +1,13 @@
 import { getOption, setOption } from './utils/options/option_handler'
 
-const [pipSwitch, recSwitch, screenshotSwitch, fastSaveSwitch, seekSwitch] =
+const [
+  pipSwitch,
+  recSwitch,
+  screenshotSwitch,
+  seekSwitch,
+  highFrameRateSwitch,
+  fastSaveSwitch
+] =
   document.querySelectorAll('input[type="checkbox"]')
 
 const isInputElement = (element: Element): element is HTMLInputElement => {
@@ -12,7 +19,7 @@ function init (): void {
     !(
       isInputElement(pipSwitch) && isInputElement(recSwitch) &&
       isInputElement(screenshotSwitch) && isInputElement(fastSaveSwitch) &&
-      isInputElement(seekSwitch)
+      isInputElement(seekSwitch) && isInputElement(highFrameRateSwitch)
     )
   ) {
     return
@@ -25,6 +32,7 @@ function init (): void {
     screenshotSwitch.checked = option.screenshot
     fastSaveSwitch.checked = option.fastRec
     seekSwitch.checked = option.seek
+    highFrameRateSwitch.checked = option.highFrameRate
   })()
 }
 
@@ -48,6 +56,9 @@ async function handleChange (e: Event): Promise<void> {
       break
     case screenshotSwitch:
       await setOption('screenshot', e.target.checked)
+      break
+    case highFrameRateSwitch:
+      await setOption('highFrameRate', e.target.checked)
       break
   }
 }
