@@ -5,37 +5,48 @@ const checkIsMuted = (video: Video): boolean => {
   return video.muted || video.volume === 0
 }
 
-export async function startRecord (video: Video, streamInfo: StreamInfo): Promise<MediaRecorder> {
+export async function startRecord(video: Video, streamInfo: StreamInfo): Promise<MediaRecorder | null> {
+  // WebM with AVC1 codec
+  const mimeType = 'video/webm;codecs=avc1';
+
+  // Check browser support for WebM with AVC1
+  if (!MediaRecorder.isTypeSupported(mimeType)) {
+    console.error('WebM with AVC1 codec not supported by this browser/environment.');
+    return null;
+  }
+
   if (video instanceof HTMLVideoElement) {
-    const isMuted = checkIsMuted(video)
+    const isMuted = checkIsMuted(video);
 
     if (isMuted) {
-      video.muted = false
-      video.volume = 0.5
+      video.muted = false; // Unmute to ensure audio recording if desired
+      video.volume = 0.5; // Adjust volume appropriately
     }
   }
 
-  const stream = video.captureStream()
-  const recorder = new MediaRecorder(
-    stream,
-    {
-      mimeType: 'video/webm',
-      videoBitsPerSecond: 7000000
-    }
-  )
+  const stream = video.captureStream();
 
-  const date = new Date()
-  await chrome.storage.local.set({ recorderBlob: '', streamInfo, recorderStartTime: date.getTime() })
+  const recorder = new MediaRecorder(stream, {
+    mimeType,
+    videoBitsPerSecond: 7000000
+  });
+
+  const date = new Date();
+  await chrome.storage.local.set({
+    recorderBlob: '',
+    streamInfo,
+    recorderStartTime: date.getTime()
+  });
 
   recorder.ondataavailable = async (event) => {
-    if (event.data.size === 0) return
+    if (event.data.size === 0) return;
 
-    const url = URL.createObjectURL(event.data)
-    await chrome.storage.local.set({ recorderBlob: url })
-  }
+    const url = URL.createObjectURL(event.data);
+    await chrome.storage.local.set({ recorderBlob: url });
+  };
 
-  recorder.start()
-  return recorder
+  recorder.start();
+  return recorder;
 }
 
 export async function stopRecord (recorder: MediaRecorder): Promise<void> {
