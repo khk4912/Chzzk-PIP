@@ -7,7 +7,7 @@ const checkIsMuted = (video: Video): boolean => {
 
 export async function startRecord(video: Video, streamInfo: StreamInfo): Promise<MediaRecorder | null> {
   // WebM with AVC1 codec
-  const mimeType = 'video/webm;codecs=vp8';
+  const mimeType = 'video/webm;codecs=avc1';
 
   // Check browser support for WebM with AVC1
   if (!MediaRecorder.isTypeSupported(mimeType)) {
