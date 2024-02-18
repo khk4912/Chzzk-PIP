@@ -32,7 +32,7 @@ export function startRecordListener (e: Event): void {
     const overlayInterval = setInterval(() => {
       if (oldHref !== window.location.href) {
         clearInterval(overlayInterval)
-        stopRecordListener(recorder, overlayInterval)
+        stopRecordListener(recorder!, overlayInterval) 
         return
       }
       updateOverlay(sec++)
@@ -40,7 +40,7 @@ export function startRecordListener (e: Event): void {
 
     // Add stop EventListener
     const recordButton = document.querySelector('.chzzk-record-button')
-    recordButton?.addEventListener('click', () => { stopRecordListener(recorder, overlayInterval) }, { once: true })
+    recordButton?.addEventListener('click', () => { stopRecordListener(recorder!, overlayInterval) }, { once: true }) // Add '!' to assert that 'recorder' is not null
   })()
     .then()
     .catch(() => {
