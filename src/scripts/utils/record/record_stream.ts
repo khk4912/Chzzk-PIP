@@ -19,7 +19,7 @@ export async function startRecord (video: Video, streamInfo: StreamInfo): Promis
   const recorder = new MediaRecorder(
     stream,
     {
-      mimeType: 'video/webm',
+      mimeType: 'video/webm;codecs=avc1',
       videoBitsPerSecond: 7000000
     }
   )
