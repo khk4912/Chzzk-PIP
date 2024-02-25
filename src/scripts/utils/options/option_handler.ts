@@ -6,7 +6,7 @@ const DEFAULT_OPTIONS: Record<keyof Option, boolean> = {
   fastRec: false,
   seek: false,
   screenshot: true,
-  screenshotPreview: false
+  screenshotPreview: true
 }
 
 export const getOption = async (): Promise<typeof DEFAULT_OPTIONS> => {

@@ -1,10 +1,11 @@
+import { getOption } from '../options/option_handler'
 import { createDraggablePreview } from './preview'
 
 const pad = (num: number | string): string => {
   return num.toString().padStart(2, '0')
 }
 
-export function screenshot (): void {
+export async function screenshot (): Promise<void> {
   const streamerName = document.querySelector("[class^='video_information'] > [class^='name_ellipsis'] > [class^='name_text']")?.textContent ??
                        document.querySelector("[class^='live_information'] > [class^='name_ellipsis']> [class^='name_text']")?.textContent ??
                        'streamer'
@@ -29,14 +30,21 @@ export function screenshot (): void {
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
 
   const image = canvas.toDataURL('image/png')
-  const a = document.createElement('a')
 
   const now = new Date()
   const date = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`
 
-  a.href = image
-  a.download = `${streamerName}_${streamTitle}_${date}.png`
-  a.click()
+  const fileName = `${streamerName}_${streamTitle}_${date}.png`
 
-  createDraggablePreview(image, video)
+  const { screenshotPreview } = await getOption()
+
+  if (screenshotPreview) {
+    createDraggablePreview(image, video, fileName)
+  } else {
+    const a = document.createElement('a')
+    a.href = image
+    a.download = fileName
+
+    a.click()
+  }
 }

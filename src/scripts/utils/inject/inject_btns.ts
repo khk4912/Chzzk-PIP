@@ -181,7 +181,7 @@ function screenshotShortcut (e: KeyboardEvent): void {
       return
     }
 
-    screenshot()
+    void screenshot()
   }
 }
 

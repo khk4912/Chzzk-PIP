@@ -32,6 +32,7 @@ function init (): void {
     screenshotSwitch.checked = option.screenshot
     fastSaveSwitch.checked = option.fastRec
     seekSwitch.checked = option.seek
+    screenshotPreviewSwitch.checked = option.screenshotPreview
   })()
 }
 
@@ -55,6 +56,9 @@ async function handleChange (e: Event): Promise<void> {
       break
     case screenshotSwitch:
       await setOption('screenshot', e.target.checked)
+      break
+    case screenshotPreviewSwitch:
+      await setOption('screenshotPreview', e.target.checked)
       break
   }
 }
