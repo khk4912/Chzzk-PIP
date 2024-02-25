@@ -99,6 +99,10 @@ function wrapWithOverlay (img: HTMLImageElement, fileName: string): HTMLDivEleme
     overlay.remove()
   })
 
+  downloadButton.addEventListener('click', () => {
+    overlay.remove()
+  })
+
   cover.append(downloadButton, closeButton)
 
   overlay.classList.add('chzzk-screenshot-overlay')
