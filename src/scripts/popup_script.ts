@@ -1,6 +1,13 @@
 import { getOption, setOption } from './utils/options/option_handler'
 
-const [pipSwitch, recSwitch, screenshotSwitch, fastSaveSwitch, seekSwitch] =
+const [
+  pipSwitch,
+  recSwitch,
+  screenshotSwitch,
+  fastSaveSwitch,
+  seekSwitch,
+  screenshotPreviewSwitch
+] =
   document.querySelectorAll('input[type="checkbox"]')
 
 const isInputElement = (element: Element): element is HTMLInputElement => {
@@ -12,7 +19,7 @@ function init (): void {
     !(
       isInputElement(pipSwitch) && isInputElement(recSwitch) &&
       isInputElement(screenshotSwitch) && isInputElement(fastSaveSwitch) &&
-      isInputElement(seekSwitch)
+      isInputElement(seekSwitch) && isInputElement(screenshotPreviewSwitch)
     )
   ) {
     return
