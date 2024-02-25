@@ -1,3 +1,5 @@
+import { createDraggablePreview } from './preview'
+
 const pad = (num: number | string): string => {
   return num.toString().padStart(2, '0')
 }
@@ -35,4 +37,6 @@ export function screenshot (): void {
   a.href = image
   a.download = `${streamerName}_${streamTitle}_${date}.png`
   a.click()
+
+  createDraggablePreview(image, video)
 }
