@@ -149,6 +149,10 @@ async function makeVideoPIP (): Promise<void> {
 
 function recordShortcut (e: KeyboardEvent): void {
   if (e.key === 'r' || e.key === 'R' || e.key === 'ㄱ') {
+    if (e.ctrlKey || e.metaKey) {
+      return
+    }
+
     const activeElement = document.activeElement
     if (activeElement instanceof HTMLInputElement ||
       activeElement instanceof HTMLTextAreaElement ||
@@ -166,6 +170,10 @@ function recordShortcut (e: KeyboardEvent): void {
 
 function screenshotShortcut (e: KeyboardEvent): void {
   if (e.key === 's' || e.key === 'S' || e.key === 'ㄴ') {
+    if (e.ctrlKey || e.metaKey) {
+      return
+    }
+
     const activeElement = document.activeElement
     if (activeElement instanceof HTMLInputElement ||
       activeElement instanceof HTMLTextAreaElement ||
