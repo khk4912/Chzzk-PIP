@@ -14,7 +14,9 @@ export function getMemoizedState (
     let memoizedState = fiber.memoizedState
 
     while (memoizedState !== null) {
-      if (stateName in memoizedState.memoizedState) {
+      if (
+        typeof memoizedState.memoizedState === 'object' &&
+        stateName in memoizedState.memoizedState) {
         return memoizedState.memoizedState[stateName]
       }
 
