@@ -26,16 +26,24 @@ export function startRecordListener (e: Event): void {
 
     const overlayInterval = setInterval(() => {
       if (oldHref !== window.location.href) {
-        clearInterval(overlayInterval)
-        stopRecordListener(recorder, overlayInterval)
+        stopRecordListener(recorder, overlayInterval, videoWatcherInterval)
         return
       }
       updateOverlay(sec++)
     }, 1000)
 
+    const videoWatcherInterval = setInterval(() => {
+      const video = document.querySelector('.webplayer-internal-video')
+      if (video === null) {
+        stopRecordListener(recorder, overlayInterval, videoWatcherInterval)
+      }
+    }, 1000)
+
     // Add stop EventListener
     const recordButton = document.querySelector('.chzzk-record-button')
-    recordButton?.addEventListener('click', () => { stopRecordListener(recorder, overlayInterval) }, { once: true })
+    recordButton?.addEventListener('click', () => {
+      stopRecordListener(recorder, overlayInterval, videoWatcherInterval)
+    }, { once: true })
   })()
     .then()
     .catch(() => {
@@ -43,7 +51,11 @@ export function startRecordListener (e: Event): void {
     })
 }
 
-export function stopRecordListener (recorder: MediaRecorder, intervalID: NodeJS.Timeout): void {
+export function stopRecordListener (
+  recorder: MediaRecorder,
+  overlayIntervalID: NodeJS.Timeout,
+  videoWatcherIntervalID: NodeJS.Timeout
+): void {
   (async (): Promise<void> => {
     // TODO: Remove volume watcher
     const recordButton = document.querySelector('.chzzk-record-button')
@@ -56,11 +68,14 @@ export function stopRecordListener (recorder: MediaRecorder, intervalID: NodeJS.
     const clonedBtn = document.querySelector('.chzzk-record-button')
 
     // claer Overlay
-    clearInterval(intervalID)
+    clearInterval(overlayIntervalID)
     removeOverlay()
 
     // Add start EventListener
     clonedBtn?.addEventListener('click', startRecordListener, { once: true })
+
+    // clear video watcher
+    clearInterval(videoWatcherIntervalID)
   })()
     .then()
     .catch(console.error)
