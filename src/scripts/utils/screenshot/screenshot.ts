@@ -27,11 +27,14 @@ export async function screenshot (): Promise<void> {
 
   const image = canvas.toDataURL('image/png')
 
+  if (image === 'data:,') {
+    return
+  }
+
   const now = new Date()
   const date = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`
 
   const fileName = `${streamerName}_${streamTitle}_${date}.png`
-
   const { screenshotPreview } = await getOption()
 
   if (screenshotPreview) {
