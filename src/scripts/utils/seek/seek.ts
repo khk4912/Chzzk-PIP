@@ -1,3 +1,4 @@
+import { isVODPage } from '../download_vod/download'
 import { waitForElement } from '../inject/inject_btns'
 import { injectWithTimeout, seekOverlayLeft, seekOverlayRight } from '../inject/seek_overlay'
 import { getOption } from '../options/option_handler'
@@ -23,6 +24,10 @@ export async function registerSeekHandler (): Promise<void> {
   document.head.appendChild(script)
 
   document.addEventListener('keydown', (e) => {
+    if (isVODPage()) {
+      return
+    }
+
     const activeElement = document.activeElement
 
     if (activeElement instanceof HTMLInputElement ||
