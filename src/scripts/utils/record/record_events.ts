@@ -1,6 +1,7 @@
 import { injectOverlay, removeOverlay, updateOverlay } from '../inject/rec_overlay'
 import { startRecord, stopRecord } from './record_stream'
 import type { Video } from '../../types/record'
+import { getStreamInfo } from '../stream_info'
 
 export function startRecordListener (e: Event): void {
   (async (): Promise<void> => {
@@ -9,14 +10,8 @@ export function startRecordListener (e: Event): void {
       return
     }
 
-    const streamerName = document.querySelector("[class^='video_information'] > [class^='name_ellipsis'] > [class^='name_text']")?.textContent ??
-                         document.querySelector("[class^='live_information'] > [class^='name_ellipsis']> [class^='name_text']")?.textContent ??
-                         'streamer'
-    const streamTitle = document.querySelector("[class^='video_information_title']")?.textContent ??
-                        document.querySelector("[class^='live_information_player_title']")?.textContent ??
-                        'title'
-
-    const recorder = await startRecord(video, { streamerName, streamTitle })
+    const streamInfo = getStreamInfo(document)
+    const recorder = await startRecord(video, streamInfo)
 
     const recordSVG = document.querySelector('#chzzk-rec-icon')
     recordSVG?.setAttribute('fill', 'red')

@@ -1,4 +1,5 @@
 import { getOption } from '../options/option_handler'
+import { getStreamInfo } from '../stream_info'
 import { createDraggablePreview } from './preview'
 
 const pad = (num: number | string): string => {
@@ -6,12 +7,7 @@ const pad = (num: number | string): string => {
 }
 
 export async function screenshot (): Promise<void> {
-  const streamerName = document.querySelector("[class^='video_information'] > [class^='name_ellipsis'] > [class^='name_text']")?.textContent ??
-                       document.querySelector("[class^='live_information'] > [class^='name_ellipsis']> [class^='name_text']")?.textContent ??
-                       'streamer'
-  const streamTitle = document.querySelector("[class^='video_information_title']")?.textContent ??
-                       document.querySelector("[class^='live_information_player_title']")?.textContent ??
-                       'title'
+  const { streamerName, streamTitle } = getStreamInfo(document)
 
   const video = document.querySelector('video')
   if (!(video instanceof HTMLVideoElement)) {
