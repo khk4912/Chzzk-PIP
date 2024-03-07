@@ -7,8 +7,6 @@ export function createDraggablePreview (
   video: HTMLVideoElement,
   fileName: string
 ): void {
-  const rect = video.getBoundingClientRect()
-
   const preview = document.createElement('img')
   preview.classList.add('chzzk-pip', 'screenshot-preview')
 
@@ -22,13 +20,21 @@ export function createDraggablePreview (
   const wrappedOverlay = wrapWithOverlay(preview, fileName)
   wrappedOverlay.style.cssText = `
     position: absolute;
-    left: ${rect.left * 1.2}px;
-    top: ${rect.top * 1.2}px;
+    left: 15%;
+    top: 5%;
     cursor: move;
-    width: ${rect.width * 0.8}px;
-    height: ${rect.height * 0.8}px;
+    width: 40%;
+    aspect-ratio: 16/9;
+    z-index: 999;
     `
-  document.body.appendChild(wrappedOverlay)
+
+  const informationContainer = document.querySelector('[class^="layout_body"]')
+
+  if (informationContainer === null) {
+    return
+  }
+
+  informationContainer.prepend(wrappedOverlay)
 
   let startPosX = 0
   let startPosY = 0
