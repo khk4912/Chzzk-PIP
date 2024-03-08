@@ -6,7 +6,8 @@ const [
   screenshotSwitch,
   fastSaveSwitch,
   seekSwitch,
-  screenshotPreviewSwitch
+  screenshotPreviewSwitch,
+  highFrameRateRecSwitch
 ] =
   document.querySelectorAll('input[type="checkbox"]')
 
@@ -19,7 +20,8 @@ function init (): void {
     !(
       isInputElement(pipSwitch) && isInputElement(recSwitch) &&
       isInputElement(screenshotSwitch) && isInputElement(fastSaveSwitch) &&
-      isInputElement(seekSwitch) && isInputElement(screenshotPreviewSwitch)
+      isInputElement(seekSwitch) && isInputElement(screenshotPreviewSwitch) &&
+      isInputElement(highFrameRateRecSwitch)
     )
   ) {
     return
@@ -33,6 +35,7 @@ function init (): void {
     fastSaveSwitch.checked = option.fastRec
     seekSwitch.checked = option.seek
     screenshotPreviewSwitch.checked = option.screenshotPreview
+    highFrameRateRecSwitch.checked = option.highFrameRateRec
   })()
 }
 
@@ -59,6 +62,9 @@ async function handleChange (e: Event): Promise<void> {
       break
     case screenshotPreviewSwitch:
       await setOption('screenshotPreview', e.target.checked)
+      break
+    case highFrameRateRecSwitch:
+      await setOption('highFrameRateRec', e.target.checked)
       break
   }
 }

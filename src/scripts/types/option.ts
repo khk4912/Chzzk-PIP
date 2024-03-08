@@ -5,4 +5,5 @@ export interface Option {
   seek?: boolean
   screenshot?: boolean
   screenshotPreview?: boolean
+  highFrameRateRec?: boolean
 }
