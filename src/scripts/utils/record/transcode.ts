@@ -170,9 +170,9 @@ export async function mergeVideoWithAudio (inputFileURL: string, audioFileURL: s
   const audioFile = await fetchFile(audioFileURL)
 
   await ffmpeg.writeFile('input.webm', inputFile)
-  await ffmpeg.writeFile('audio.webm', audioFile)
+  await ffmpeg.writeFile('audio.opus', audioFile)
 
-  await ffmpeg.exec(['-i', 'input.webm', '-i', 'audio.webm', '-c', 'copy', 'output.webm'])
+  await ffmpeg.exec(['-i', 'input.webm', '-i', 'audio.opus', '-c', 'copy', 'output.webm'])
 
   const data = await ffmpeg.readFile('output.webm')
   const url = URL.createObjectURL(new Blob([data], { type: 'video/webm' }))

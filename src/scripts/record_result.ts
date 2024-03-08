@@ -70,26 +70,26 @@ function _showVideo (
 async function highFrameInit (): Promise<void> {
   const {
     videoRecorderBlob,
-    auidoRecorderBlob,
+    audioRecorderBlob,
     streamInfo,
     recorderStartTime,
     recorderStopTime
   } = await chrome.storage.local.get(
     [
       'videoRecorderBlob',
-      'auidoRecorderBlob',
+      'audioRecorderBlob',
       'streamInfo',
       'recorderStartTime',
       'recorderStopTime'
     ]) as {
     videoRecorderBlob: string
-    auidoRecorderBlob: string
+    audioRecorderBlob: string
     streamInfo: StreamInfo
     recorderStartTime: number
     recorderStopTime: number
   }
 
-  const videoURL = await mergeVideoWithAudio(videoRecorderBlob, auidoRecorderBlob)
+  const videoURL = await mergeVideoWithAudio(videoRecorderBlob, audioRecorderBlob)
   _showVideo(videoURL, recorderStopTime, recorderStartTime, streamInfo)
 }
 

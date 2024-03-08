@@ -112,19 +112,17 @@ export async function startHighFrameRecord (video: Video, streamInfo: StreamInfo
 
   const videoMediaRecorder = new MediaRecorder(canvas.captureStream(60),
     {
-      mimeType: 'video/webm;codecs=avc1',
+      mimeType: 'video/webm;codecs=vp9',
       videoBitsPerSecond: 7000000
     }
   )
-  const auidoTrackStream = new MediaStream()
+  const audioTrackStream = new MediaStream()
   video.captureStream().getAudioTracks().forEach(track => {
-    auidoTrackStream.addTrack(track)
+    audioTrackStream.addTrack(track)
   })
 
-  console.log(auidoTrackStream.getAudioTracks())
-
-  const audioMediaRecorder = new MediaRecorder(video.captureStream(), {
-    mimeType: 'audio/webm'
+  const audioMediaRecorder = new MediaRecorder(audioTrackStream, {
+    mimeType: 'audio/webm;codecs=opus'
   })
 
   const date = new Date()
@@ -170,29 +168,19 @@ export async function stopHighFrameRecord (
   const recorderStopTime = new Date().getTime()
   await chrome.storage.local.set({ recorderStopTime })
 
-  const { fastRec } = await getOption()
   const {
     videoRecorderBlob,
-    audioRecorderBlob,
-    streamInfo,
-    recorderStartTime
+    audioRecorderBlob
   } = await chrome.storage.local.get(
     [
       'videoRecorderBlob',
-      'auidoRecorderBlob',
-      'streamInfo',
-      'recorderStartTime'
-    ]) as { videoRecorderBlob: string, audioRecorderBlob: string, streamInfo: StreamInfo, recorderStartTime: number }
+      'audioRecorderBlob'
+    ]) as {
+    videoRecorderBlob: string
+    audioRecorderBlob: string
+  }
 
-  if (!fastRec && videoRecorderBlob !== '' && audioRecorderBlob !== '') {
+  if (videoRecorderBlob !== '' && audioRecorderBlob !== '') {
     window.open(chrome.runtime.getURL('pages/record.html'))
-    return
   }
-
-  if (typeof videoRecorderBlob !== 'string' || typeof audioRecorderBlob !== 'string') {
-    return
-  }
-
-  const video = document.createElement('video')
-  // TODO: merge video and audio
 }
