@@ -2,6 +2,7 @@ import { injectOverlay, removeOverlay, updateOverlay } from '../inject/rec_overl
 import { startRecord, stopRecord } from './record_stream'
 import type { Video } from '../../types/record'
 import { getStreamInfo } from '../stream_info'
+import { getOption } from '../options/option_handler'
 
 export function startRecordListener (e: Event): void {
   (async (): Promise<void> => {
@@ -10,45 +11,59 @@ export function startRecordListener (e: Event): void {
       return
     }
 
-    const streamInfo = getStreamInfo(document)
-    const recorder = await startRecord(video, streamInfo)
+    const { highFrameRateRec } = await getOption()
 
-    const recordSVG = document.querySelector('#chzzk-rec-icon')
-    recordSVG?.setAttribute('fill', 'red')
+    if (highFrameRateRec) {
+      await _highFrameRateRec(video)
+    }
 
-    // inject Overlay
-    let sec = 0
-
-    injectOverlay()
-    updateOverlay(sec++)
-
-    const oldHref = window.location.href
-
-    const overlayInterval = setInterval(() => {
-      if (oldHref !== window.location.href) {
-        stopRecordListener(recorder, overlayInterval, videoWatcherInterval)
-        return
-      }
-      updateOverlay(sec++)
-    }, 1000)
-
-    const videoWatcherInterval = setInterval(() => {
-      const video = document.querySelector('.webplayer-internal-video')
-      if (video === null) {
-        stopRecordListener(recorder, overlayInterval, videoWatcherInterval)
-      }
-    }, 1000)
-
-    // Add stop EventListener
-    const recordButton = document.querySelector('.chzzk-record-button')
-    recordButton?.addEventListener('click', () => {
-      stopRecordListener(recorder, overlayInterval, videoWatcherInterval)
-    }, { once: true })
+    await _record(video)
   })()
     .then()
     .catch(() => {
       initRecordButton()
     })
+}
+
+async function _record (video: Video): Promise<void> {
+  const streamInfo = getStreamInfo(document)
+  const recorder = await startRecord(video, streamInfo)
+
+  const recordSVG = document.querySelector('#chzzk-rec-icon')
+  recordSVG?.setAttribute('fill', 'red')
+
+  // inject Overlay
+  let sec = 0
+
+  injectOverlay()
+  updateOverlay(sec++)
+
+  const oldHref = window.location.href
+
+  const overlayInterval = setInterval(() => {
+    if (oldHref !== window.location.href) {
+      stopRecordListener(recorder, overlayInterval, videoWatcherInterval)
+      return
+    }
+    updateOverlay(sec++)
+  }, 1000)
+
+  const videoWatcherInterval = setInterval(() => {
+    const video = document.querySelector('.webplayer-internal-video')
+    if (video === null) {
+      stopRecordListener(recorder, overlayInterval, videoWatcherInterval)
+    }
+  }, 1000)
+
+  // Add stop EventListener
+  const recordButton = document.querySelector('.chzzk-record-button')
+  recordButton?.addEventListener('click', () => {
+    stopRecordListener(recorder, overlayInterval, videoWatcherInterval)
+  }, { once: true })
+}
+
+async function _highFrameRateRec (video: Video): Promise<void> {
+
 }
 
 export function stopRecordListener (
