@@ -121,7 +121,11 @@ export async function startHighFrameRecord (video: Video, streamInfo: StreamInfo
     auidoTrackStream.addTrack(track)
   })
 
-  const audioMediaRecorder = new MediaRecorder(auidoTrackStream)
+  console.log(auidoTrackStream.getAudioTracks())
+
+  const audioMediaRecorder = new MediaRecorder(video.captureStream(), {
+    mimeType: 'audio/webm'
+  })
 
   const date = new Date()
   await chrome.storage.local.set({ highFrame: true, videoRecorderBlob: '', audioRecorderBlob: '', streamInfo, recorderStartTime: date.getTime() })
@@ -143,6 +147,8 @@ export async function startHighFrameRecord (video: Video, streamInfo: StreamInfo
   videoMediaRecorder.start()
   audioMediaRecorder.start()
 
+  console.log('asdf')
+
   return {
     videoMediaRecorder,
     audioMediaRecorder,
@@ -150,12 +156,19 @@ export async function startHighFrameRecord (video: Video, streamInfo: StreamInfo
   }
 }
 
-export async function stopHighFrameRecord (highFPSRecorder: HighFrameRecorder): Promise<void> {
+export async function stopHighFrameRecord (
+  highFPSRecorder: HighFrameRecorder
+
+): Promise<void> {
   const { videoMediaRecorder, audioMediaRecorder, highFrameCanvasInterval } = highFPSRecorder
+
+  clearInterval(highFrameCanvasInterval)
 
   videoMediaRecorder.stop()
   audioMediaRecorder.stop()
-  clearInterval(highFrameCanvasInterval)
+
+  const recorderStopTime = new Date().getTime()
+  await chrome.storage.local.set({ recorderStopTime })
 
   const { fastRec } = await getOption()
   const {

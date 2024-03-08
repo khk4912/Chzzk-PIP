@@ -1,7 +1,18 @@
 import { isSupportedType, type StreamInfo, type SupportedType } from './types/record'
-import { hideLoadBar, segmentize, transcode } from './utils/record/transcode'
+import { hideLoadBar, mergeVideoWithAudio, segmentize, transcode } from './utils/record/transcode'
 
 async function main (): Promise<void> {
+  const { highFrame } = await chrome.storage.local.get('highFrame') as { highFrame: boolean }
+
+  if (highFrame) {
+    await highFrameInit()
+    return
+  }
+
+  await init()
+}
+
+async function init (): Promise<void> {
   const {
     recorderBlob,
     streamInfo,
@@ -20,6 +31,15 @@ async function main (): Promise<void> {
     recorderStopTime: number
   }
 
+  _showVideo(recorderBlob, recorderStopTime, recorderStartTime, streamInfo)
+}
+
+function _showVideo (
+  recorderBlob: string,
+  recorderStopTime: number,
+  recorderStartTime: number,
+  streamInfo: StreamInfo
+): void {
   const video = document.getElementById('vid') as HTMLVideoElement
 
   video.src = recorderBlob
@@ -45,6 +65,32 @@ async function main (): Promise<void> {
       registerSegmentModalHandler(recorderBlob, fileName, duration)
     })()
   }, { once: true })
+}
+
+async function highFrameInit (): Promise<void> {
+  const {
+    videoRecorderBlob,
+    auidoRecorderBlob,
+    streamInfo,
+    recorderStartTime,
+    recorderStopTime
+  } = await chrome.storage.local.get(
+    [
+      'videoRecorderBlob',
+      'auidoRecorderBlob',
+      'streamInfo',
+      'recorderStartTime',
+      'recorderStopTime'
+    ]) as {
+    videoRecorderBlob: string
+    auidoRecorderBlob: string
+    streamInfo: StreamInfo
+    recorderStartTime: number
+    recorderStopTime: number
+  }
+
+  const videoURL = await mergeVideoWithAudio(videoRecorderBlob, auidoRecorderBlob)
+  _showVideo(videoURL, recorderStopTime, recorderStartTime, streamInfo)
 }
 
 function registerDownloadHandler (

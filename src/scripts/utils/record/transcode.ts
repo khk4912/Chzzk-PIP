@@ -15,6 +15,7 @@ const ffmpeg = new FFmpeg()
 ffmpeg.on('progress', ({ progress, time }) => {
   updateLoadBar(Math.floor(time / (videoDuration * 1000000) * 100))
 })
+ffmpeg.on('log', (evt) => { console.log(evt.message) })
 
 export const transcode = async (
   inputFile: string,
@@ -154,4 +155,28 @@ export function hideLoadBar (): void {
 
   loadBar.style.visibility = 'hidden'
   loadBar.style.opacity = '0'
+}
+
+export async function mergeVideoWithAudio (inputFileURL: string, audioFileURL: string): Promise<string> {
+  if (ffmpeg.loaded) {
+    ffmpeg.terminate()
+  }
+  await ffmpeg.load({ ...FFMPEG_OPTION })
+
+  showLoadBar()
+  updateLoadBar(0)
+
+  const inputFile = await fetchFile(inputFileURL)
+  const audioFile = await fetchFile(audioFileURL)
+
+  await ffmpeg.writeFile('input.webm', inputFile)
+  await ffmpeg.writeFile('audio.webm', audioFile)
+
+  await ffmpeg.exec(['-i', 'input.webm', '-i', 'audio.webm', '-c', 'copy', 'output.webm'])
+
+  const data = await ffmpeg.readFile('output.webm')
+  const url = URL.createObjectURL(new Blob([data], { type: 'video/webm' }))
+
+  hideLoadBar()
+  return url
 }

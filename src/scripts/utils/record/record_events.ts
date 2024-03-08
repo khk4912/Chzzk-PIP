@@ -1,6 +1,6 @@
 import { injectOverlay, removeOverlay, updateOverlay } from '../inject/rec_overlay'
-import { startRecord, stopRecord } from './record_stream'
-import type { Video } from '../../types/record'
+import { startHighFrameRecord, startRecord, stopHighFrameRecord, stopRecord } from './record_stream'
+import type { HighFrameRecorder, Video } from '../../types/record'
 import { getStreamInfo } from '../stream_info'
 import { getOption } from '../options/option_handler'
 
@@ -15,6 +15,7 @@ export function startRecordListener (e: Event): void {
 
     if (highFrameRateRec) {
       await _highFrameRateRec(video)
+      return
     }
 
     await _record(video)
@@ -63,7 +64,40 @@ async function _record (video: Video): Promise<void> {
 }
 
 async function _highFrameRateRec (video: Video): Promise<void> {
+  const streamInfo = getStreamInfo(document)
+  const higfhFPSRecorder = await startHighFrameRecord(video, streamInfo)
 
+  const recordSVG = document.querySelector('#chzzk-rec-icon')
+  recordSVG?.setAttribute('fill', 'red')
+
+  // inject Overlay
+  let sec = 0
+
+  injectOverlay()
+  updateOverlay(sec++)
+
+  const oldHref = window.location.href
+
+  const overlayInterval = setInterval(() => {
+    if (oldHref !== window.location.href) {
+      void stopHighFrameRecord(higfhFPSRecorder)
+      return
+    }
+    updateOverlay(sec++)
+  }, 1000)
+
+  const videoWatcherInterval = setInterval(() => {
+    const video = document.querySelector('.webplayer-internal-video')
+    if (video === null) {
+      stopHighFrameRecordListener(higfhFPSRecorder, overlayInterval, videoWatcherInterval)
+    }
+  }, 1000)
+
+  // Add stop EventListener
+  const recordButton = document.querySelector('.chzzk-record-button')
+  recordButton?.addEventListener('click', () => {
+    stopHighFrameRecordListener(higfhFPSRecorder, overlayInterval, videoWatcherInterval)
+  }, { once: true })
 }
 
 export function stopRecordListener (
@@ -76,6 +110,36 @@ export function stopRecordListener (
     const recordButton = document.querySelector('.chzzk-record-button')
     clearEventListeners(recordButton)
     await stopRecord(recorder)
+
+    const recordSVG = document.querySelector('#chzzk-rec-icon')
+    recordSVG?.setAttribute('fill', '#ffffff')
+
+    const clonedBtn = document.querySelector('.chzzk-record-button')
+
+    // claer Overlay
+    clearInterval(overlayIntervalID)
+    removeOverlay()
+
+    // Add start EventListener
+    clonedBtn?.addEventListener('click', startRecordListener, { once: true })
+
+    // clear video watcher
+    clearInterval(videoWatcherIntervalID)
+  })()
+    .then()
+    .catch(console.error)
+}
+
+function stopHighFrameRecordListener (
+  highFPSRecorder: HighFrameRecorder,
+  overlayIntervalID: NodeJS.Timeout,
+  videoWatcherIntervalID: NodeJS.Timeout
+): void {
+  (async (): Promise<void> => {
+    // TODO: Remove volume watcher
+    const recordButton = document.querySelector('.chzzk-record-button')
+    clearEventListeners(recordButton)
+    await stopHighFrameRecord(highFPSRecorder)
 
     const recordSVG = document.querySelector('#chzzk-rec-icon')
     recordSVG?.setAttribute('fill', '#ffffff')
