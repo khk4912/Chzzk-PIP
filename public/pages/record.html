@@ -22,11 +22,12 @@
         </button>
         <button class="download" data-type="gif">GIF</button>
         <button class="download" data-type="webp">WEBP</button>
-        <button class="sole" id="showSegmentModalBtn">분할 다운로드</button>
+        <button class="download" id="showSegmentModalBtn">분할 다운로드</button>
+        <button class="download" id="showSliceModalBtn">자르기</button>
       </div>
     </div>
 
-    <div class="segment-overlay">
+    <div class="modal-overlay" id="segmentOverlay">
       <div class="header">
         <h3>분할 후 다운로드</h3>
         <span
@@ -43,6 +44,27 @@
         <br />
         <button id="segmentDownloadBtn">분할 후 다운로드</button>
         <button id="hideSegmentModalBtn">닫기</button>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="sliceOverlay">
+      <div class="header">
+        <h3>자른 후 다운로드</h3>
+        <span
+          >필요없는 부분이 녹화되었나요? <br />
+          영상을 잘라서 필요한 부분만 저장해보세요!
+          <br />
+          <br />
+          (브라우저의 한계로, 몇 초의 오차가 발생할 수 있어요.)
+        </span>
+      </div>
+
+      <div class="segment-input">
+        <input name="" id="sliceStart" value="45" /> 초 부터
+        <input id="sliceEnd" /> 초 까지
+        <br />
+        <button id="sliceDownloadBtn">자르고 다운로드</button>
+        <button id="hideSliceModalBtn">닫기</button>
       </div>
     </div>
 
