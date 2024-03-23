@@ -17,19 +17,23 @@ ffmpeg.on('progress', ({ progress, time }) => {
 })
 ffmpeg.on('log', (evt) => { console.log(evt.message) })
 
+async function loadFFmpeg (): Promise<void> {
+  if (ffmpeg.loaded) {
+    ffmpeg.terminate()
+  }
+
+  await ffmpeg.load({ ...FFMPEG_OPTION })
+}
+
 export const transcode = async (
   inputFile: string,
   outputType: SupportedType,
   originalVideoDuration: number
 ): Promise<string> => {
-  if (ffmpeg.loaded) {
-    ffmpeg.terminate()
-  }
+  await loadFFmpeg()
   showLoadBar()
 
   videoDuration = originalVideoDuration
-
-  await ffmpeg.load({ ...FFMPEG_OPTION })
 
   switch (outputType) {
     case 'gif':
@@ -95,10 +99,7 @@ const transcodeMP4AAC = async (inputFileURL: string): Promise<string> => {
 }
 
 export const segmentize = async (inputFileURL: string, targetDuration: number, originalVideoDuration: number): Promise<string[]> => {
-  if (ffmpeg.loaded) {
-    ffmpeg.terminate()
-  }
-  await ffmpeg.load({ ...FFMPEG_OPTION })
+  await loadFFmpeg()
 
   videoDuration = originalVideoDuration
   showLoadBar()
@@ -158,11 +159,7 @@ export function hideLoadBar (): void {
 }
 
 export async function mergeVideoWithAudio (inputFileURL: string, audioFileURL: string): Promise<string> {
-  if (ffmpeg.loaded) {
-    ffmpeg.terminate()
-  }
-  await ffmpeg.load({ ...FFMPEG_OPTION })
-
+  await loadFFmpeg()
   showLoadBar()
   updateLoadBar(0)
 
