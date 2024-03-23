@@ -1,5 +1,5 @@
 import { isSupportedType, type StreamInfo, type SupportedType } from './types/record'
-import { hideLoadBar, mergeVideoWithAudio, segmentize, transcode } from './utils/record/transcode'
+import { hideLoadBar, mergeVideoWithAudio, segmentize, slice, transcode } from './utils/record/transcode'
 
 async function main (): Promise<void> {
   const { highFrame } = await chrome.storage.local.get('highFrame') as { highFrame: boolean }
@@ -63,6 +63,7 @@ function _showVideo (
       const fileName = `${streamInfo.streamerName}_${duration}s`
       registerDownloadHandler(recorderBlob, fileName, duration)
       registerSegmentModalHandler(recorderBlob, fileName, duration)
+      registerDownloadAfterSliceHandler(recorderBlob, fileName, duration)
     })()
   }, { once: true })
 }
@@ -153,35 +154,29 @@ async function donwloadAfterTranscode (
   startDownload(transcodeBlobURL, fileName)
 }
 
+const showModal = (modal: HTMLDivElement): void => {
+  modal.style.visibility = 'visible'
+  modal.style.opacity = '1'
+}
+
+const hideModal = (modal: HTMLDivElement): void => {
+  modal.style.visibility = 'hidden'
+  modal.style.opacity = '0'
+}
+
 function registerSegmentModalHandler (
   recorderBlobURL: string,
   fileName: string,
   originalVideoDuration: number
 ): void {
-  const segmentModal = document.querySelector('.segment-overlay')
+  const segmentModal = document.querySelector('#segmentOverlay')
   const segmentDownloadBtn = document.querySelector('#segmentDownloadBtn')
   const modalShowBtn = document.getElementById('showSegmentModalBtn')
   const modalHideBtn = document.getElementById('hideSegmentModalBtn')
   const segmentSecInput = document.getElementById('segmentSec') as HTMLInputElement
 
-  const showModal = (): void => {
-    if (!(segmentModal instanceof HTMLDivElement)) {
-      return
-    }
-
-    segmentSecInput.value = String(Math.floor(originalVideoDuration))
-
-    segmentModal.style.visibility = 'visible'
-    segmentModal.style.opacity = '1'
-  }
-
-  const hideModal = (): void => {
-    if (!(segmentModal instanceof HTMLDivElement)) {
-      return
-    }
-
-    segmentModal.style.visibility = 'hidden'
-    segmentModal.style.opacity = '0'
+  if (!(segmentModal instanceof HTMLDivElement)) {
+    return
   }
 
   segmentDownloadBtn?.addEventListener('click', () => {
@@ -191,11 +186,54 @@ function registerSegmentModalHandler (
       return
     }
 
-    hideModal()
+    hideModal(segmentModal)
     void segmentDownload(recorderBlobURL, fileName, originalVideoDuration)
   })
-  modalShowBtn?.addEventListener('click', showModal)
-  modalHideBtn?.addEventListener('click', hideModal)
+  modalShowBtn?.addEventListener('click', () => {
+    segmentSecInput.value = String(Math.floor(originalVideoDuration))
+    showModal(segmentModal)
+  })
+  modalHideBtn?.addEventListener('click', () => {
+    hideModal(segmentModal)
+  })
+}
+
+function registerDownloadAfterSliceHandler (
+  recorderBlobURL: string,
+  fileName: string,
+  originalVideoDuration: number
+): void {
+  const sliceModal = document.querySelector('#sliceOverlay')
+  const sliceDownloadBtn = document.querySelector('#sliceDownloadBtn')
+  const modalShowBtn = document.getElementById('showSliceModalBtn')
+  const modalHideBtn = document.getElementById('hideSliceModalBtn')
+
+  const sliceStart = document.getElementById('sliceStart') as HTMLInputElement
+  const sliceEnd = document.getElementById('sliceEnd') as HTMLInputElement
+
+  if (!(sliceModal instanceof HTMLDivElement)) {
+    return
+  }
+
+  sliceDownloadBtn?.addEventListener('click', () => {
+    const parsedStartSecInput = Number(sliceStart.value)
+    const parsedEndSecInput = Number(sliceEnd.value)
+
+    if ((Number.isNaN(parsedStartSecInput) || parsedStartSecInput <= 0) ||
+        (Number.isNaN(parsedEndSecInput) || parsedEndSecInput <= 0)) {
+      return
+    }
+
+    hideModal(sliceModal)
+    void sliceDownload(recorderBlobURL, fileName, parsedStartSecInput, parsedEndSecInput)
+  })
+  modalShowBtn?.addEventListener('click', () => {
+    sliceEnd.value = String(Math.floor(originalVideoDuration))
+    showModal(sliceModal)
+  })
+  modalHideBtn?.addEventListener('click', () => {
+    hideModal(sliceModal)
+  })
 }
 
 async function segmentDownload (
@@ -214,6 +252,20 @@ async function segmentDownload (
     a.download = `${fileName}_${idx}.mp4`
     a.click()
   })
+}
+
+async function sliceDownload (
+  recorderBlobURL: string,
+  fileName: string,
+  sliceStart: number,
+  sliceEnd: number
+): Promise<void> {
+  const url = await slice(recorderBlobURL, sliceStart, sliceEnd - sliceStart)
+
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `${fileName}_trim_${sliceEnd - sliceStart}s.mp4`
+  a.click()
 }
 
 void main()
