@@ -15,7 +15,6 @@ const ffmpeg = new FFmpeg()
 ffmpeg.on('progress', ({ progress, time }) => {
   updateLoadBar(Math.floor(time / (videoDuration * 1000000) * 100))
 })
-ffmpeg.on('log', (evt) => { console.log(evt.message) })
 
 async function loadFFmpeg (): Promise<void> {
   if (ffmpeg.loaded) {
@@ -173,6 +172,23 @@ export async function mergeVideoWithAudio (inputFileURL: string, audioFileURL: s
 
   const data = await ffmpeg.readFile('output.webm')
   const url = URL.createObjectURL(new Blob([data], { type: 'video/webm' }))
+
+  hideLoadBar()
+  return url
+}
+
+export async function slice (inputFileURL: string, start: number, duration: number): Promise<string> {
+  await loadFFmpeg()
+  showLoadBar()
+  updateLoadBar(0)
+
+  const inputFile = await fetchFile(inputFileURL)
+
+  await ffmpeg.writeFile('input.webm', inputFile)
+  await ffmpeg.exec(['-ss', String(start), '-i', 'input.webm', '-c', 'copy', '-t', String(duration), 'output.mp4'])
+
+  const data = await ffmpeg.readFile('output.mp4')
+  const url = URL.createObjectURL(new Blob([data], { type: 'video/mp4' }))
 
   hideLoadBar()
   return url
