@@ -39,7 +39,7 @@
         </span>
       </div>
 
-      <div class="segment-input">
+      <div class="modal-input">
         <input name="" id="segmentSec" value="45" /> 초
         <br />
         <button id="segmentDownloadBtn">분할 후 다운로드</button>
@@ -59,9 +59,11 @@
         </span>
       </div>
 
-      <div class="segment-input">
-        <input name="" id="sliceStart" value="45" /> 초 부터
-        <input id="sliceEnd" /> 초 까지
+      <div class="modal-input">
+        <input class="duration" type="text" id="sliceStart" value="00:00" />
+        초 부터
+        <input class="duration" type="text" id="sliceEnd" value="00:00" /> 초
+        까지
         <br />
         <button id="sliceDownloadBtn">자르고 다운로드</button>
         <button id="hideSliceModalBtn">닫기</button>

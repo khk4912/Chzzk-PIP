@@ -54,7 +54,7 @@ button:hover {
   font-weight: bold;
 }
 
-.segment-overlay {
+.modal-overlay {
   position: absolute;
   visibility: hidden;
   display: grid;
@@ -71,11 +71,11 @@ button:hover {
   transition: all 0.3s;
 }
 
-.segment-overlay.header {
+.modal-overlay.header {
   margin-bottom: 10vh;
 }
 
-#segmentSec {
+.modal-input input {
   width: 10%;
   text-align: center;
   padding: 2%;
