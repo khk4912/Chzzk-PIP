@@ -189,7 +189,7 @@ function createScreenshotButton (): HTMLButtonElement {
   const screenshotButton = document.createElement('button')
   screenshotButton.classList.add('pzp-button', 'pzp-pc-setting-button', 'pzp-pc__setting-button', 'pzp-pc-ui-button')
   screenshotButton.addEventListener('click', () => {
-    screenshot()
+    void screenshot()
   })
 
   const toolTip = document.createElement('span')
