@@ -16,6 +16,9 @@ devDependencies:
   '@types/chrome':
     specifier: ^0.0.254
     version: 0.0.254
+  '@types/firefox-webext-browser':
+    specifier: ^120.0.3
+    version: 120.0.3
   '@types/node':
     specifier: ^20.10.5
     version: 20.10.5
@@ -266,6 +269,10 @@ packages:
 
   /@types/filewriter@0.0.32:
     resolution: {integrity: sha512-Kpi2GXQyYJdjL8mFclL1eDgihn1SIzorMZjD94kdPZh9E4VxGOeyjPxi5LpsM4Zku7P0reqegZTt2GxhmA9VBg==}
+    dev: true
+
+  /@types/firefox-webext-browser@120.0.3:
+    resolution: {integrity: sha512-APbBSxOvFMbKwXy/4YrEVa5Di6N0C9yl4w0WA0xzdkOrChAfPQ/KlcC8QLyhemHCHpF1CB/zHy52+oUQurViOg==}
     dev: true
 
   /@types/har-format@1.2.15:
