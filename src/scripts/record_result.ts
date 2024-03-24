@@ -31,6 +31,19 @@ async function init (): Promise<void> {
     recorderStopTime: number
   }
 
+  if (navigator.userAgent.includes('Firefox')) {
+    chrome.runtime.onMessage.addListener((message) => {
+      const blob = message.blob
+      if (blob instanceof Blob) {
+        void (async () => {
+          const url = URL.createObjectURL(blob)
+          _showVideo(url, recorderStopTime, recorderStartTime, streamInfo)
+        })()
+      }
+    })
+    return
+  }
+
   _showVideo(recorderBlob, recorderStopTime, recorderStartTime, streamInfo)
 }
 

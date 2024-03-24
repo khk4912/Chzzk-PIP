@@ -38,6 +38,12 @@ export async function startRecord (video: Video, streamInfo: StreamInfo): Promis
 
     const url = URL.createObjectURL(event.data)
     await chrome.storage.local.set({ recorderBlob: url })
+
+    if (isMoz) {
+      // send Blob via message to new page
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      await chrome.runtime.sendMessage({ blob: new Blob([event.data], { type: 'video/webm' }) })
+    }
   }
 
   recorder.start()
@@ -49,10 +55,10 @@ export async function stopRecord (recorder: MediaRecorder): Promise<void> {
   const recorderStopTime = new Date().getTime()
   await chrome.storage.local.set({ recorderStopTime })
 
-  // TODO: Firefox needs more time to save the file, gonna find a better way to do this
-  if (navigator.userAgent.includes('Firefox')) {
-    await new Promise(resolve => setTimeout(resolve, 1000))
-  }
+  // // TODO: Firefox needs more time to save the file, gonna find a better way to do this
+  // if (navigator.userAgent.includes('Firefox')) {
+  //   await new Promise(resolve => setTimeout(resolve, 1000))
+  // }
 
   const { fastRec } = await getOption()
   const {
@@ -66,7 +72,7 @@ export async function stopRecord (recorder: MediaRecorder): Promise<void> {
       'recorderStartTime'
     ]) as { recorderBlob: string, streamInfo: StreamInfo, recorderStartTime: number }
 
-  if (!fastRec && recorderBlob !== '') {
+  if ((!fastRec && recorderBlob !== '') || navigator.userAgent.includes('Firefox')) {
     window.open(chrome.runtime.getURL('pages/record.html'))
     return
   }
