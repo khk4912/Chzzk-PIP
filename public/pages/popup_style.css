@@ -20,6 +20,10 @@ body {
   place-items: center;
 }
 
+.header span {
+  font-size: small;
+}
+
 #logo_img {
   width: 25%;
 }
