@@ -21,7 +21,8 @@ export function startRecordListener (e: Event): void {
     await _record(video)
   })()
     .then()
-    .catch(() => {
+    .catch((err) => {
+      console.error(err)
       initRecordButton()
     })
 }

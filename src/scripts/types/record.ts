@@ -1,5 +1,6 @@
 export interface Video extends HTMLMediaElement {
   captureStream: () => MediaStream
+  mozCaptureStream: () => MediaStream
 }
 
 export interface StreamInfo {

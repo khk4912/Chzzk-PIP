@@ -14,12 +14,18 @@ export async function startRecord (video: Video, streamInfo: StreamInfo): Promis
       video.volume = 0.5
     }
   }
+  const isMoz = navigator.userAgent.includes('Firefox')
+  let stream: MediaStream
+  if (isMoz) {
+    stream = video.mozCaptureStream()
+  } else {
+    stream = video.captureStream()
+  }
 
-  const stream = video.captureStream()
   const recorder = new MediaRecorder(
     stream,
     {
-      mimeType: 'video/webm;codecs=avc1',
+      mimeType: isMoz ? 'video/webm;codecs=vp8,opus' : 'video/webm;codecs=avc1',
       videoBitsPerSecond: 7000000
     }
   )
@@ -42,6 +48,11 @@ export async function stopRecord (recorder: MediaRecorder): Promise<void> {
   recorder.stop()
   const recorderStopTime = new Date().getTime()
   await chrome.storage.local.set({ recorderStopTime })
+
+  // TODO: Firefox needs more time to save the file, gonna find a better way to do this
+  if (navigator.userAgent.includes('Firefox')) {
+    await new Promise(resolve => setTimeout(resolve, 1000))
+  }
 
   const { fastRec } = await getOption()
   const {
@@ -110,9 +121,12 @@ export async function startHighFrameRecord (video: Video, streamInfo: StreamInfo
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
   }, 1000 / 60)
 
-  const videoMediaRecorder = new MediaRecorder(canvas.captureStream(60),
+  const isMoz = navigator.userAgent.includes('Firefox')
+  const stream = canvas.captureStream(60)
+
+  const videoMediaRecorder = new MediaRecorder(stream,
     {
-      mimeType: 'video/webm;codecs=vp9',
+      mimeType: isMoz ? 'video/webm;codecs=vp8,opus' : 'video/webm;codecs=vp9',
       videoBitsPerSecond: 7000000
     }
   )
@@ -145,8 +159,6 @@ export async function startHighFrameRecord (video: Video, streamInfo: StreamInfo
   videoMediaRecorder.start()
   audioMediaRecorder.start()
 
-  console.log('asdf')
-
   return {
     videoMediaRecorder,
     audioMediaRecorder,
@@ -156,7 +168,6 @@ export async function startHighFrameRecord (video: Video, streamInfo: StreamInfo
 
 export async function stopHighFrameRecord (
   highFPSRecorder: HighFrameRecorder
-
 ): Promise<void> {
   const { videoMediaRecorder, audioMediaRecorder, highFrameCanvasInterval } = highFPSRecorder
 
