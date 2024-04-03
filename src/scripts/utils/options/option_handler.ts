@@ -1,7 +1,7 @@
 import type { Option } from '../../types/option'
 
 const DEFAULT_OPTIONS: Record<keyof Option, boolean> = {
-  pip: true,
+  pip: false,
   rec: true,
   fastRec: false,
   seek: false,
