@@ -79,9 +79,9 @@ async function _highFrameRateRec (video: Video): Promise<void> {
 
   const oldHref = window.location.href
 
-  const overlayInterval = setInterval(() => {
+  const overlayInterval = setInterval((): void => {
     if (oldHref !== window.location.href) {
-      void stopHighFrameRecord(higfhFPSRecorder)
+      stopHighFrameRecordListener(higfhFPSRecorder, overlayInterval, videoWatcherInterval)
       return
     }
     updateOverlay(sec++)
