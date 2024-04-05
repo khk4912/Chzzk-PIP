@@ -16,6 +16,9 @@ devDependencies:
   '@types/chrome':
     specifier: ^0.0.254
     version: 0.0.254
+  '@types/dom-navigation':
+    specifier: ^1.0.3
+    version: 1.0.3
   '@types/node':
     specifier: ^20.10.5
     version: 20.10.5
@@ -238,6 +241,10 @@ packages:
     dependencies:
       '@types/filesystem': 0.0.35
       '@types/har-format': 1.2.15
+    dev: true
+
+  /@types/dom-navigation@1.0.3:
+    resolution: {integrity: sha512-nbkhQ2o6UUBn1uLwSrA//rFkqs8XRk5d7cE6jzzTl8MAIUs/nFMtFqVESwiYY1HGZxflzbFlXsZ8NNzTaoFs1Q==}
     dev: true
 
   /@types/eslint-scope@3.7.7:
