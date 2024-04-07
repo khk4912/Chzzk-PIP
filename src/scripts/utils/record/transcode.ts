@@ -133,7 +133,7 @@ function showLoadBar (): void {
   loadBar.style.opacity = '1'
 }
 
-function updateLoadBar (progress: number): void {
+export function updateLoadBar (progress: number): void {
   const loadBar = document.querySelector('#loadbar-inner')
   const loadPercentSpan = document.querySelector('#loadPercent')
 

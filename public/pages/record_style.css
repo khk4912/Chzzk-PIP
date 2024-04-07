@@ -139,3 +139,32 @@ button:hover {
   margin-top: 5%;
   transition: all 0.1s;
 }
+
+#uploadOverlay .modal-input {
+  display: grid;
+  place-items: center;
+}
+
+#uploadOverlay .modal-input {
+  width: 100%;
+}
+
+#uploadStatus {
+  display: grid;
+  place-items: center;
+  width: 80%;
+}
+
+#urlCopy {
+  visibility: hidden;
+  width: 70%;
+}
+
+#uploadedURL {
+  font-size: x-small;
+  color: lightgray;
+}
+
+#copyBtn {
+  width: 30%;
+}

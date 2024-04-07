@@ -1,5 +1,6 @@
 import { isSupportedType, type StreamInfo, type SupportedType } from './types/record'
-import { hideLoadBar, mergeVideoWithAudio, segmentize, slice, transcode } from './utils/record/transcode'
+import { hideLoadBar, mergeVideoWithAudio, segmentize, slice, transcode, updateLoadBar } from './utils/record/transcode'
+import { upload } from './utils/upload/upload'
 
 async function main (): Promise<void> {
   const { highFrame } = await chrome.storage.local.get('highFrame') as { highFrame: boolean }
@@ -77,6 +78,7 @@ function _showVideo (
       registerDownloadHandler(recorderBlob, fileName, duration)
       registerSegmentModalHandler(recorderBlob, fileName, duration)
       registerDownloadAfterSliceHandler(recorderBlob, fileName, duration)
+      registerUploadHandler(recorderBlob, duration)
     })()
   }, { once: true })
 }
@@ -279,6 +281,43 @@ async function sliceDownload (
   a.href = url
   a.download = `${fileName}_trim_${sliceEnd - sliceStart}s.mp4`
   a.click()
+}
+
+function registerUploadHandler (recorderBlobURL: string, duration: number): void {
+  const uploadBtn = document.getElementById('uploadBtn') as HTMLButtonElement
+  const uploadOverlay = document.getElementById('uploadOverlay') as HTMLDivElement
+  const hideModalBtn = document.getElementById('hideUploadModalBtn')
+
+  const urlCopy = document.getElementById('urlCopy') as HTMLDivElement
+  const uploadedURL = document.getElementById('uploadedURL') as HTMLSpanElement
+  const copyBtn = document.getElementById('copyBtn') as HTMLButtonElement
+
+  hideModalBtn?.addEventListener('click', () => {
+    hideModal(uploadOverlay)
+  })
+
+  uploadBtn?.addEventListener('click', () => {
+    void (async () => {
+      urlCopy.style.visibility = 'hidden'
+      uploadedURL.innerText = ''
+
+      const mp4 = await transcode(recorderBlobURL, 'mp4', duration)
+      hideLoadBar()
+      updateLoadBar(0)
+
+      showModal(uploadOverlay)
+      const blob = await fetch(mp4).then(async res => await res.blob())
+
+      const res = await upload(blob)
+      const url = `https://chzzk-pip.kosame.dev/clips/${res.key}`
+
+      uploadedURL.innerText = url
+      copyBtn.addEventListener('click', () => {
+        void navigator.clipboard.writeText(url)
+      })
+      urlCopy.style.visibility = 'visible'
+    })()
+  })
 }
 
 void main()

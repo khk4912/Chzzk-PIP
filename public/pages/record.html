@@ -13,6 +13,7 @@
 
     <div class="buttons">
       <button class="download" data-type="webm">다운로드</button>
+      <button id="uploadBtn">업로드 (베타)</button>
 
       <span id="note"> 변환 후 다운로드(베타) </span>
       <div class="after-transcode">
@@ -68,6 +69,36 @@
         <button id="sliceDownloadBtn">자르고 다운로드</button>
         <button id="hideSliceModalBtn">닫기</button>
       </div>
+    </div>
+
+    <div class="modal-overlay" id="uploadOverlay">
+      <div class="header">
+        <h3>업로드</h3>
+          영상을 서버에 업로드하여 링크로 공유해보세요!
+          <br />
+          (실험적인 기능으로, 업로드한 영상은 사라져버릴 수도 있어요.)
+        </span>
+      </div>
+
+
+
+      <div class="modal-input">
+        <div id="uploadStatus">
+          <div id="loadbar">
+            <span id="loadPercent">0 % </span>
+            <div id="loadbar-inner"></div>
+          </div>
+  
+        </div>
+
+        <div id="urlCopy">
+          <span id="uploadedURL"></span><br> <button id="copyBtn">링크 복사</button>
+        </div> 
+
+        <br />
+        <button id="hideUploadModalBtn">닫기</button>
+      </div>
+
     </div>
 
     <div class="transcode-loadbar">
