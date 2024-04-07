@@ -49,5 +49,9 @@ export async function upload (blob: Blob): Promise<UploadResponse> {
     duplex: 'half'
   })
 
+  if (response.status !== 200) {
+    throw new Error('Failed to upload')
+  }
+
   return await response.json()
 }

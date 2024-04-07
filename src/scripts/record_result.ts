@@ -298,6 +298,18 @@ function registerUploadHandler (recorderBlobURL: string, duration: number): void
 
   uploadBtn?.addEventListener('click', () => {
     void (async () => {
+      const ss = await fetch(recorderBlobURL).then(async res => await res.blob())
+
+      if (duration < 3) {
+        alert('3초 이상의 영상만 업로드할 수 있어요.')
+        return
+      }
+
+      if (ss.size > 50 * 1024 * 1024) {
+        alert('파일 사이즈가 너무 커서 업로드할 수 없어요.\n최대 업로드 가능 용량은 50MB입니다.')
+        return
+      }
+
       urlCopy.style.visibility = 'hidden'
       uploadedURL.innerText = ''
 
@@ -308,7 +320,10 @@ function registerUploadHandler (recorderBlobURL: string, duration: number): void
       showModal(uploadOverlay)
       const blob = await fetch(mp4).then(async res => await res.blob())
 
-      const res = await upload(blob)
+      const res = await upload(blob).catch(() => {
+        alert('업로드 중 오류가 발생했어요.')
+        hideModal(uploadOverlay)
+      })
       const url = `https://clips.kosame.dev/${res.key}`
 
       uploadedURL.innerText = url
