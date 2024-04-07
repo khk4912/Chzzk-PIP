@@ -2,7 +2,11 @@ import { waitForElement, addButton } from './inject_btns'
 import { registerSeekHandler } from '../seek/seek'
 
 async function main (): Promise<void> {
-  await waitForElement('.pzp-pc__bottom-buttons-right').catch()
+  const x = await waitForElement('.pzp-pc__bottom-buttons-right').catch(() => null)
+
+  if (x === null) {
+    return
+  }
 
   addButton()
   void registerSeekHandler()

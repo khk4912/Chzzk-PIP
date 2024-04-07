@@ -21,7 +21,11 @@ const screenshotIcon = `
 
 export function addButton (): void {
   void (async () => {
-    const btn = await waitForElement('.pzp-pc__bottom-buttons-right')
+    const btn = await waitForElement('.pzp-pc__bottom-buttons-right').catch(() => null)
+
+    if (btn === null) {
+      return
+    }
 
     if (btn.classList.contains('chzzk-pip-injected')) {
       return
@@ -60,7 +64,9 @@ export function addButton (): void {
   })()
 }
 
-export async function waitForElement (selector: string): Promise<HTMLElement> {
+export async function waitForElement (selector: string, threshold = 3000): Promise<HTMLElement> {
+  let cnt = 0
+
   return await new Promise((resolve, reject) => {
     const interval = setInterval(() => {
       const element = document.querySelector(selector)
@@ -68,6 +74,13 @@ export async function waitForElement (selector: string): Promise<HTMLElement> {
         clearInterval(interval)
         resolve(element as HTMLElement)
       }
+
+      if (cnt >= threshold) {
+        clearInterval(interval)
+        reject(new Error('Cannot find element within threshold time'))
+      }
+
+      cnt += 100
     }, 100)
   })
 }

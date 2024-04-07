@@ -13,7 +13,7 @@ export async function registerSeekHandler (): Promise<void> {
     return
   }
 
-  const video = await waitForElement('.webplayer-internal-video')
+  const video = await waitForElement('.webplayer-internal-video').catch(() => null)
 
   if (!(video instanceof HTMLVideoElement)) {
     return

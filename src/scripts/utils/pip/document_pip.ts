@@ -7,8 +7,12 @@ export interface WindowWithDocumentPictureInPicture extends Window {
 }
 
 export async function windowPIP (): Promise<void> {
-  const wrapper = await waitForElement('.webplayer-internal-source-wrapper')
-  const video = await waitForElement('.webplayer-internal-video')
+  const wrapper = await waitForElement('.webplayer-internal-source-wrapper').catch(() => null)
+  const video = await waitForElement('.webplayer-internal-video').catch(() => null)
+
+  if (wrapper === null || video === null) {
+    return
+  }
 
   const styleSheets = Array.from(document.styleSheets)
 
