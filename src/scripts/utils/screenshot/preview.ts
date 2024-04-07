@@ -25,16 +25,16 @@ export function createDraggablePreview (
     cursor: move;
     width: 40%;
     aspect-ratio: 16/9;
-    z-index: 999;
+    z-index: 15000;
     `
 
-  const informationContainer = document.querySelector('[class^="layout_body"]')
+  const informationContainer = document.querySelector('[class^="live_information_container"]')
 
   if (informationContainer === null) {
     return
   }
 
-  informationContainer.prepend(wrappedOverlay)
+  informationContainer.insertBefore(wrappedOverlay, informationContainer.firstChild)
 
   let startPosX = 0
   let startPosY = 0
