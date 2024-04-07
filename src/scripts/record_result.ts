@@ -309,7 +309,7 @@ function registerUploadHandler (recorderBlobURL: string, duration: number): void
       const blob = await fetch(mp4).then(async res => await res.blob())
 
       const res = await upload(blob)
-      const url = `https://chzzk-pip.kosame.dev/clips/${res.key}`
+      const url = `https://clips.kosame.dev/${res.key}`
 
       uploadedURL.innerText = url
       copyBtn.addEventListener('click', () => {
