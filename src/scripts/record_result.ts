@@ -323,13 +323,16 @@ function registerUploadHandler (recorderBlobURL: string, duration: number): void
       const res = await upload(blob).catch(() => {
         alert('업로드 중 오류가 발생했어요.')
         hideModal(uploadOverlay)
+
+        return { key: '' }
       })
       const url = `https://clips.kosame.dev/${res.key}`
 
       uploadedURL.innerText = url
-      copyBtn.addEventListener('click', () => {
+      copyBtn.onclick = () => {
         void navigator.clipboard.writeText(url)
-      })
+        alert('클립 주소가 복사되었어요.')
+      }
       urlCopy.style.visibility = 'visible'
     })()
   })
