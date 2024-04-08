@@ -165,6 +165,6 @@ button:hover {
   color: lightgray;
 }
 
-.copy-button {
-  width: 40%;
+#copyBtn {
+  width: 30%;
 }
