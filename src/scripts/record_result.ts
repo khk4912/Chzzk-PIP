@@ -291,6 +291,7 @@ function registerUploadHandler (recorderBlobURL: string, duration: number): void
   const urlCopy = document.getElementById('urlCopy') as HTMLDivElement
   const uploadedURL = document.getElementById('uploadedURL') as HTMLSpanElement
   const copyBtn = document.getElementById('copyBtn') as HTMLButtonElement
+  const iframeCopyBtn = document.getElementById('iframeCopyBtn') as HTMLButtonElement
 
   hideModalBtn?.addEventListener('click', () => {
     hideModal(uploadOverlay)
@@ -327,12 +328,18 @@ function registerUploadHandler (recorderBlobURL: string, duration: number): void
         return { key: '' }
       })
       const url = `https://clips.kosame.dev/${res.key}`
+      const embedURL = `https://chzzk-pip.kosame.dev/embed/${res.key}`
 
       uploadedURL.innerText = url
       copyBtn.onclick = () => {
         void navigator.clipboard.writeText(url)
         alert('클립 주소가 복사되었어요.')
       }
+      iframeCopyBtn.onclick = () => {
+        void navigator.clipboard.writeText(`<iframe src="${embedURL}" width="560" height="315" frameborder="0" allowfullscreen></iframe>`)
+        alert('iframe 코드가 복사되었어요.')
+      }
+
       urlCopy.style.visibility = 'visible'
     })()
   })
