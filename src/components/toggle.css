@@ -1,0 +1,38 @@
+[type="checkbox"] {
+  margin-left: 10vw;
+
+  cursor: pointer;
+  appearance: none;
+  border: 0.1em solid gray;
+
+  background-color: gray;
+
+  border-radius: 2em;
+  aspect-ratio: 1.7/1;
+  height: 4vh;
+}
+
+[type="checkbox"]:before {
+  content: "";
+  display: block;
+  height: 85%;
+  aspect-ratio: 1/1;
+  margin: 5%;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+[type="checkbox"]:checked::before {
+  transform: translateX(90%);
+}
+
+[type="checkbox"]:checked {
+  transition: background-color 0.2s;
+  background-color: rgba(0, 255, 163, 1);
+}
+
+[type="checkbox"]:not(:checked) {
+  transition: background-color 0.2s;
+  background-color: gray;
+}

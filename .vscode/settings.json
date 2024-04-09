@@ -3,5 +3,8 @@
 
   "[typescript]": {
     "editor.defaultFormatter": "standard.vscode-standard"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "standard.vscode-standard"
   }
 }

@@ -1,4 +1,4 @@
-import type { StreamInfo } from '../types/record'
+import type { StreamInfo } from '../../types/record'
 
 export const getStreamInfo = (document: Document): StreamInfo => {
   const streamerName = document.querySelector("[class^='video_information'] > [class^='name_ellipsis'] > [class^='name_text']")?.textContent ??

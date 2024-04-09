@@ -7,3 +7,11 @@ export interface Option {
   screenshotPreview?: boolean
   highFrameRateRec?: boolean
 }
+
+export type OptionInfo =
+  Record<keyof Option,
+  {
+    name: string
+    desc: string
+  }
+  >

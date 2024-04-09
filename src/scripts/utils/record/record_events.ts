@@ -1,6 +1,6 @@
 import { injectOverlay, removeOverlay, updateOverlay } from '../inject/rec_overlay'
 import { startHighFrameRecord, startRecord, stopHighFrameRecord, stopRecord } from './record_stream'
-import type { HighFrameRecorder, Video } from '../../types/record'
+import type { HighFrameRecorder, Video } from '../../../types/record'
 import { getStreamInfo } from '../stream_info'
 import { getOption } from '../options/option_handler'
 
