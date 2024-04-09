@@ -327,7 +327,6 @@ function registerUploadHandler (recorderBlobURL: string, duration: number): void
         return { key: '' }
       })
       const url = `https://clips.kosame.dev/${res.key}`
-      const embedURL = `https://chzzk-pip.kosame.dev/embed/${res.key}`
 
       uploadedURL.innerText = url
       copyBtn.onclick = () => {
