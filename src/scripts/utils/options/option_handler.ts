@@ -1,4 +1,4 @@
-import type { Option } from '../../../types/option'
+import type { Option } from '../../types/option'
 
 const DEFAULT_OPTIONS: Record<keyof Option, boolean> = {
   pip: false,

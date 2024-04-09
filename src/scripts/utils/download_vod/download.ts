@@ -1,4 +1,4 @@
-import type { PlayBackURL, Video, VideoInfo } from '../../../types/vod'
+import type { PlayBackURL, Video, VideoInfo } from '../../types/vod'
 
 export function isVODPage (): boolean {
   return location.pathname.startsWith('/video')

@@ -1,4 +1,4 @@
-import type { PlayBackURL, VideoInfo } from '../types/vod'
+import type { PlayBackURL, VideoInfo } from './types/vod'
 
 async function main (): Promise<void> {
   const { videoInfo, playBackURL } = await chrome.storage.local.get(['videoInfo', 'playBackURL']) as { videoInfo: VideoInfo, playBackURL: PlayBackURL[] }

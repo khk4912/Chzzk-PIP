@@ -1,4 +1,4 @@
-import type { SupportedType } from '../../../types/record'
+import type { SupportedType } from '../../types/record'
 
 import { FFmpeg } from '@ffmpeg/ffmpeg'
 import { fetchFile } from '@ffmpeg/util'

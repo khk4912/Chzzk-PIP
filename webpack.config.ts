@@ -1,5 +1,5 @@
 import type { Configuration } from 'webpack'
-import { resolve } from 'path'
+import * as path from 'path'
 import CopyPlugin = require('copy-webpack-plugin')
 
 const mode =
@@ -9,19 +9,15 @@ const config: Configuration = {
   mode,
   devtool: mode === 'development' ? 'inline-source-map' : false,
   entry: {
-    content_script: resolve(__dirname, 'src/scripts/content_script.ts'),
-    record_result: resolve(__dirname, 'src/scripts/record_result.ts'),
-    popup_script: resolve(__dirname, 'src/scripts/popup_script.ts'),
-    download_vod: resolve(__dirname, 'src/scripts/download_vod.ts'),
-    monkeypatch_core: resolve(__dirname, 'src/scripts/monkeypatch_core.ts'),
-    service_worker: resolve(__dirname, 'src/scripts/service_worker.ts'),
-
-    // Page entry
-    popup: resolve(__dirname, 'src/pages/popup/popup.tsx')
-
+    content_script: path.resolve(__dirname, 'src/scripts/content_script.ts'),
+    record_result: path.resolve(__dirname, 'src/scripts/record_result.ts'),
+    popup_script: path.resolve(__dirname, 'src/scripts/popup_script.ts'),
+    download_vod: path.resolve(__dirname, 'src/scripts/download_vod.ts'),
+    monkeypatch_core: path.resolve(__dirname, 'src/scripts/monkeypatch_core.ts'),
+    service_worker: path.resolve(__dirname, 'src/scripts/service_worker.ts')
   },
   output: {
-    path: resolve(__dirname, 'dist/js'),
+    path: path.resolve(__dirname, 'dist/js'),
     filename: '[name].js',
     assetModuleFilename: 'assets/[hash][ext][query]'
   },
@@ -38,10 +34,6 @@ const config: Configuration = {
       {
         test: /\.(png|jpg|gif|svg)$/i,
         type: 'asset/resource'
-      },
-      {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader']
       }
     ]
   },

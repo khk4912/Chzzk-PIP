@@ -1,4 +1,4 @@
-import { isSupportedType, type StreamInfo, type SupportedType } from '../types/record'
+import { isSupportedType, type StreamInfo, type SupportedType } from './types/record'
 import { hideLoadBar, mergeVideoWithAudio, segmentize, slice, transcode, updateLoadBar } from './utils/record/transcode'
 import { upload } from './utils/upload/upload'
 

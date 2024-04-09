@@ -1,4 +1,4 @@
-import type { Video, StreamInfo, HighFrameRecorder } from '../../../types/record'
+import type { Video, StreamInfo, HighFrameRecorder } from '../../types/record'
 import { getOption } from '../options/option_handler'
 
 const checkIsMuted = (video: Video): boolean => {
