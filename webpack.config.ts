@@ -12,12 +12,13 @@ const config: Configuration = {
     content_script: resolve(__dirname, 'src/scripts/content_script.ts'),
     record_result: resolve(__dirname, 'src/scripts/record_result.ts'),
     popup_script: resolve(__dirname, 'src/scripts/popup_script.ts'),
-    download_vod: resolve(__dirname, 'src/scripts/download_vod.ts'),
+    // download_vod: resolve(__dirname, 'src/scripts/download_vod.ts'),
     monkeypatch_core: resolve(__dirname, 'src/scripts/monkeypatch_core.ts'),
     service_worker: resolve(__dirname, 'src/scripts/service_worker.ts'),
 
     // Page entry
-    popup: resolve(__dirname, 'src/pages/popup/popup.tsx')
+    popup: resolve(__dirname, 'src/pages/popup/popup.tsx'),
+    download_vod: resolve(__dirname, 'src/pages/download_vod/download_vod.tsx')
 
   },
   output: {
