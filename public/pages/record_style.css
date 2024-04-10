@@ -18,11 +18,10 @@ body {
 }
 
 video {
-  margin-top: 5vh;
+  aspect-ratio: 16 / 9;
   height: 40vh;
-  aspect-ratio: 16/9;
+  margin-top: 5vh;
 }
-
 .buttons {
   width: 100%;
   display: grid;
@@ -31,10 +30,9 @@ video {
 }
 
 button {
-  width: 17vw;
+  width: 15vw;
   aspect-ratio: 7/1;
-  margin-top: 2vh;
-  padding: 0.8%;
+  padding: 2% 1%;
   background-color: rgba(0, 255, 163, 0.9);
   border: none;
   border-radius: 4vh;
@@ -45,13 +43,6 @@ button {
 button:hover {
   background-color: rgba(0, 255, 163, 1);
   cursor: pointer;
-}
-
-#note {
-  margin-top: 5vh;
-  margin-bottom: 2vh;
-  font-size: 1.3rem;
-  font-weight: bold;
 }
 
 .modal-overlay {
@@ -90,19 +81,16 @@ button:hover {
   padding: 2%;
 }
 
-.after-transcode {
-  display: flex;
-  width: 40vw;
-  flex-wrap: wrap;
-  justify-content: space-between;
+.actions {
+  display: grid;
+  place-items: center;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 15%;
 }
 
-.after-transcode button {
-  margin: 2%;
-}
-
-.after-transcode .sole {
-  margin: 5% auto;
+.actions button {
+  width: 90%;
+  aspect-ratio: 9 /1;
 }
 
 .transcode-loadbar {
@@ -167,4 +155,29 @@ button:hover {
 
 #copyBtn {
   width: 30%;
+}
+
+.default-actions {
+  width: 40vw;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.default-actions button {
+  width: 30%;
+  aspect-ratio: 8/1;
+}
+
+#note {
+  text-align: center;
+}
+
+.transcode-actions {
+  width: 30vw;
+  display: grid;
+  margin-top: 5vh;
+}
+
+.modal-overlay button {
+  margin-top: 3vh;
 }
