@@ -133,6 +133,16 @@ function showLoadBar (): void {
   loadBar.style.opacity = '1'
 }
 
+export function showUploadBar (): void {
+  const uploadBar = document.querySelector('.transcode-uploadbar')
+  if (!(uploadBar instanceof HTMLDivElement)) {
+    return
+  }
+  updateUploadBar(0)
+  uploadBar.style.visibility = 'visible'
+  uploadBar.style.opacity = '1'
+}
+
 export function updateLoadBar (progress: number): void {
   const loadBar = document.querySelector('#loadbar-inner')
   const loadPercentSpan = document.querySelector('#loadPercent')
@@ -146,6 +156,19 @@ export function updateLoadBar (progress: number): void {
   loadBar.style.width = `${progress}%`
 }
 
+export function updateUploadBar (progress: number): void {
+  const uploadBar = document.querySelector('#uploadInner')
+  const uploadPercentSpan = document.querySelector('#uploadPercent')
+
+  if (!(uploadBar instanceof HTMLDivElement &&
+    uploadPercentSpan instanceof HTMLSpanElement)) {
+    return
+  }
+
+  uploadPercentSpan.innerText = `${progress}%`
+  uploadBar.style.width = `${progress}%`
+}
+
 export function hideLoadBar (): void {
   const loadBar = document.querySelector('.transcode-loadbar')
 
@@ -155,6 +178,17 @@ export function hideLoadBar (): void {
 
   loadBar.style.visibility = 'hidden'
   loadBar.style.opacity = '0'
+}
+
+export function hideUploadBar (): void {
+  const uploadBar = document.querySelector('.transcode-uploadbar')
+
+  if (!(uploadBar instanceof HTMLDivElement)) {
+    return
+  }
+
+  uploadBar.style.visibility = 'hidden'
+  uploadBar.style.opacity = '0'
 }
 
 export async function mergeVideoWithAudio (inputFileURL: string, audioFileURL: string): Promise<string> {

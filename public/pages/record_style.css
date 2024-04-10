@@ -52,7 +52,7 @@ button:hover {
   opacity: 0;
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(100px);
-  border-radius: 10%;
+  border-radius: 6%;
   font-size: 1rem;
   width: 50vw;
   height: 50vh;
@@ -121,6 +121,14 @@ button:hover {
 }
 
 #loadbar-inner {
+  width: 0%;
+  height: 10%;
+  background-color: rgba(0, 255, 163, 0.9);
+  margin-top: 5%;
+  transition: all 0.1s;
+}
+
+#uploadInner {
   width: 0%;
   height: 10%;
   background-color: rgba(0, 255, 163, 0.9);

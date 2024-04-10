@@ -1,5 +1,5 @@
 import { isSupportedType, type StreamInfo, type SupportedType } from './types/record'
-import { hideLoadBar, mergeVideoWithAudio, segmentize, slice, transcode, updateLoadBar } from './utils/record/transcode'
+import { hideLoadBar, mergeVideoWithAudio, segmentize, showUploadBar, slice, transcode, updateUploadBar } from './utils/record/transcode'
 import { upload } from './utils/upload/upload'
 
 async function main (): Promise<void> {
@@ -240,6 +240,7 @@ function registerDownloadAfterSliceHandler (
     }
 
     hideModal(sliceModal)
+    console.log('sliceDownload called')
     void sliceDownload(recorderBlobURL, fileName, parsedStartSecInput, parsedEndSecInput)
   })
   modalShowBtn?.addEventListener('click', () => {
@@ -315,8 +316,9 @@ function registerUploadHandler (recorderBlobURL: string, duration: number): void
 
       const mp4 = await transcode(recorderBlobURL, 'mp4', duration)
       hideLoadBar()
-      updateLoadBar(0)
+      showUploadBar()
 
+      updateUploadBar(0)
       showModal(uploadOverlay)
       const blob = await fetch(mp4).then(async res => await res.blob())
 

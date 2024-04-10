@@ -1,4 +1,4 @@
-import { updateLoadBar } from '../record/transcode'
+import { updateUploadBar } from '../record/transcode'
 
 const BASE_URL = 'https://chzzk-pip.kosame.dev'
 
@@ -34,7 +34,7 @@ export async function upload (blob: Blob): Promise<UploadResponse> {
 
         uploadedSize += chunk.byteLength as number
         const progress = Math.floor(uploadedSize / totalSize * 100)
-        updateLoadBar(progress)
+        updateUploadBar(progress)
       }
     }
   )
