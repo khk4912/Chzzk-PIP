@@ -3,12 +3,15 @@
 body {
   background-color: #141517;
   color: white;
-  display: grid;
-  place-items: center;
   font-family: "Pretendard Variable", Pretendard, -apple-system,
     BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
     "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+}
+
+#root {
+  display: grid;
+  place-items: center;
 }
 
 #header {
@@ -18,9 +21,9 @@ body {
 }
 
 video {
-  margin-top: 5vh;
+  aspect-ratio: 16 / 9;
   height: 40vh;
-  aspect-ratio: 16/9;
+  margin-top: 5vh;
 }
 
 .buttons {
@@ -28,6 +31,17 @@ video {
   display: grid;
   place-items: center;
   margin-top: 3vh;
+}
+
+.default-actions {
+  width: 40vw;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.default-actions button {
+  width: 30%;
+  aspect-ratio: 8/1;
 }
 
 #note {
@@ -72,21 +86,21 @@ video {
 .segment-overlay button {
   padding: 2%;
 }
-
+/* 
 .after-transcode {
   display: flex;
   width: 40vw;
   flex-wrap: wrap;
   justify-content: space-between;
-}
+} */
 
-.after-transcode button {
+/* .after-transcode button {
   margin: 2%;
 }
 
 .after-transcode .sole {
   margin: 5% auto;
-}
+} */
 
 .transcode-loadbar {
   position: absolute;
@@ -150,4 +164,30 @@ video {
 
 #copyBtn {
   width: 30%;
+}
+
+#transcode-note {
+  width: 100%;
+}
+
+.transcode-actions {
+  width: 30vw;
+  display: grid;
+  margin-top: 5vh;
+}
+
+#transcode-note {
+  text-align: center;
+}
+
+.actions {
+  display: grid;
+  place-items: center;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 15%;
+}
+
+.actions button {
+  width: 90%;
+  aspect-ratio: 9 /1;
 }

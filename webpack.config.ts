@@ -18,7 +18,8 @@ const config: Configuration = {
 
     // Page entry
     popup: resolve(__dirname, 'src/pages/popup/popup.tsx'),
-    download_vod: resolve(__dirname, 'src/pages/download_vod/download_vod.tsx')
+    download_vod: resolve(__dirname, 'src/pages/download_vod/download_vod.tsx'),
+    record: resolve(__dirname, 'src/pages/record/record.tsx')
 
   },
   output: {
