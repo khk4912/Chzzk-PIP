@@ -18,6 +18,10 @@ export async function startRecord (video: Video, streamInfo: StreamInfo): Promis
   let stream: MediaStream
   if (isMoz) {
     stream = video.mozCaptureStream()
+
+    const ctx = new AudioContext()
+    const dest = ctx.createMediaStreamSource(stream)
+    dest.connect(ctx.destination)
   } else {
     stream = video.captureStream()
   }
