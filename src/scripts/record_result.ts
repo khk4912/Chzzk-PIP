@@ -322,7 +322,6 @@ function registerUploadHandler (recorderBlobURL: string, duration: number): void
       urlCopy.style.visibility = 'hidden'
       uploadedURL.innerText = ''
 
-
       const mp4 = await transcode(recorderBlobURL, 'mp4', duration)
       const thumbnail = await getFrame(recorderBlobURL)
 
