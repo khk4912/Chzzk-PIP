@@ -31,7 +31,7 @@ video {
 
 button {
   width: 15vw;
-  aspect-ratio: 7/1;
+  aspect-ratio: 5/1;
   padding: 2% 1%;
   background-color: rgba(0, 255, 163, 0.9);
   border: none;
@@ -166,14 +166,14 @@ button:hover {
 }
 
 .default-actions {
-  width: 40vw;
+  width: 45vw;
   display: flex;
   justify-content: space-evenly;
 }
 
 .default-actions button {
-  width: 30%;
-  aspect-ratio: 8/1;
+  width: 27%;
+  aspect-ratio: 4/1;
 }
 
 #note {
@@ -181,7 +181,7 @@ button:hover {
 }
 
 .transcode-actions {
-  width: 30vw;
+  width: 40vw;
   display: grid;
   margin-top: 5vh;
 }
