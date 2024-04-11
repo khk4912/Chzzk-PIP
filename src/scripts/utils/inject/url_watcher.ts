@@ -13,23 +13,32 @@ async function main (): Promise<void> {
 }
 
 export const injectButton = (): void => {
-  // const oldHref = window.location.href
-  // const body = document.querySelector('body') as HTMLE
+  const isMoz = navigator.userAgent.includes('Firefox')
   const inject = (): void => {
     void main()
   }
 
+  if (isMoz) {
+    inject()
+
+    let oldHref = window.location.href
+    const body = document.querySelector('body') as HTMLElement
+
+    const _observer = new MutationObserver(() => {
+      if (oldHref !== window.location.href) {
+        oldHref = window.location.href
+        inject()
+      }
+    })
+
+    _observer.observe(body, {
+      childList: true,
+      subtree: true
+    })
+
+    return
+  }
+
   inject()
   window.navigation.addEventListener('navigate', inject)
-  // const _observer = new MutationObserver(() => {
-  //   if (oldHref !== window.location.href) {
-  //     oldHref = window.location.href
-  //     inject()
-  //   }
-  // })
-
-  // _observer.observe(body, {
-  //   childList: true,
-  //   subtree: true
-  // })
 }
