@@ -23,7 +23,7 @@ export async function checkStatus (): Promise<StatusResponse> {
   return data
 }
 
-export async function upload (blob: Blob): Promise<UploadResponse> {
+export async function upload (blob: Blob, thumbnail: string): Promise<UploadResponse> {
   const totalSize = blob.size
   let uploadedSize = 0
 
@@ -53,5 +53,28 @@ export async function upload (blob: Blob): Promise<UploadResponse> {
     throw new Error('Failed to upload')
   }
 
-  return await response.json()
+  const data = await response.json() as UploadResponse
+  const key = data.key
+
+  try {
+    const formData = new FormData()
+    const yyyymmddhhmmss = new Date().toISOString().replace(/[-:]/g, '').slice(0, 14)
+
+    formData.append('title', yyyymmddhhmmss)
+    formData.append('key', key)
+    formData.append('thumbnail', thumbnail)
+
+    const response = await fetch(`${BASE_URL}/thumb`, {
+      method: 'POST',
+      body: formData
+    })
+
+    if (response.status !== 200) {
+      console.log('Failed to upload thumbnail...')
+    }
+  } catch (e) {
+    console.log('Failed to upload thumbnail...')
+  }
+
+  return data
 }

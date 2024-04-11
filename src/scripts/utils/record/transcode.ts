@@ -227,3 +227,17 @@ export async function slice (inputFileURL: string, start: number, duration: numb
   hideLoadBar()
   return url
 }
+
+export async function getFrame (blobURL: string): Promise<string> {
+  await loadFFmpeg()
+
+  const inputFile = await fetchFile(blobURL)
+
+  await ffmpeg.writeFile('input.webm', inputFile)
+  await ffmpeg.exec(['-i', 'input.webm', '-ss', '00:00:01.00', '-vf', 'scale=1100:1100:force_original_aspect_ratio=decrease', '-vframes', '1', 'output.jpg'])
+
+  const data = await ffmpeg.readFile('output.jpg')
+  const url = URL.createObjectURL(new Blob([data], { type: 'image/jpeg' }))
+
+  return url
+}

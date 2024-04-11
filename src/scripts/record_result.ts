@@ -1,5 +1,5 @@
 import { isSupportedType, type StreamInfo, type SupportedType } from './types/record'
-import { hideLoadBar, mergeVideoWithAudio, segmentize, showUploadBar, slice, transcode, updateUploadBar } from './utils/record/transcode'
+import { getFrame, hideLoadBar, mergeVideoWithAudio, segmentize, showUploadBar, slice, transcode, updateUploadBar } from './utils/record/transcode'
 import { upload } from './utils/upload/upload'
 
 async function main (): Promise<void> {
@@ -11,6 +11,14 @@ async function main (): Promise<void> {
   }
 
   await init()
+}
+
+async function blobToBase64 (blob: Blob): Promise<string | ArrayBuffer | null> {
+  return await new Promise(resolve => {
+    const reader = new FileReader()
+    reader.onloadend = () => { resolve(reader.result) }
+    reader.readAsDataURL(blob)
+  })
 }
 
 async function init (): Promise<void> {
@@ -314,15 +322,22 @@ function registerUploadHandler (recorderBlobURL: string, duration: number): void
       urlCopy.style.visibility = 'hidden'
       uploadedURL.innerText = ''
 
+
       const mp4 = await transcode(recorderBlobURL, 'mp4', duration)
+      const thumbnail = await getFrame(recorderBlobURL)
+
       hideLoadBar()
       showUploadBar()
 
       updateUploadBar(0)
       showModal(uploadOverlay)
-      const blob = await fetch(mp4).then(async res => await res.blob())
 
-      const res = await upload(blob).catch(() => {
+      const blob = await fetch(mp4).then(async res => await res.blob())
+      const thumbBlob = await fetch(thumbnail).then(async res => await res.blob())
+
+      const thumbURL = await blobToBase64(thumbBlob)
+
+      const res = await upload(blob, thumbURL as string).catch(() => {
         alert('업로드 중 오류가 발생했어요.')
         hideModal(uploadOverlay)
 
