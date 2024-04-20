@@ -15,6 +15,7 @@ const ffmpeg = new FFmpeg()
 ffmpeg.on('progress', ({ progress, time }) => {
   updateLoadBar(Math.floor(time / (videoDuration * 1000000) * 100))
 })
+ffmpeg.on('log', ({ message }) => { console.log(message) })
 
 async function loadFFmpeg (): Promise<void> {
   if (ffmpeg.loaded) {
