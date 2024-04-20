@@ -28,13 +28,13 @@ export function createDraggablePreview (
     z-index: 15000;
     `
 
-  const informationContainer = document.querySelector('[class^="live_information_container"]')
+  const toolbarContainer = document.querySelector('[class^="toolbar_container"]')
 
-  if (informationContainer === null) {
+  if (toolbarContainer === null) {
     return
   }
 
-  informationContainer.insertBefore(wrappedOverlay, informationContainer.firstChild)
+  toolbarContainer.parentNode?.insertBefore(wrappedOverlay, toolbarContainer)
 
   let startPosX = 0
   let startPosY = 0
