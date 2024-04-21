@@ -28,13 +28,14 @@ export function createDraggablePreview (
     z-index: 15000;
     `
 
-  const toolbarContainer = document.querySelector('[class^="toolbar_container"]')
+  const target = document.querySelector('[class^="toolbar_container"]') ??
+                 document.querySelector('[class^="layout_glive"]')
 
-  if (toolbarContainer === null) {
+  if (target === null) {
     return
   }
 
-  toolbarContainer.parentNode?.insertBefore(wrappedOverlay, toolbarContainer)
+  target.parentNode?.insertBefore(wrappedOverlay, target)
 
   let startPosX = 0
   let startPosY = 0
