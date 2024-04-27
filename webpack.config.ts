@@ -13,7 +13,8 @@ const config: Configuration = {
     record_result: path.resolve(__dirname, 'src/scripts/record_result.ts'),
     popup_script: path.resolve(__dirname, 'src/scripts/popup_script.ts'),
     download_vod: path.resolve(__dirname, 'src/scripts/download_vod.ts'),
-    monkeypatch_core: path.resolve(__dirname, 'src/scripts/monkeypatch_core.ts')
+    monkeypatch_core: path.resolve(__dirname, 'src/scripts/monkeypatch_core.ts'),
+    record: path.resolve(__dirname, 'src/pages/record/record.tsx'),
   },
   output: {
     path: path.resolve(__dirname, 'dist/js'),
@@ -33,6 +34,10 @@ const config: Configuration = {
       {
         test: /\.(png|jpg|gif|svg)$/i,
         type: 'asset/resource'
+      },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader']
       }
     ]
   },
