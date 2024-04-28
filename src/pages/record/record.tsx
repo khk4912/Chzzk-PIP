@@ -4,7 +4,7 @@ import { createRoot } from 'react-dom/client'
 import { DownloadButton, UploadButton } from '../../components/button'
 import type { StreamInfo } from '../../scripts/types/record'
 
-interface ResultContextData {
+export interface ResultContextData {
   recorderBlob: string
   streamInfo: StreamInfo
   recorderStartTime: number
@@ -13,11 +13,11 @@ interface ResultContextData {
 
 }
 
-const Header = (prop: { recorderBlob: string }): JSX.Element => {
+const Header = ({ children }: { children: React.ReactNode }): JSX.Element => {
   return (
     <>
       <span id='header'>녹화 완료!</span>
-      <video muted controls src={prop.recorderBlob} id='vid' />
+      {children}
     </>
   )
 }
@@ -57,6 +57,12 @@ function Record (): JSX.Element {
             'recorderStopTime'
           ]) as ResultContextData
 
+        if (context.recorderBlob === undefined ||
+            typeof context.recorderBlob !== 'string'
+        ) {
+          return
+        }
+
         setResultContext(context)
         setCanDownload(true)
       }
@@ -66,19 +72,26 @@ function Record (): JSX.Element {
 
   return (
     <>
-      <Header recorderBlob={resultContext?.recorderBlob ?? ''} />
+      <Header>
+        <video
+          muted controls preload='metadata' src={resultContext?.recorderBlob}
+          onLoadedMetadata={canDownload
+            ? handleMetadata(resultContext, setResultContext)
+            : undefined}
+        />
+      </Header>
 
       <div className='buttons'>
 
         <DefaultActions>
-          <DownloadButton disabled={!canDownload} dataType='webm'>다운로드</DownloadButton>
+          <DownloadButton disabled={!canDownload} context={resultContext} dataType='webm'>다운로드</DownloadButton>
           <UploadButton disabled={!canDownload} />
         </DefaultActions>
         <TranscodeActions>
-          <DownloadButton disabled={!canDownload} dataType='mp4'>MP4</DownloadButton>
-          <DownloadButton disabled={!canDownload} dataType='mp4-aac'>MP4 (AAC, 느림)</DownloadButton>
-          <DownloadButton disabled={!canDownload} dataType='gif'>GIF</DownloadButton>
-          <DownloadButton disabled={!canDownload} dataType='webp'>WebP</DownloadButton>
+          <DownloadButton disabled={!canDownload} context={resultContext} dataType='mp4'>MP4</DownloadButton>
+          <DownloadButton disabled={!canDownload} context={resultContext} dataType='mp4-aac'>MP4 (AAC, 느림)</DownloadButton>
+          <DownloadButton disabled={!canDownload} context={resultContext} dataType='gif'>GIF</DownloadButton>
+          <DownloadButton disabled={!canDownload} context={resultContext} dataType='webp'>WebP</DownloadButton>
         </TranscodeActions>
 
       </div>
@@ -94,4 +107,34 @@ if (root !== null) {
       <Record />
     </React.StrictMode>
   )
+}
+function handleMetadata (resultContext: ResultContextData | null, setVideoDuration: React.Dispatch<React.SetStateAction<ResultContextData | null>>): React.ReactEventHandler<HTMLVideoElement> | undefined {
+  return e => {
+    const video = e.target as HTMLVideoElement
+    if (resultContext === null) {
+      return
+    }
+
+    void (async () => {
+      video.currentTime = Number.MAX_SAFE_INTEGER
+      await new Promise(resolve => setTimeout(resolve, 500))
+      video.currentTime = 0
+
+      let duration = video.duration
+      if (duration === Infinity) {
+        duration = (resultContext?.recorderStopTime - resultContext?.recorderStopTime) / 1000 - 0.1
+      }
+
+      setVideoDuration((prev) => {
+        if (prev === null) {
+          return null
+        }
+
+        return {
+          ...prev,
+          duration
+        }
+      })
+    })()
+  }
 }
