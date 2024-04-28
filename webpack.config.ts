@@ -14,7 +14,7 @@ const config: Configuration = {
     popup_script: path.resolve(__dirname, 'src/scripts/popup_script.ts'),
     download_vod: path.resolve(__dirname, 'src/scripts/download_vod.ts'),
     monkeypatch_core: path.resolve(__dirname, 'src/scripts/monkeypatch_core.ts'),
-    record: path.resolve(__dirname, 'src/pages/record/record.tsx'),
+    record: path.resolve(__dirname, 'src/pages/record/record.tsx')
   },
   output: {
     path: path.resolve(__dirname, 'dist/js'),

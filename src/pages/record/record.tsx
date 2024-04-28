@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react'
 import './record.css'
 import { createRoot } from 'react-dom/client'
