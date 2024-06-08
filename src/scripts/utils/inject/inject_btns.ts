@@ -1,4 +1,5 @@
 import { isVODPage, openDownloadVODPage } from '../download_vod/download'
+import { downloadClip, isClipPage } from '../download_vod/download_clip'
 import { getOption } from '../options/option_handler'
 import { startRecordListener } from '../record/record_events'
 import { screenshot } from '../screenshot/screenshot'
@@ -43,6 +44,13 @@ export function addButton (): void {
     if (isVODPage()) {
       const vodDownloadButton = createVODDownloadButton()
       btn.insertBefore(vodDownloadButton, btn.firstChild)
+    }
+
+    if (isClipPage()) {
+      const clipDownloadButton = createClipDownloadButton()
+      btn.insertBefore(clipDownloadButton, btn.firstChild)
+
+      return
     }
 
     if (pip) {
@@ -103,6 +111,26 @@ function createVODDownloadButton (): HTMLButtonElement {
   vodDownloadButton.appendChild(toolTip)
   vodDownloadButton.appendChild(icon)
   return vodDownloadButton
+}
+
+function createClipDownloadButton (): HTMLButtonElement {
+  const clipDownloadButton = document.createElement('button')
+  clipDownloadButton.classList.add('pzp-button', 'pzp-pc-setting-button', 'pzp-pc__setting-button', 'pzp-pc-ui-button')
+  clipDownloadButton.addEventListener('click', () => {
+    void downloadClip()
+  })
+
+  const toolTip = document.createElement('span')
+  toolTip.classList.add('pzp-pc-ui-button__tooltip', 'pzp-pc-ui-button__tooltip--top')
+  toolTip.innerText = '다운로드'
+
+  const icon = document.createElement('span')
+  icon.classList.add('pzp-ui-icon', 'pzp-pc-setting-button__icon')
+  icon.innerHTML = downloadIcon
+
+  clipDownloadButton.appendChild(toolTip)
+  clipDownloadButton.appendChild(icon)
+  return clipDownloadButton
 }
 
 function createPIPButton (): HTMLButtonElement {

@@ -84,6 +84,36 @@ export interface VideoInfo {
   thumbnailURL: string
 }
 
+export interface ContentInfo {
+  contentTitle: string
+  inKey: string
+  contentID: string
+}
+interface ClipOwnerChannel {
+  channelId: string
+  channelName: string
+  channelImageUrl: string
+  verifiedMark: boolean
+}
+
+interface ClipContent {
+  contentType: string
+  contentId: number
+  videoId: string
+  vodStatus: string
+  contentTitle: string
+  adult: boolean
+  inKey: string
+  userAdultStatus: string
+  ownerChannel: ClipOwnerChannel
+}
+
+export interface Clip {
+  code: number
+  message: string | null
+  content: ClipContent
+}
+
 export interface PlayBackURL {
   resolution: number
   fps: number
