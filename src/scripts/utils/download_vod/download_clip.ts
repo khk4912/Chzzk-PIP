@@ -6,8 +6,8 @@ export function isClipPage (): boolean {
 
 // https://apis.naver.com/neonplayer/vodplay/v1/playback/185E84C6EEAC13828C3A6ADFD10800810E81?key=V1257d3d223e05ce67f809b5051667aa86f181e3ae1c23455289eccb2031fde8a47809b5051667aa86f18&sid=2113&env=real&lc=ko&cpl=ko
 
-export async function getClipInfo (videoNumber: number): Promise<ContentInfo> {
-  const r = await fetch(`https://api.chzzk.naver.com/service/v1/play-info/clip/${videoNumber}`, { credentials: 'include' })
+export async function getClipInfo (videoID: string): Promise<ContentInfo> {
+  const r = await fetch(`https://api.chzzk.naver.com/service/v1/play-info/clip/${videoID}`, { credentials: 'include' })
   const data: Clip = await r.json()
 
   const contentTitle = data.content.contentTitle
@@ -59,9 +59,9 @@ export async function download (url: string, title: string): Promise<void> {
 }
 
 export async function downloadClip (): Promise<void> {
-  const videoNumber = Number(location.pathname.split('/')[3])
+  const videoID = location.pathname.split('/')[3]
 
-  const contentInfo = await getClipInfo(videoNumber)
+  const contentInfo = await getClipInfo(videoID)
   const playBackURL = await getPlayBackURL(contentInfo.contentID, contentInfo.inKey)
 
   await download(playBackURL.url, contentInfo.contentTitle)
