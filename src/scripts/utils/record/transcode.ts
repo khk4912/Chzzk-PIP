@@ -249,9 +249,9 @@ export async function getFrame (blobURL: string): Promise<string> {
   const inputFile = await fetchFile(blobURL)
 
   await ffmpeg.writeFile('input.webm', inputFile)
-  await ffmpeg.exec(['-i', 'input.webm', '-ss', '00:00:01.00', '-vf', 'scale=1100:1100:force_original_aspect_ratio=decrease', '-vframes', '1', 'output.jpg'])
+  await ffmpeg.exec(['-i', 'input.webm', '-ss', '00:00:01.00', '-vf', 'scale=1100:1100:force_original_aspect_ratio=decrease', '-vframes', '1', 'output%03d.jpg'])
 
-  const data = await ffmpeg.readFile('output.jpg')
+  const data = await ffmpeg.readFile('output001.jpg')
   const url = URL.createObjectURL(new Blob([data], { type: 'image/jpeg' }))
 
   return url
