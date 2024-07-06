@@ -82,7 +82,9 @@ function _showVideo (
         duration = (recorderStopTime - recorderStartTime) / 1000 - 0.1
       }
 
-      const fileName = `${streamInfo.streamerName}_${duration}s`
+      const fixedDuration = duration.toFixed(2)
+
+      const fileName = `${streamInfo.streamerName}_${fixedDuration}s`
       registerDownloadHandler(recorderBlob, fileName, duration)
       registerSegmentModalHandler(recorderBlob, fileName, duration)
       registerDownloadAfterSliceHandler(recorderBlob, fileName, duration)
@@ -123,6 +125,8 @@ function registerDownloadHandler (
   originalVideoDuration: number
 ): void {
   const downloadButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.download')
+  const isMP4 = MediaRecorder.isTypeSupported('video/mp4;codecs=avc1,mp4a.40.2')
+
   downloadButtons.forEach((btn) => {
     const dataType = btn.getAttribute('data-type') ?? ''
 
@@ -130,14 +134,30 @@ function registerDownloadHandler (
       return
     }
 
-    btn.addEventListener('click', () => {
-      download(
-        recorderBlobURL,
-        `${fileName}.${dataType === 'mp4-aac' ? 'mp4' : dataType}`,
-        dataType,
-        originalVideoDuration
-      )
-    })
+    if (isMP4 && (dataType === 'mp4' || dataType === 'mp4-aac')) {
+      btn.disabled = true
+    } else {
+      let ext = 'webm'
+
+      if (dataType === 'default') {
+        if (isMP4) {
+          ext = 'mp4'
+        }
+      } else if (dataType === 'mp4-aac') {
+        ext = 'mp4'
+      } else {
+        ext = dataType
+      }
+
+      btn.addEventListener('click', () => {
+        download(
+          recorderBlobURL,
+          `${fileName}.${ext}`,
+          dataType,
+          originalVideoDuration
+        )
+      })
+    }
   })
 
   window.addEventListener('beforeunload', () => {
@@ -148,9 +168,9 @@ function registerDownloadHandler (
 function download (
   recorderBlobURL: string,
   fileName: string,
-  type: SupportedType = 'webm',
+  type: SupportedType = 'default',
   originalVideoDuration: number): void {
-  if (type === 'webm') {
+  if (type === 'default') {
     startDownload(recorderBlobURL, fileName)
     return
   }

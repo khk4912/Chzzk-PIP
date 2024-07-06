@@ -26,16 +26,20 @@ export async function startRecord (video: Video, streamInfo: StreamInfo): Promis
     stream = video.captureStream()
   }
 
+  const isSupportMP4 = MediaRecorder.isTypeSupported('video/mp4;codecs=avc1,mp4a.40.2')
+
   const recorder = new MediaRecorder(
     stream,
     {
-      mimeType: isMoz ? 'video/webm;codecs=vp8,opus' : 'video/webm;codecs=avc1',
-      videoBitsPerSecond: 7000000
+      mimeType: isMoz
+        ? 'video/webm;codecs=vp8,opus'
+        : isSupportMP4 ? 'video/mp4;codecs=avc1,mp4a.40.2' : 'video/webm;codecs=avc1',
+      videoBitsPerSecond: 8000000
     }
   )
 
   const date = new Date()
-  await chrome.storage.local.set({ highFrame: false, recorderBlob: '', streamInfo, recorderStartTime: date.getTime() })
+  await chrome.storage.local.set({ highFrame: false, recorderBlob: '', streamInfo, recorderStartTime: date.getTime(), isSupportMP4 })
 
   recorder.ondataavailable = async (event) => {
     if (event.data.size === 0) return

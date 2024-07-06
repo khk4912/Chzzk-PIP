@@ -36,6 +36,8 @@ export const transcode = async (
   videoDuration = originalVideoDuration
 
   switch (outputType) {
+    case 'default':
+      return await transcodeWEBM(inputFile)
     case 'gif':
       return await transcodeGIF(inputFile)
     case 'webp':
@@ -94,6 +96,18 @@ const transcodeMP4AAC = async (inputFileURL: string): Promise<string> => {
 
   const data = await ffmpeg.readFile('output.mp4')
   const url = URL.createObjectURL(new Blob([data], { type: 'video/mp4' }))
+
+  return url
+}
+
+const transcodeWEBM = async (inputFileURL: string): Promise<string> => {
+  const inputFile = await fetchFile(inputFileURL)
+
+  await ffmpeg.writeFile('input.mp4', inputFile)
+  await ffmpeg.exec(['-i', 'input.mp4', '-c', 'copy', 'output.webm'])
+
+  const data = await ffmpeg.readFile('output.webm')
+  const url = URL.createObjectURL(new Blob([data], { type: 'video/webm' }))
 
   return url
 }
