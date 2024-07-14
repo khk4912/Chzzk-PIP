@@ -26,14 +26,14 @@ export async function startRecord (video: Video, streamInfo: StreamInfo): Promis
     stream = video.captureStream()
   }
 
-  const isSupportMP4 = MediaRecorder.isTypeSupported('video/mp4;codecs=avc1,mp4a.40.2')
+  const isSupportMP4 = MediaRecorder.isTypeSupported('video/mp4;codecs=vp9,mp4a.40.2')
 
   const recorder = new MediaRecorder(
     stream,
     {
       mimeType: isMoz
         ? 'video/webm;codecs=vp8,opus'
-        : isSupportMP4 ? 'video/mp4;codecs=avc1,mp4a.40.2' : 'video/webm;codecs=avc1',
+        : isSupportMP4 ? 'video/mp4;codecs=vp9,mp4a.40.2' : 'video/webm;codecs=avc1',
       videoBitsPerSecond: 8000000
     }
   )
