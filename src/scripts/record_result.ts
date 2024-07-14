@@ -125,7 +125,7 @@ function registerDownloadHandler (
   originalVideoDuration: number
 ): void {
   const downloadButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.download')
-  const isMP4 = MediaRecorder.isTypeSupported('video/mp4;codecs=avc1,mp4a.40.2')
+  const isMP4 = MediaRecorder.isTypeSupported('video/mp4;codecs=vp9,mp4a.40.2')
 
   downloadButtons.forEach((btn) => {
     const dataType = btn.getAttribute('data-type') ?? ''
