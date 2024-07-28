@@ -1,0 +1,37 @@
+{
+  "name": "Chzzk-PIP",
+  "version": "1.1.3",
+  "description": "치지직 PIP, 녹화, 스크린샷 확장 프로그램",
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "pages/popup/index.html"
+  },
+  "icons": {
+    "16": "public/logos/logo_16x16.png",
+    "48": "public/logos/logo_48x48.png",
+    "128": "public/logos/logo_128x128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://chzzk.naver.com/*"],
+      "js": ["src/content_script.tsx"],
+      "all_frames": true
+    }
+  ],
+  "permissions": ["storage", "downloads"],
+  "web_accessible_resources": [
+    {
+      "resources": ["js/*", "ffmpeg/*", "pages/*"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';",
+    "sandbox": "sandbox allow-scripts allow-forms allow-popups allow-modals; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval'; child-src 'self';"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "chzzk_pip@kosame.dev"
+    }
+  }
+}
