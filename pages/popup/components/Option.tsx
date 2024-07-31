@@ -35,7 +35,7 @@ function CheckButton ({ optionID }: { optionID: keyof OptionType }): React.React
 
   return (
     <input
-      onClick={handleClick}
+      onChange={handleClick}
       className={style.checkBox} role='switch' type='checkbox' checked={optionContext[optionID] ?? DEFAULT_OPTIONS[optionID]}
     />
   )
