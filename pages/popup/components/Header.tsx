@@ -1,6 +1,5 @@
 import style from './Header.module.css'
 import logo from '../../../logos/logo.png'
-
 export function Header (): React.ReactNode {
   return (
 

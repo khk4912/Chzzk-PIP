@@ -7,3 +7,14 @@ interface HTMLVideoElement {
   captureStream: () => MediaStream
   mozCaptureStream: () => MediaStream
 }
+
+interface MediaRecorder {
+  tempBlobURL?: string
+  recordInfo?: {
+    startDateTime: number
+    stopDateTime: number
+    resultBlobURL: string
+    streamInfo: StreamInfo
+  }
+
+}
