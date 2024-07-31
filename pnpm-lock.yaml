@@ -54,6 +54,9 @@ importers:
       globals:
         specifier: ^15.8.0
         version: 15.8.0
+      navigation-api-types:
+        specifier: ^0.5.1
+        version: 0.5.1
       ts-standard:
         specifier: ^12.0.2
         version: 12.0.2(typescript@5.5.4)
@@ -1600,6 +1603,9 @@ packages:
 
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
+
+  navigation-api-types@0.5.1:
+    resolution: {integrity: sha512-STpzr4JvInYi+GFIckNe/dM5cKc9M7Q/ZLKLWcWxFzOCXCBK5Oog3PzjwXwJ18yCJ1RnPVgdVueQG357PIeiAA==}
 
   no-case@3.0.4:
     resolution: {integrity: sha512-fgAN3jGAh+RoxUGZHTSOLJIqUc2wmoBwGR4tbpNAKmmovFoWq0OdRkb0VkldReO2a2iBT/OEulG9XSUc10r3zg==}
@@ -3849,6 +3855,8 @@ snapshots:
   natural-compare-lite@1.4.0: {}
 
   natural-compare@1.4.0: {}
+
+  navigation-api-types@0.5.1: {}
 
   no-case@3.0.4:
     dependencies:
