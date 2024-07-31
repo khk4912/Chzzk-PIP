@@ -1,13 +1,14 @@
-import { injectButton, waitForElement } from './inject_btn'
+import { injectButton } from './inject_btn'
 
 async function main (): Promise<void> {
-  const button = await waitForElement('.pzp-pc__bottom-buttons-right').catch(() => null)
+  void injectButton()
 
-  if (button === null) {
+  if (window.navigation === undefined) {
+    // TODO: Add classic way for unsupported browsers
     return
   }
 
-  await injectButton()
+  window.navigation.addEventListener('navigate', () => { void injectButton() })
 }
 
-main().catch(console.error)
+void main().catch(console.error)
