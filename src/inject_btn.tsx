@@ -4,10 +4,6 @@ import { PIPButton } from './components/pip_button'
 import { RecordButton } from './components/rec_button'
 import { ScreenshotButton } from './components/screenshot_button'
 
-const getInjectTarget = (): HTMLElement | null => {
-  return document.querySelector('.pzp-pc__bottom-buttons-right')
-}
-
 export const waitForElement = async (querySelector: string): Promise<Element> => {
   return await new Promise((resolve) => {
     const interval = setInterval(() => {
@@ -23,6 +19,7 @@ export const waitForElement = async (querySelector: string): Promise<Element> =>
 export async function injectButton (): Promise<void> {
   const tg = await waitForElement('.pzp-pc__bottom-buttons-right') as HTMLElement
 
+  // 이미 버튼이 삽입되어있다면?
   if (tg.classList.contains('chzzk-pip-injected')) {
     return
   }
