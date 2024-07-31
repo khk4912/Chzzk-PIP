@@ -7,9 +7,9 @@
     "default_popup": "pages/popup/index.html"
   },
   "icons": {
-    "16": "public/logos/logo_16x16.png",
-    "48": "public/logos/logo_48x48.png",
-    "128": "public/logos/logo_128x128.png"
+    "16": "logos/logo_16x16.png",
+    "48": "logos/logo_48x48.png",
+    "128": "logos/logo_128x128.png"
   },
   "content_scripts": [
     {
