@@ -8,7 +8,9 @@ async function main (): Promise<void> {
     return
   }
 
-  window.navigation.addEventListener('navigate', () => { void injectButton() })
+  window.navigation.addEventListener('navigate', () => {
+    void injectButton()
+  })
 }
 
 void main().catch(console.error)

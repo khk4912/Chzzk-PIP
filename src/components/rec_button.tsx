@@ -31,7 +31,7 @@ export function RecordButton (): React.ReactNode {
       await stopRecord(recorder.current)
       recorder.current = undefined
 
-      window.open(chrome.runtime.getURL('/pages/record_result/index.html'), '_blank')
+      window.open(chrome.runtime.getURL('/pages/record_result/index.html'))
     }
 
     setIsRecording(newRec)

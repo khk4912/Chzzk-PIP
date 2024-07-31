@@ -1,4 +1,4 @@
-import { createRoot } from 'react-dom/client'
+import { createRoot, type Root } from 'react-dom/client'
 import { getOption } from '../types/options'
 import { PIPButton } from './components/pip_button'
 import { RecordButton } from './components/rec_button'
@@ -23,10 +23,8 @@ export async function injectButton (): Promise<void> {
   if (tg.classList.contains('chzzk-pip-injected')) {
     return
   }
-
-  const { pip, rec, screenshot } = await getOption()
-
   tg.classList.add('chzzk-pip-injected')
+  const { pip, rec, screenshot } = await getOption()
 
   if (pip) {
     await injectPIP(tg)
@@ -68,6 +66,9 @@ async function injectScreenshot (buttonTarget: HTMLElement): Promise<void> {
   inject(<ScreenshotButton />, div)
 }
 
-function inject (node: React.ReactNode, target: HTMLElement): void {
-  createRoot(target).render(node)
+export function inject (node: React.ReactNode, target: HTMLElement): Root {
+  const root = createRoot(target)
+  root.render(node)
+
+  return root
 }
