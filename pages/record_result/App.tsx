@@ -13,31 +13,36 @@ export default function App (): React.ReactNode {
   const [recordInfo, setRecordInfo] = useState<RecordInfo>()
   const [downloadInfo, setDownloadInfo] = useState<DonwloadInfo>()
 
+  const onLoadedMetadataHandler = async (): Promise<void> => {
+    if (recordInfo === undefined) {
+      return
+    }
+
+    const video = document.querySelector('video')
+
+    if (!(video instanceof HTMLVideoElement) || recordInfo === undefined) {
+      return
+    }
+
+    let duration: number = 0
+
+    video.currentTime = Number.MAX_SAFE_INTEGER
+    await new Promise(resolve => setTimeout(resolve, 500))
+    video.currentTime = 0
+
+    duration = video.duration
+
+    if (duration === Infinity) {
+      duration = (recordInfo.stopDateTime - recordInfo.startDateTime) / 1000 - 0.1
+    }
+
+    const fileName = `${recordInfo.streamInfo.streamerName}_${duration.toFixed(2)}s`
+    setDownloadInfo({ recordInfo, length: duration, fileName })
+  }
+
   useEffect(() => {
-    console.log('initial load')
     getRecordInfo()
-      .then((x) => {
-        setRecordInfo(x)
-
-        const recInfo = x
-        getDuration().then((length) => {
-          if (recInfo === undefined) {
-            return
-          }
-
-          const duration = recInfo.stopDateTime - recInfo.startDateTime
-          const len = length === Infinity ? duration : length
-
-          const fileName = `${recInfo.streamInfo.streamerName}_${len.toFixed(2)}`
-          console.log('Set download Info to', {
-            recordInfo, length: len, fileName
-          })
-          setDownloadInfo({
-            recordInfo: recInfo, length: len, fileName
-          })
-        }).catch(console.error)
-      }
-      )
+      .then(setRecordInfo)
       .catch(console.error)
   }, [])
 
@@ -49,30 +54,10 @@ export default function App (): React.ReactNode {
   return (
     <video
       id='video'
+      preload='metadata'
       src={recordInfo?.resultBlobURL}
       controls muted
+      onLoadedMetadata={() => { void onLoadedMetadataHandler() }}
     />
   )
-}
-
-async function getDuration (): Promise<number> {
-  const video = document.querySelector('video')
-
-  if (video === null) {
-    return Infinity
-  }
-
-  console.log(video.readyState)
-  if (video.readyState < HTMLMediaElement.HAVE_METADATA) {
-    await new Promise((resolve) => {
-      video.addEventListener('onloadedmetadata', resolve)
-    })
-  }
-
-  console.log(video.readyState)
-  video.currentTime = Number.MAX_SAFE_INTEGER
-  await new Promise(resolve => setTimeout(resolve, 500))
-  video.currentTime = 0
-
-  return video.duration
 }
