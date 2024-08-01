@@ -1,5 +1,5 @@
 import type { RecordInfo } from '../../../types/record_info'
-import { getRecordInfo, setRecordInfo } from '../record_info_helper'
+import { getRecordInfo, setRecordInfo } from './record_info_helper'
 import { getStreamInfo } from '../stream_info'
 
 export async function startRecord (video: HTMLVideoElement): Promise<MediaRecorder | null> {
@@ -43,7 +43,7 @@ export async function startRecord (video: HTMLVideoElement): Promise<MediaRecord
 export async function stopRecord (recorder: MediaRecorder): Promise<RecordInfo> {
   recorder.stop()
 
-  await new Promise((resolve, reject) => {
+  await new Promise((resolve) => {
     recorder.onstop = async () => {
       const info = recorder.recordInfo
 

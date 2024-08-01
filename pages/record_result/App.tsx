@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { getRecordInfo } from '../../src/utils/record_info_helper'
+import { getRecordInfo } from '../../src/utils/record/record_info_helper'
 import './style.css'
 
 export default function App (): React.ReactNode {

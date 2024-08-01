@@ -1,4 +1,4 @@
-import type { RecordInfo } from '../../types/record_info'
+import type { RecordInfo } from '../../../types/record_info'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const checkRecordInfo = (x: any): x is RecordInfo => {

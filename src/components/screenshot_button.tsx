@@ -1,11 +1,9 @@
-import { useState } from 'react'
 import ScreenshotIcon from '../../static/screenshot.svg?react'
 import { getOption } from '../../types/options'
-import { inject } from '../inject_btn'
 import { useShortcut } from '../utils/hooks'
-import { saveScreenshot } from '../utils/save'
+import { saveScreenshot } from '../utils/screenshot/save'
 import { getStreamInfo } from '../utils/stream_info'
-import { ScreenshotPreview } from './screenshot_preview'
+import { createDraggablePreview } from '../utils/screenshot/screenshot_preview'
 
 export function ScreenshotButton (): React.ReactNode {
   const clickHandler = (): void => {
@@ -71,21 +69,8 @@ async function saveOrPreview (dataURL: string): Promise<void> {
   const title = `${info.streamerName}_${info.streamTitle.replace(/[/\\?%*:|"<>]/g, '_')}}_${yyyymmddhhmmss(new Date())}`
 
   if (screenshotPreview) {
-    injectPreview(dataURL, title)
+    createDraggablePreview(dataURL, title)
   } else {
     saveScreenshot(dataURL, title)
   }
-}
-
-function injectPreview (dataURL: string, title: string): void {
-  const target = document.querySelector('[class^="toolbar_container"]') ??
-  document.querySelector('[class^="layout_glive"]')
-
-  const div = document.createElement('div')
-  if (target === null) {
-    return
-  }
-
-  target.parentNode?.insertBefore(div, target)
-  const root = inject(<ScreenshotPreview dataURL={dataURL} title={title} />, div)
 }
