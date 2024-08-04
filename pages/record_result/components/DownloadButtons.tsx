@@ -10,7 +10,7 @@ export function DownloadButtons ({ downloadInfo }: { downloadInfo: DownloadInfo 
   }
 
   return (
-    <div className='download-buttons'>
+    <div className={`download-buttons ${downloadInfo === undefined ? 'disabled' : ''}`}>
       <ButtonBase onClick={download}>
         다운로드
       </ButtonBase>

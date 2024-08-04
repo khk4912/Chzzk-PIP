@@ -64,3 +64,8 @@ body {
     flex: 1;
   }
 }
+
+.disabled button {
+  background-color: var(--chzzk-gray);
+  cursor: not-allowed;
+}
