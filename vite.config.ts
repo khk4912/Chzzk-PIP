@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite'
+import {resolve} from 'path'
 
 import react from '@vitejs/plugin-react'
 import { crx } from '@crxjs/vite-plugin'
@@ -8,6 +9,14 @@ import manifest from './manifest.json'
 
 export default defineConfig({
   plugins: [react(), crx({ manifest }), svgr()],
+  root: resolve(__dirname, ''),
+  build: {
+    rollupOptions: {
+      input: {
+        record: resolve(__dirname, 'pages/record_result/index.html'),
+      }
+    }
+  },
   css: {
     modules: {
       localsConvention: 'camelCase'
