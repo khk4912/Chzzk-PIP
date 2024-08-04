@@ -22,6 +22,9 @@ export default defineConfig({
       localsConvention: 'camelCase'
     }
   },
+  optimizeDeps:{
+    exclude:['@ffmpeg/ffmpeg']
+  },
   server: {
     port: 5173,
     strictPort: true,
