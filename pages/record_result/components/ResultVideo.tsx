@@ -1,15 +1,9 @@
-import { useEffect, useState } from 'react'
-import type { RecordInfo } from '../../../types/record_info'
+import React, { useEffect, useState } from 'react'
+import type { DownloadInfo, RecordInfo } from '../../../types/record_info'
 import { getRecordInfo } from '../../../src/utils/record/record_info_helper'
 
-interface DonwloadInfo {
-  recordInfo: RecordInfo
-  length: number
-  fileName: string
-}
-export function ResultVideo (): React.ReactNode {
+export function ResultVideo ({ setDownloadInfo }: { setDownloadInfo: React.Dispatch<React.SetStateAction<DownloadInfo | undefined>> }): React.ReactNode {
   const [recordInfo, setRecordInfo] = useState<RecordInfo>()
-  const [downloadInfo, setDownloadInfo] = useState<DonwloadInfo>()
 
   const onLoadedMetadataHandler = async (): Promise<void> => {
     if (recordInfo === undefined) {
@@ -43,11 +37,6 @@ export function ResultVideo (): React.ReactNode {
       .then(setRecordInfo)
       .catch(console.error)
   }, [])
-
-  useEffect(() => {
-    console.log('changed downloadInfo')
-    console.log(downloadInfo)
-  }, [downloadInfo])
 
   return (
     <video

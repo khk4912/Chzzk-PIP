@@ -9,3 +9,9 @@ export interface RecordInfo {
   resultBlobURL: string
   streamInfo: StreamInfo
 }
+
+export interface DownloadInfo {
+  recordInfo: RecordInfo
+  length: number
+  fileName: string
+}
