@@ -23,6 +23,7 @@ export async function injectButton (): Promise<void> {
   if (tg.classList.contains('chzzk-pip-injected')) {
     return
   }
+
   tg.classList.add('chzzk-pip-injected')
   const { pip, rec, screenshot } = await getOption()
 

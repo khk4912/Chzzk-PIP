@@ -1,0 +1,16 @@
+#timer-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 1%;
+  border-radius: 10%;
+}
+
+#red-dot {
+  width: 0.3vw;
+  height: 0.3vw;
+  margin-right: 0.3vw;
+  background-color: red;
+  border-radius: 50%;
+}

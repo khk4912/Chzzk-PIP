@@ -1,3 +1,4 @@
+import { createContext } from 'react'
 import type { RecordInfo } from '../../../types/record_info'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -52,3 +53,6 @@ export const getTempBlobURL = async (): Promise<string> => {
   const { tempBlobURL } = await chrome.storage.local.get('tempBlobURL') as { tempBlobURL: string }
   return tempBlobURL
 }
+
+type Context<T> = [T, React.Dispatch<React.SetStateAction<T>>]
+export const RecordStateContext = createContext < Context < boolean>>([false, () => {}])

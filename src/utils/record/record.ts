@@ -3,10 +3,6 @@ import { getRecordInfo, setRecordInfo } from './record_info_helper'
 import { getStreamInfo } from '../stream_info'
 
 export async function startRecord (video: HTMLVideoElement): Promise<MediaRecorder | null> {
-  if (video.muted) {
-    alert('음소거된 비디오는 녹화할 수 없습니다.')
-    return null
-  }
 
   const streamInfo = getStreamInfo(document)
   const stream = video.captureStream()
@@ -42,6 +38,7 @@ export async function startRecord (video: HTMLVideoElement): Promise<MediaRecord
 
 export async function stopRecord (recorder: MediaRecorder): Promise<RecordInfo> {
   recorder.stop()
+
 
   await new Promise((resolve) => {
     recorder.onstop = async () => {
