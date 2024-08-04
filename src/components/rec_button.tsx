@@ -15,6 +15,7 @@ export function RecordButton (): React.ReactNode {
     }
 
     const newRec = !isRecording
+    setIsRecording(newRec)
 
     if (newRec) {
       const _recorder = await startRecord(video)
@@ -28,13 +29,15 @@ export function RecordButton (): React.ReactNode {
         return
       }
 
-      await stopRecord(recorder.current)
+      const info = await stopRecord(recorder.current)
       recorder.current = undefined
+
+      if (info.resultBlobURL === '') {
+        return
+      }
 
       window.open(chrome.runtime.getURL('/pages/record_result/index.html'))
     }
-
-    setIsRecording(newRec)
   }
 
   return (
