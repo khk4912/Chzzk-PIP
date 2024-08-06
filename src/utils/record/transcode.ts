@@ -8,7 +8,7 @@ const FFMPEG_OPTION = {
   workerURL: chrome.runtime.getURL('ffmpeg/ffmpeg-core.worker.js')
 }
 
-export function useFFmpeg (): [React.MutableRefObject<FFmpeg>, boolean] {
+export function useFFmpeg (): readonly [React.MutableRefObject<FFmpeg>, boolean] {
   const ffmpeg = useRef<FFmpeg>(new FFmpeg())
 
   ffmpeg.current.on('log', ({ message }) => { console.log(message) })

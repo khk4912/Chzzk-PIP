@@ -17,6 +17,7 @@ const DEFAULT_RECORD_INFO: RecordInfo = {
   startDateTime: -1,
   stopDateTime: -1,
   resultBlobURL: 'string',
+  isMP4: false,
   streamInfo: {
     streamerName: '?',
     streamTitle: '?'
