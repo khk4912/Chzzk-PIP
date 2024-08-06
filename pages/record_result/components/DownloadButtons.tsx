@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useFFmpeg, toMP4, toMP4AAC, toGIF, toWEBP } from '../../../src/utils/record/transcode'
+import { useFFmpeg, toMP4, toMP4AAC, toGIF, toWEBP, segmentize } from '../../../src/utils/record/transcode'
 import type { DownloadInfo } from '../../../types/record_info'
 import { ButtonBase } from './Button'
 
@@ -61,7 +61,12 @@ export function DownloadButtons ({ downloadInfo }: { downloadInfo: DownloadInfo 
       </div>
       <div className='after-transcode'>
         <ButtonBase>자르고 다운로드</ButtonBase>
-        <ButtonBase>분할 다운로드</ButtonBase>
+        <ButtonBase onClick={() => {
+          void segmentize(ffmpeg.current, downloadInfo?.recordInfo.resultBlobURL ?? '')
+            .then((url) => { url.forEach((u, i) => { download(u, `part_${i}.mp4`) }) })
+        }}
+        >분할 다운로드
+        </ButtonBase>
       </div>
 
     </div>

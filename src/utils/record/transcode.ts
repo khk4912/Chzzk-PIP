@@ -58,3 +58,24 @@ async function _transcode (
 
   return URL.createObjectURL(new Blob([output], { type: type === undefined ? 'video/mp4' : `video/${type}` }))
 }
+
+export async function segmentize (ffmpeg: FFmpeg, inputFileURL: string): Promise<string[]> {
+  const input = await fetchFile(inputFileURL)
+  await ffmpeg.writeFile('input.webm', input)
+
+  await ffmpeg.exec(['-i', 'input.webm', '-c', 'copy', 'pre.mp4'])
+  await ffmpeg.exec(['-i', 'pre.mp4', '-f', 'segment', '-segment_time', '5', '-c', 'copy', '-reset_timestamps', '1', 'output%03d.mp4'])
+
+  const output: string[] = []
+
+  const files = await ffmpeg.listDir('.')
+  for (const file of files) {
+    if (file.name.startsWith('output') && file.name.endsWith('.mp4')) {
+      const data = await ffmpeg.readFile(file.name)
+      output.push(URL.createObjectURL(new Blob([data], { type: 'video/mp4' })))
+    }
+  }
+
+  // await ffmpeg.deleteFile('output*')
+  return output
+}
