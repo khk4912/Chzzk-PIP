@@ -1,7 +1,21 @@
+import ReactDOM from 'react-dom'
+
 import PIPIcon from '../../static/pip.svg?react'
 import { useShortcut } from '../utils/hooks'
 
-export function PIPButton (): React.ReactNode {
+export function PIPPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {
+  if (tg === undefined) {
+    return null
+  }
+
+  const div = document.createElement('div')
+  div.id = 'chzzk-pip-pip-button'
+
+  tg.insertBefore(div, tg.firstChild)
+  return ReactDOM.createPortal(<PIPButton />, div)
+}
+
+function PIPButton (): React.ReactNode {
   const clickHandler = (): void => { void makeVideoPIP() }
   useShortcut(['p', 'P', 'ㅔ'], clickHandler)
 

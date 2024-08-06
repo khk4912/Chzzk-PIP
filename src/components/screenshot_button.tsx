@@ -1,3 +1,5 @@
+import ReactDOM from 'react-dom'
+
 import ScreenshotIcon from '../../static/screenshot.svg?react'
 import { getOption } from '../../types/options'
 import { useShortcut } from '../utils/hooks'
@@ -5,7 +7,19 @@ import { saveScreenshot } from '../utils/screenshot/save'
 import { getStreamInfo } from '../utils/stream_info'
 import { createDraggablePreview } from '../utils/screenshot/screenshot_preview'
 
-export function ScreenshotButton (): React.ReactNode {
+export function ScreenShotPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {
+  if (tg === undefined) {
+    return null
+  }
+
+  const div = document.createElement('div')
+  div.id = 'chzzk-pip-screenshot-button'
+
+  tg.insertBefore(div, tg.firstChild)
+  return ReactDOM.createPortal(<ScreenshotButton />, div)
+}
+
+function ScreenshotButton (): React.ReactNode {
   const clickHandler = (): void => {
     const dataURL = screenshot()
     if (dataURL === undefined) {

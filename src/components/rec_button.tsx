@@ -1,9 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react'
-import RecIcon from '../../static/rec.svg?react'
+import ReactDOM from 'react-dom'
 
+import RecIcon from '../../static/rec.svg?react'
 import { useShortcut } from '../utils/hooks'
 import { startRecord, stopRecord } from '../utils/record/record'
 import { RecordOverlayPortal } from './rec_overlay'
+
+export function RecordPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {
+  if (tg === undefined) {
+    return null
+  }
+
+  const div = document.createElement('div')
+  div.id = 'chzzk-pip-rec-button'
+
+  tg.insertBefore(div, tg.firstChild)
+  return ReactDOM.createPortal(<RecordButton />, div)
+}
 
 async function _stopRecord (recorder: React.MutableRefObject<MediaRecorder | undefined>): Promise<void> {
   if (recorder.current === undefined) {
@@ -20,7 +33,7 @@ async function _stopRecord (recorder: React.MutableRefObject<MediaRecorder | und
   window.open(chrome.runtime.getURL('/pages/record_result/index.html'))
 }
 
-export function RecordButton (): React.ReactNode {
+function RecordButton (): React.ReactNode {
   const [isRecording, setIsRecording] = useState(false)
   const recorder = useRef<MediaRecorder>()
 
