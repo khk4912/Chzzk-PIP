@@ -8,6 +8,7 @@ export interface RecordInfo {
   stopDateTime: number
   resultBlobURL: string
   streamInfo: StreamInfo
+  isMP4: boolean
 }
 
 export interface DownloadInfo {

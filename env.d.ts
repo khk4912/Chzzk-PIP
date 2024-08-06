@@ -15,6 +15,7 @@ interface MediaRecorder {
     stopDateTime: number
     resultBlobURL: string
     streamInfo: StreamInfo
+    isMP4: boolean
   }
 
 }
