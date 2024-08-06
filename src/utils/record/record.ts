@@ -1,13 +1,17 @@
 import type { RecordInfo } from '../../../types/record_info'
-import { getRecordInfo, setRecordInfo } from './record_info_helper'
 import { getStreamInfo } from '../stream_info'
+import { getRecordInfo, setRecordInfo } from './record_info_helper'
 
 export async function startRecord (video: HTMLVideoElement): Promise<MediaRecorder | null> {
   const streamInfo = getStreamInfo(document)
   const stream = video.captureStream()
 
+  const isSupportMP4 = MediaRecorder.isTypeSupported('video/mp4;codecs=avc1,mp4a.40.2')
   const recorder = new MediaRecorder(stream, {
-    mimeType: 'video/webm;codecs=avc1',
+    mimeType:
+     isSupportMP4
+       ? 'video/mp4;codecs=avc1,mp4a.40.2'
+       : 'video/webm;codecs=avc1',
     videoBitsPerSecond: 8000000
   })
 
@@ -15,7 +19,8 @@ export async function startRecord (video: HTMLVideoElement): Promise<MediaRecord
     startDateTime: new Date().getTime(),
     stopDateTime: -1,
     resultBlobURL: '',
-    streamInfo
+    streamInfo,
+    isMP4: isSupportMP4
   }
 
   recorder.recordInfo = newRecordInfo

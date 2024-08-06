@@ -25,19 +25,25 @@ export function DownloadButtons ({ downloadInfo }: { downloadInfo: DownloadInfo 
       </ButtonBase>
 
       <h3>변환 후 다운로드</h3>
+      {((downloadInfo?.recordInfo.isMP4) ?? false) && '영상이 MP4로 MP4로 변환은 숨겨졌어요.'}
+
       <div className={`after-transcode ${!isFFmpegReady ? 'disabled' : ''}`}>
-        <ButtonBase onClick={() => {
-          void toMP4(ffmpeg.current, downloadInfo?.recordInfo.resultBlobURL ?? '')
-            .then((url) => { download(url, 'mp4') })
-        }}
-        >MP4
-        </ButtonBase>
-        <ButtonBase onClick={() => {
-          void toMP4AAC(ffmpeg.current, downloadInfo?.recordInfo.resultBlobURL ?? '')
-            .then((url) => { download(url, 'mp4') })
-        }}
-        >MP4 (호환성)
-        </ButtonBase>
+
+        {!((downloadInfo?.recordInfo.isMP4) ?? false) &&
+          <>
+            <ButtonBase onClick={() => {
+              void toMP4(ffmpeg.current, downloadInfo?.recordInfo.resultBlobURL ?? '')
+                .then((url) => { download(url, 'mp4') })
+            }}
+            >MP4
+            </ButtonBase>
+            <ButtonBase onClick={() => {
+              void toMP4AAC(ffmpeg.current, downloadInfo?.recordInfo.resultBlobURL ?? '')
+                .then((url) => { download(url, 'mp4') })
+            }}
+            >MP4 (호환성)
+            </ButtonBase>
+          </>}
         <ButtonBase onClick={() => {
           void toGIF(ffmpeg.current, downloadInfo?.recordInfo.resultBlobURL ?? '')
             .then((url) => { download(url, 'gif') })
