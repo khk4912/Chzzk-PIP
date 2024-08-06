@@ -1,10 +1,13 @@
+import { useEffect, useState } from 'react'
+import ReactDOM from 'react-dom'
 import { createRoot, type Root } from 'react-dom/client'
-import { getOption } from '../types/options'
+
+import { type DEFAULT_OPTIONS, getOption } from '../types/options'
 import { PIPButton } from './components/pip_button'
 import { RecordButton } from './components/rec_button'
 import { ScreenshotButton } from './components/screenshot_button'
 
-export const waitForElement = async (querySelector: string): Promise<Element> => {
+const waitForElement = async (querySelector: string): Promise<Element> => {
   return await new Promise((resolve) => {
     const interval = setInterval(() => {
       const element = document.querySelector(querySelector)
@@ -19,52 +22,59 @@ export const waitForElement = async (querySelector: string): Promise<Element> =>
 export async function injectButton (): Promise<void> {
   const tg = await waitForElement('.pzp-pc__bottom-buttons-right') as HTMLElement
 
-  // 이미 버튼이 삽입되어있다면?
-  if (tg.classList.contains('chzzk-pip-injected')) {
-    return
-  }
+  let div = document.createElement('div')
+  div.id = 'chzzk-pip-buttons'
 
-  tg.classList.add('chzzk-pip-injected')
-  const { pip, rec, screenshot } = await getOption()
+  tg.insertBefore(div, tg.firstChild)
 
-  if (pip) {
-    await injectPIP(tg)
-  }
+  let root = inject(<InjectButtons />, div)
 
-  if (screenshot) {
-    await injectScreenshot(tg)
-  }
+  window.navigation?.addEventListener('navigate', () => {
+    root.unmount()
+    div.remove()
 
-  if (rec) {
-    await injectRec(tg)
-  }
+    div = document.createElement('div')
+    div.id = 'chzzk-pip-buttons'
+
+    tg.insertBefore(div, tg.firstChild)
+    root = inject(<InjectButtons />, div)
+  })
 }
 
-async function injectPIP (buttonTarget: HTMLElement): Promise<void> {
+function PIPPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {
+  if (tg === undefined) {
+    return null
+  }
+
   const div = document.createElement('div')
   div.id = 'chzzk-pip-pip-button'
 
-  buttonTarget.insertBefore(div, buttonTarget.firstChild)
-
-  inject(<PIPButton />, div)
+  tg.insertBefore(div, tg.firstChild)
+  return ReactDOM.createPortal(<PIPButton />, div)
 }
 
-async function injectRec (buttonTarget: HTMLElement): Promise<void> {
+function RecordPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {
+  if (tg === undefined) {
+    return null
+  }
+
   const div = document.createElement('div')
   div.id = 'chzzk-pip-rec-button'
 
-  buttonTarget.insertBefore(div, buttonTarget.firstChild)
-
-  inject(<RecordButton />, div)
+  tg.insertBefore(div, tg.firstChild)
+  return ReactDOM.createPortal(<RecordButton />, div)
 }
 
-async function injectScreenshot (buttonTarget: HTMLElement): Promise<void> {
+function ScreenShotPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {
+  if (tg === undefined) {
+    return null
+  }
+
   const div = document.createElement('div')
   div.id = 'chzzk-pip-screenshot-button'
 
-  buttonTarget.insertBefore(div, buttonTarget.firstChild)
-
-  inject(<ScreenshotButton />, div)
+  tg.insertBefore(div, tg.firstChild)
+  return ReactDOM.createPortal(<ScreenshotButton />, div)
 }
 
 export function inject (node: React.ReactNode, target: HTMLElement): Root {
@@ -72,4 +82,31 @@ export function inject (node: React.ReactNode, target: HTMLElement): Root {
   root.render(node)
 
   return root
+}
+
+function InjectButtons (): React.ReactNode {
+  const [target, setTarget] = useState<Element | undefined>(undefined)
+  const [options, setOptions] = useState<typeof DEFAULT_OPTIONS>()
+
+  useEffect(() => {
+    getOption()
+      .then(setOptions)
+      .catch(console.error)
+  }, [])
+
+  useEffect(() => {
+    if (target === undefined) {
+      waitForElement('.pzp-pc__bottom-buttons-right')
+        .then(setTarget)
+        .catch(console.error)
+    }
+  }, [target])
+
+  return (
+    <>
+      {((options?.pip) ?? false) && <PIPPortal tg={target} />}
+      {((options?.screenshot) ?? false) && <ScreenShotPortal tg={target} />}
+      {((options?.rec) ?? false) && <RecordPortal tg={target} />}
+    </>
+  )
 }
