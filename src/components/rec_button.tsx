@@ -1,12 +1,36 @@
-import { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import RecIcon from '../../static/rec.svg?react'
-import { startRecord, stopRecord } from '../utils/record/record'
+
 import { useShortcut } from '../utils/hooks'
+import { startRecord, stopRecord } from '../utils/record/record'
 import { RecordOverlayPortal } from './rec_overlay'
+
+async function _stopRecord (recorder: React.MutableRefObject<MediaRecorder | undefined>): Promise<void> {
+  if (recorder.current === undefined) {
+    return
+  }
+
+  const info = await stopRecord(recorder.current)
+  recorder.current = undefined
+
+  if (info.resultBlobURL === '') {
+    return
+  }
+
+  window.open(chrome.runtime.getURL('/pages/record_result/index.html'))
+}
 
 export function RecordButton (): React.ReactNode {
   const [isRecording, setIsRecording] = useState(false)
   const recorder = useRef<MediaRecorder>()
+
+  useEffect(() => {
+    return () => {
+      if (isRecording) {
+        void _stopRecord(recorder)
+      }
+    }
+  }, [isRecording])
 
   useShortcut(['r', 'R', 'ㄱ'], () => { void clickHandler() })
 
@@ -32,18 +56,7 @@ export function RecordButton (): React.ReactNode {
       }
       recorder.current = _recorder
     } else {
-      if (recorder.current === undefined) {
-        return
-      }
-
-      const info = await stopRecord(recorder.current)
-      recorder.current = undefined
-
-      if (info.resultBlobURL === '') {
-        return
-      }
-
-      window.open(chrome.runtime.getURL('/pages/record_result/index.html'))
+      await _stopRecord(recorder)
     }
   }
 
