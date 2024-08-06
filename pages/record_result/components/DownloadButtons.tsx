@@ -15,6 +15,8 @@ export function DownloadButtons ({ downloadInfo }: { downloadInfo: DownloadInfo 
     a.click()
   }
 
+  const isMP4 = downloadInfo?.recordInfo.isMP4 ?? false
+
   const [ffmpeg, isFFmpegReady] = useFFmpeg()
   useEffect(() => { console.log(isFFmpegReady) }, [isFFmpegReady])
 
@@ -25,11 +27,11 @@ export function DownloadButtons ({ downloadInfo }: { downloadInfo: DownloadInfo 
       </ButtonBase>
 
       <h3>변환 후 다운로드</h3>
-      {((downloadInfo?.recordInfo.isMP4) ?? false) && '영상이 MP4로 MP4로 변환은 숨겨졌어요.'}
+      {isMP4 && '이미 MP4로 녹화되어 MP4로 변환은 숨겨졌어요.'}
 
       <div className={`after-transcode ${!isFFmpegReady ? 'disabled' : ''}`}>
 
-        {!((downloadInfo?.recordInfo.isMP4) ?? false) &&
+        {!isMP4 &&
           <>
             <ButtonBase onClick={() => {
               void toMP4(ffmpeg.current, downloadInfo?.recordInfo.resultBlobURL ?? '')
