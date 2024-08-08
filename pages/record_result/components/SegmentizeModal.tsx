@@ -29,7 +29,7 @@ function SegmentizeModal (
   const [ffmpeg, isFFmpegReady] = useFFmpeg()
 
   return (
-    <ModalBase modalState={setModalState}>
+    <ModalBase>
       <div className={style.header}>
         <h1>분할 다운로드</h1>
         <span>

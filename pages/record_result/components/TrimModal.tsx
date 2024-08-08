@@ -31,7 +31,7 @@ function TrimModal (
   const [ffmpeg, isFFmpegReady] = useFFmpeg()
 
   return (
-    <ModalBase modalState={setModalState}>
+    <ModalBase>
       <div className={style.header}>
         <h1>자르고 다운로드</h1>
         <span>

@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useFFmpeg, toMP4, toMP4AAC, toGIF, toWEBP, trim } from '../../../src/utils/record/transcode'
+import { useFFmpeg, toMP4, toMP4AAC, toGIF, toWEBP } from '../../../src/utils/record/transcode'
 import type { DownloadInfo } from '../../../types/record_info'
 import { ButtonBase } from './Button'
 
