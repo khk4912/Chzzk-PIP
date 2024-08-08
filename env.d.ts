@@ -16,6 +16,6 @@ interface MediaRecorder {
     resultBlobURL: string
     streamInfo: StreamInfo
     isMP4: boolean
+    chunks?: Blob[]
   }
-
 }

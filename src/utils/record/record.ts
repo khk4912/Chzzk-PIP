@@ -15,25 +15,20 @@ export async function startRecord (video: HTMLVideoElement): Promise<MediaRecord
     videoBitsPerSecond: 8000000
   })
 
-  const newRecordInfo = {
+  const newRecordInfo: RecordInfo = {
     startDateTime: new Date().getTime(),
     stopDateTime: -1,
     resultBlobURL: '',
     streamInfo,
-    isMP4: isSupportMP4
+    isMP4: isSupportMP4,
+    chunks: []
   }
 
   recorder.recordInfo = newRecordInfo
-  let tempBlobURL = ''
 
   recorder.ondataavailable = async (event) => {
     if (event.data.size === 0) return
-
-    const prev = tempBlobURL
-    tempBlobURL = URL.createObjectURL(event.data)
-
-    URL.revokeObjectURL(prev)
-    recorder.tempBlobURL = tempBlobURL
+    newRecordInfo.chunks?.push(event.data)
   }
 
   recorder.start()
@@ -52,7 +47,7 @@ export async function stopRecord (recorder: MediaRecorder): Promise<RecordInfo> 
       }
 
       info.stopDateTime = new Date().getTime()
-      info.resultBlobURL = recorder.tempBlobURL ?? ''
+      info.resultBlobURL = URL.createObjectURL(new Blob(info.chunks, { type: recorder.mimeType }))
 
       await setRecordInfo(info)
       resolve(null)
