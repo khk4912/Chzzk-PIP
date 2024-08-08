@@ -1,16 +1,16 @@
 import { useEffect } from 'react'
-import { useFFmpeg, toMP4, toMP4AAC, toGIF, toWEBP, segmentize } from '../../../src/utils/record/transcode'
+import { useFFmpeg, toMP4, toMP4AAC, toGIF, toWEBP, trim } from '../../../src/utils/record/transcode'
 import type { DownloadInfo } from '../../../types/record_info'
 import { ButtonBase } from './Button'
 
-export function DownloadButtons ({ downloadInfo }: { downloadInfo: DownloadInfo | undefined }): React.ReactNode {
+export function DownloadButtons ({ downloadInfo, setSegmentizeModalState, setSliceModalState }: { downloadInfo: DownloadInfo | undefined, setSegmentizeModalState: (x: boolean) => void, setSliceModalState: (x: boolean) => void }): React.ReactNode {
   const download = (url: string | undefined, ext: string): void => {
     if (url === undefined) {
       return
     }
 
     const a = document.createElement('a')
-    a.href = downloadInfo?.recordInfo.resultBlobURL ?? ''
+    a.href = url
     a.download = `${downloadInfo?.fileName ?? 'title'}.${ext}` ?? ''
     a.click()
   }
@@ -60,10 +60,13 @@ export function DownloadButtons ({ downloadInfo }: { downloadInfo: DownloadInfo 
         </ButtonBase>
       </div>
       <div className='after-transcode'>
-        <ButtonBase>자르고 다운로드</ButtonBase>
         <ButtonBase onClick={() => {
-          void segmentize(ffmpeg.current, downloadInfo?.recordInfo.resultBlobURL ?? '')
-            .then((url) => { url.forEach((u, i) => { download(u, `part_${i}.mp4`) }) })
+          setSliceModalState(true)
+        }}
+        >자르고 다운로드
+        </ButtonBase>
+        <ButtonBase onClick={() => {
+          setSegmentizeModalState(true)
         }}
         >분할 다운로드
         </ButtonBase>

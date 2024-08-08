@@ -59,12 +59,10 @@ async function _transcode (
   return URL.createObjectURL(new Blob([output], { type: type === undefined ? 'video/mp4' : `video/${type}` }))
 }
 
-export async function segmentize (ffmpeg: FFmpeg, inputFileURL: string): Promise<string[]> {
+export async function segmentize (ffmpeg: FFmpeg, inputFileURL: string, targetSegmentTime: number): Promise<string[]> {
   const input = await fetchFile(inputFileURL)
   await ffmpeg.writeFile('input.webm', input)
-
-  await ffmpeg.exec(['-i', 'input.webm', '-c', 'copy', 'pre.mp4'])
-  await ffmpeg.exec(['-i', 'pre.mp4', '-f', 'segment', '-segment_time', '5', '-c', 'copy', '-reset_timestamps', '1', 'output%03d.mp4'])
+  await ffmpeg.exec(['-i', 'input.webm', '-map', '0', '-f', 'segment', '-segment_time', targetSegmentTime.toString(), '-c', 'copy', '-reset_timestamps', '1', 'output%03d.mp4'])
 
   const output: string[] = []
 
@@ -76,6 +74,15 @@ export async function segmentize (ffmpeg: FFmpeg, inputFileURL: string): Promise
     }
   }
 
-  // await ffmpeg.deleteFile('output*')
   return output
+}
+
+export async function trim (ffmpeg: FFmpeg, inputFileURL: string, start: number, end: number): Promise<string> {
+  const input = await fetchFile(inputFileURL)
+  await ffmpeg.writeFile('input.webm', input)
+
+  await ffmpeg.exec(['-i', 'input.webm', '-ss', start.toString(), '-to', end.toString(), '-c', 'copy', 'output.mp4'])
+  const output = await ffmpeg.readFile('output.mp4')
+
+  return URL.createObjectURL(new Blob([output], { type: 'video/mp4' }))
 }
