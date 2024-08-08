@@ -7,6 +7,7 @@ import { ButtonBase } from './Button'
 import { useRef } from 'react'
 import { trim } from '../../../src/utils/record/transcode'
 import type { FFmpeg } from '@ffmpeg/ffmpeg'
+import { ProgressModalPortal } from './ProgressModal'
 
 export function TrimModalPortal ({ setModalState, downloadInfo, ffmpeg }: { setModalState: (x: boolean) => void, downloadInfo: DownloadInfo | undefined, ffmpeg: FFmpeg | undefined }): React.ReactNode {
   const trimModal = document.getElementById('trim-modal')
@@ -32,6 +33,8 @@ function TrimModal (
 
   return (
     <ModalBase>
+      <ProgressModalPortal progress={0} />
+
       <div className={style.header}>
         <h1>자르고 다운로드</h1>
         <span>

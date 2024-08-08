@@ -1,0 +1,32 @@
+.progress-modal {
+  display: flex;
+  place-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  backdrop-filter: blur(2px);
+}
+
+.progress-modal-content {
+  width: 30%;
+  height: 10%;
+  display: grid;
+  place-items: center;
+
+  padding: 5%;
+
+  border-radius: 10px;
+
+  z-index: 1000;
+  background-color: var(--color-bg);
+}
+
+.progress-modal-content span {
+  font-size: 1.1rem;
+  font-weight: bold;
+}

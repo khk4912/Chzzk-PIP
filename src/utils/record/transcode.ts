@@ -8,24 +8,25 @@ const FFMPEG_OPTION = {
   workerURL: chrome.runtime.getURL('ffmpeg/ffmpeg-core.worker.js')
 }
 
-export function useFFmpeg (): readonly [React.MutableRefObject<FFmpeg>, boolean] {
+export function useFFmpeg (): readonly [React.MutableRefObject<FFmpeg>, boolean, number] {
   const ffmpeg = useRef<FFmpeg>(new FFmpeg())
 
-  ffmpeg.current.on('log', ({ message }) => { console.log(message) })
-
   const [isReady, setIsReady] = useState(false)
+  const [progress, setProgress] = useState(0)
+
   useEffect(() => {
     ffmpeg.current.load({ ...FFMPEG_OPTION })
       .then(
         () => {
-          console.log('Loaded!')
+          ffmpeg.current.on('log', ({ message }) => { console.log(message) })
+          ffmpeg.current.on('progress', ({ progress }) => { setProgress(progress * 100) })
           setIsReady(true)
         }
       )
       .catch(console.log)
   }, [])
 
-  return [ffmpeg, isReady] as const
+  return [ffmpeg, isReady, progress] as const
 }
 
 export async function toMP4 (ffmpeg: FFmpeg, inputFileURL: string): Promise<string> {
@@ -41,7 +42,7 @@ export async function toGIF (ffmpeg: FFmpeg, inputFileURL: string): Promise<stri
 }
 
 export async function toWEBP (ffmpeg: FFmpeg, inputFileURL: string): Promise<string> {
-  return await _transcode(ffmpeg, inputFileURL, 'output.webp', ['-c', 'copy'])
+  return await _transcode(ffmpeg, inputFileURL, 'output.webp', ['-c:v', 'webp'])
 }
 
 async function _transcode (
