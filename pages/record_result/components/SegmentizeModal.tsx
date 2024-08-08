@@ -6,8 +6,9 @@ import style from './SegmentizeModal.module.css'
 import { ButtonBase } from './Button'
 import { useRef } from 'react'
 import { segmentize, useFFmpeg } from '../../../src/utils/record/transcode'
+import type { FFmpeg } from '@ffmpeg/ffmpeg'
 
-export function SegmentizeModalPortal ({ setModalState, downloadInfo }: { setModalState: (x: boolean) => void, downloadInfo: DownloadInfo | undefined }): React.ReactNode {
+export function SegmentizeModalPortal ({ setModalState, downloadInfo, ffmpeg }: { setModalState: (x: boolean) => void, downloadInfo: DownloadInfo | undefined, ffmpeg: FFmpeg | undefined }): React.ReactNode {
   const segmentModal = document.getElementById('segmentize-modal')
 
   if (segmentModal == null) {
@@ -18,15 +19,15 @@ export function SegmentizeModalPortal ({ setModalState, downloadInfo }: { setMod
     <SegmentizeModal
       setModalState={setModalState}
       downloadInfo={downloadInfo}
+      ffmpeg={ffmpeg}
     />, segmentModal
   )
 }
 
 function SegmentizeModal (
-  { setModalState, downloadInfo }:
-  { setModalState: (x: boolean) => void, downloadInfo: DownloadInfo | undefined }): React.ReactNode {
+  { setModalState, downloadInfo, ffmpeg }:
+  { setModalState: (x: boolean) => void, downloadInfo: DownloadInfo | undefined, ffmpeg: FFmpeg | undefined }): React.ReactNode {
   const targetRef = useRef<HTMLInputElement>(null)
-  const [ffmpeg, isFFmpegReady] = useFFmpeg()
 
   return (
     <ModalBase>
@@ -42,10 +43,10 @@ function SegmentizeModal (
         <input ref={targetRef} defaultValue='0' /> 초로 나누기
       </div>
 
-      <div className={`${style.buttons} ${!isFFmpegReady ? `${style.disabled}` : ''}`}>
+      <div className={`${style.buttons}`}>
         <ButtonBase
           onClick={() => {
-            if (downloadInfo === undefined) {
+            if (downloadInfo === undefined || ffmpeg === undefined) {
               return
             }
 
@@ -59,7 +60,7 @@ function SegmentizeModal (
               return
             }
 
-            void segmentize(ffmpeg.current, downloadInfo.recordInfo.resultBlobURL, x | 0).then(
+            void segmentize(ffmpeg, downloadInfo.recordInfo.resultBlobURL, x | 0).then(
               (urls) => {
                 urls.forEach((url, i) => {
                   const a = document.createElement('a')
@@ -73,7 +74,12 @@ function SegmentizeModal (
           }}
         >다운로드
         </ButtonBase>
-        <ButtonBase onClick={() => { setModalState(false) }}>닫기</ButtonBase>
+        <ButtonBase onClick={(e: KeyboardEvent) => {
+          setModalState(false)
+          e.stopPropagation()
+        }}
+        >닫기
+        </ButtonBase>
       </div>
     </ModalBase>
   )

@@ -2,14 +2,20 @@ import style from './Button.module.css'
 
 interface ButtonProps {
   children?: React.ReactNode
-  onClick?: () => void
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onClick?: (e?: any) => void
 }
 
 export function ButtonBase (props: ButtonProps): React.ReactNode {
   return (
     <button
       className={style.primaryButton}
-      onClick={props.onClick}
+      onClick={(e) => {
+        if (props.onClick !== undefined) {
+          e.stopPropagation()
+          props.onClick(e)
+        }
+      }}
     >{props.children}
     </button>
   )

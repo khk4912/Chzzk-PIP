@@ -5,9 +5,10 @@ import type { DownloadInfo } from '../../../types/record_info'
 import style from './TrimModal.module.css'
 import { ButtonBase } from './Button'
 import { useRef } from 'react'
-import { trim, useFFmpeg } from '../../../src/utils/record/transcode'
+import { trim } from '../../../src/utils/record/transcode'
+import type { FFmpeg } from '@ffmpeg/ffmpeg'
 
-export function TrimModalPortal ({ setModalState, downloadInfo }: { setModalState: (x: boolean) => void, downloadInfo: DownloadInfo | undefined }): React.ReactNode {
+export function TrimModalPortal ({ setModalState, downloadInfo, ffmpeg }: { setModalState: (x: boolean) => void, downloadInfo: DownloadInfo | undefined, ffmpeg: FFmpeg | undefined }): React.ReactNode {
   const trimModal = document.getElementById('trim-modal')
 
   if (trimModal == null) {
@@ -18,17 +19,16 @@ export function TrimModalPortal ({ setModalState, downloadInfo }: { setModalStat
     <TrimModal
       setModalState={setModalState}
       downloadInfo={downloadInfo}
+      ffmpeg={ffmpeg}
     />, trimModal
   )
 }
 
 function TrimModal (
-  { setModalState, downloadInfo }:
-  { setModalState: (x: boolean) => void, downloadInfo: DownloadInfo | undefined }): React.ReactNode {
+  { setModalState, downloadInfo, ffmpeg }:
+  { setModalState: (x: boolean) => void, downloadInfo: DownloadInfo | undefined, ffmpeg: FFmpeg | undefined }): React.ReactNode {
   const startRef = useRef<HTMLInputElement>(null)
-  const endRef = useRef < HTMLInputElement>(null)
-
-  const [ffmpeg, isFFmpegReady] = useFFmpeg()
+  const endRef = useRef <HTMLInputElement>(null)
 
   return (
     <ModalBase>
@@ -44,10 +44,10 @@ function TrimModal (
         <input ref={startRef} defaultValue='0' /> 초 부터 <input ref={endRef} defaultValue='0' /> 초까지 자르기
       </div>
 
-      <div className={`${style.buttons} ${!isFFmpegReady ? `${style.disabled}` : ''}`}>
+      <div className={`${style.buttons}`}>
         <ButtonBase
           onClick={() => {
-            if (downloadInfo === undefined) {
+            if (downloadInfo === undefined || ffmpeg === undefined) {
               return
             }
 
@@ -60,12 +60,14 @@ function TrimModal (
               return
             }
 
-            void trim(ffmpeg.current, downloadInfo.recordInfo.resultBlobURL, start | 0, end | 0)
+            void trim(ffmpeg, downloadInfo.recordInfo.resultBlobURL, start | 0, end | 0)
               .then((url) => {
                 const a = document.createElement('a')
                 a.href = url
                 a.download = `${downloadInfo.fileName ?? 'title'}_trim_${start | 0}-${end | 0}.mp4` ?? ''
                 a.click()
+
+                console.log('Downlaod After trim')
 
                 setModalState(false)
               })

@@ -1,17 +1,28 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useFFmpeg, toMP4, toMP4AAC, toGIF, toWEBP } from '../../../src/utils/record/transcode'
 import type { DownloadInfo } from '../../../types/record_info'
 import { ButtonBase } from './Button'
+import { TrimModalPortal } from './TrimModal'
+import { SegmentizeModalPortal } from './SegmentizeModal'
 
-export function DownloadButtons ({ downloadInfo, setSegmentizeModalState, setSliceModalState }: { downloadInfo: DownloadInfo | undefined, setSegmentizeModalState: (x: boolean) => void, setSliceModalState: (x: boolean) => void }): React.ReactNode {
-  const download = (url: string | undefined, ext: string): void => {
+export function DownloadButtons (
+  { downloadInfo }:
+  { downloadInfo: DownloadInfo | undefined }
+): React.ReactNode {
+  const [trimModalState, setTrimModalState] = useState(false)
+  const [segmentizeModalState, setSegmentizeModalState] = useState(false)
+
+  const download = (
+    url: string | undefined,
+    ext: string,
+    title?: string): void => {
     if (url === undefined) {
       return
     }
 
     const a = document.createElement('a')
     a.href = url
-    a.download = `${downloadInfo?.fileName ?? 'title'}.${ext}` ?? ''
+    a.download = title ?? `${downloadInfo?.fileName ?? 'title'}.${ext}`
     a.click()
   }
 
@@ -21,7 +32,7 @@ export function DownloadButtons ({ downloadInfo, setSegmentizeModalState, setSli
   useEffect(() => { console.log(isFFmpegReady) }, [isFFmpegReady])
 
   return (
-    <div className={`download-buttons ${downloadInfo === undefined ? 'disabled' : ''}`}>
+    <div className={`download-buttons ${downloadInfo === undefined || trimModalState || segmentizeModalState ? 'disabled' : ''}`}>
       <ButtonBase onClick={() => { download(downloadInfo?.recordInfo?.resultBlobURL, 'webm') }}>
         다운로드
       </ButtonBase>
@@ -61,7 +72,7 @@ export function DownloadButtons ({ downloadInfo, setSegmentizeModalState, setSli
       </div>
       <div className='after-transcode'>
         <ButtonBase onClick={() => {
-          setSliceModalState(true)
+          setTrimModalState(true)
         }}
         >자르고 다운로드
         </ButtonBase>
@@ -72,7 +83,8 @@ export function DownloadButtons ({ downloadInfo, setSegmentizeModalState, setSli
         </ButtonBase>
       </div>
 
+      {trimModalState && <TrimModalPortal ffmpeg={ffmpeg.current} setModalState={setTrimModalState} downloadInfo={downloadInfo} />}
+      {segmentizeModalState && <SegmentizeModalPortal ffmpeg={ffmpeg.current} setModalState={setSegmentizeModalState} downloadInfo={downloadInfo} />}
     </div>
-
   )
 }
