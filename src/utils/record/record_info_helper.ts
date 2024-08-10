@@ -19,8 +19,8 @@ const DEFAULT_RECORD_INFO: RecordInfo = {
   resultBlobURL: 'string',
   isMP4: false,
   streamInfo: {
-    streamerName: '?',
-    streamTitle: '?'
+    streamerName: 'streamer',
+    streamTitle: 'title'
   }
 }
 
