@@ -23,7 +23,7 @@
   border-radius: 10px;
 
   z-index: 1000;
-  background-color: var(--color-bg);
+  background-color: rgba(0, 0, 0, 0.9);
 }
 
 .progress-modal-content span {
