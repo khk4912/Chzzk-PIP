@@ -5,6 +5,7 @@ import RecIcon from '../../static/rec.svg?react'
 import { useShortcut } from '../utils/hooks'
 import { startRecord, stopRecord } from '../utils/record/record'
 import { RecordOverlayPortal } from './rec_overlay'
+import { getOption } from '../../types/options'
 
 export function RecordPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {
   if (tg === undefined) {
@@ -18,7 +19,10 @@ export function RecordPortal ({ tg }: { tg: Element | undefined }): React.ReactN
   return ReactDOM.createPortal(<RecordButton />, div)
 }
 
-async function _stopRecord (recorder: React.MutableRefObject<MediaRecorder | undefined>): Promise<void> {
+async function _stopRecord (
+  recorder: React.MutableRefObject<MediaRecorder | undefined>,
+  fastRec: boolean
+): Promise<void> {
   if (recorder.current === undefined) {
     return
   }
@@ -30,20 +34,62 @@ async function _stopRecord (recorder: React.MutableRefObject<MediaRecorder | und
     return
   }
 
+  if (fastRec) {
+    const video = document.createElement('video')
+    video.src = info.resultBlobURL
+    video.preload = 'metadata'
+
+    video.onloadedmetadata = () => {
+      void (async (): Promise<void> => {
+        let duration: number = 0
+
+        video.currentTime = Number.MAX_SAFE_INTEGER
+        await new Promise(resolve => setTimeout(resolve, 500))
+        video.currentTime = 0
+
+        duration = video.duration
+
+        if (duration === Infinity) {
+          duration = (info.stopDateTime - info.startDateTime) / 1000 - 0.1
+        }
+
+        duration = video.duration
+
+        const fileName = `${info.streamInfo.streamerName}_${duration.toFixed(2)}s.${info.isMP4 ? 'mp4' : 'webm'}`
+        const a = document.createElement('a')
+
+        a.href = info.resultBlobURL
+        a.download = fileName
+        a.click()
+
+        URL.revokeObjectURL(info.resultBlobURL)
+      })()
+    }
+    return
+  }
+
   window.open(chrome.runtime.getURL('/pages/record_result/index.html'))
 }
 
 function RecordButton (): React.ReactNode {
   const [isRecording, setIsRecording] = useState(false)
+  const [fastRec, setFastRec] = useState(false)
   const recorder = useRef<MediaRecorder>()
 
   useEffect(() => {
     return () => {
       if (isRecording) {
-        void _stopRecord(recorder)
+        void _stopRecord(recorder, fastRec)
       }
     }
-  }, [isRecording])
+  }, [isRecording, fastRec])
+
+  useEffect(() => {
+    void getOption()
+      .then((opt) => {
+        setFastRec(opt.fastRec)
+      })
+  }, [])
 
   useShortcut(['r', 'R', 'ㄱ'], () => { void clickHandler() })
 
@@ -69,7 +115,7 @@ function RecordButton (): React.ReactNode {
       }
       recorder.current = _recorder
     } else {
-      await _stopRecord(recorder)
+      await _stopRecord(recorder, fastRec)
     }
   }
 
