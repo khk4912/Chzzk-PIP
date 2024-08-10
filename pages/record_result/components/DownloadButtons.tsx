@@ -4,6 +4,7 @@ import type { DownloadInfo } from '../../../types/record_info'
 import { ButtonBase } from './Button'
 import { TrimModalPortal } from './TrimModal'
 import { SegmentizeModalPortal } from './SegmentizeModal'
+import { ProgressModalPortal } from './ProgressModal'
 
 export function DownloadButtons (
   { downloadInfo }:
@@ -11,6 +12,7 @@ export function DownloadButtons (
 ): React.ReactNode {
   const [trimModalState, setTrimModalState] = useState(false)
   const [segmentizeModalState, setSegmentizeModalState] = useState(false)
+  const [progressModalState, setProgressModalState] = useState(false)
 
   const download = (
     url: string | undefined,
@@ -28,7 +30,7 @@ export function DownloadButtons (
 
   const isMP4 = downloadInfo?.recordInfo.isMP4 ?? false
 
-  const [ffmpeg, isFFmpegReady] = useFFmpeg()
+  const [ffmpeg, isFFmpegReady, progress] = useFFmpeg(downloadInfo?.length ?? NaN)
   useEffect(() => { console.log(isFFmpegReady) }, [isFFmpegReady])
 
   return (
@@ -45,32 +47,48 @@ export function DownloadButtons (
         {!isMP4 &&
           <>
             <ButtonBase onClick={() => {
+              setProgressModalState(true)
               void toMP4(ffmpeg.current, downloadInfo?.recordInfo.resultBlobURL ?? '')
                 .then((url) => { download(url, 'mp4') })
+                .finally(
+                  () => { setProgressModalState(false) }
+                )
             }}
             >MP4
             </ButtonBase>
             <ButtonBase onClick={() => {
+              setProgressModalState(true)
               void toMP4AAC(ffmpeg.current, downloadInfo?.recordInfo.resultBlobURL ?? '')
                 .then((url) => { download(url, 'mp4') })
+                .finally(
+                  () => { setProgressModalState(false) }
+                )
             }}
             >MP4 (호환성)
             </ButtonBase>
           </>}
         <ButtonBase onClick={() => {
+          setProgressModalState(true)
           void toGIF(ffmpeg.current, downloadInfo?.recordInfo.resultBlobURL ?? '')
             .then((url) => { download(url, 'gif') })
+            .finally(
+              () => { setProgressModalState(false) }
+            )
         }}
         >GIF
         </ButtonBase>
         <ButtonBase onClick={() => {
+          setProgressModalState(true)
           void toWEBP(ffmpeg.current, downloadInfo?.recordInfo.resultBlobURL ?? '')
-            .then((url) => { download(url, 'mp4') })
+            .then((url) => { download(url, 'webp') })
+            .finally(
+              () => { setProgressModalState(false) }
+            )
         }}
         >WEBP
         </ButtonBase>
       </div>
-      <div className='after-transcode'>
+      <div className={`after-transcode ${!isFFmpegReady ? 'disabled' : ''}`}>
         <ButtonBase onClick={() => {
           setTrimModalState(true)
         }}
@@ -83,8 +101,9 @@ export function DownloadButtons (
         </ButtonBase>
       </div>
 
-      {trimModalState && <TrimModalPortal ffmpeg={ffmpeg.current} setModalState={setTrimModalState} downloadInfo={downloadInfo} />}
-      {segmentizeModalState && <SegmentizeModalPortal ffmpeg={ffmpeg.current} setModalState={setSegmentizeModalState} downloadInfo={downloadInfo} />}
+      {trimModalState && <TrimModalPortal ffmpeg={ffmpeg.current} progress={progress} setModalState={setTrimModalState} downloadInfo={downloadInfo} />}
+      {segmentizeModalState && <SegmentizeModalPortal ffmpeg={ffmpeg.current} progress={progress} setModalState={setSegmentizeModalState} downloadInfo={downloadInfo} />}
+      {progressModalState && <ProgressModalPortal progress={progress} />}
     </div>
   )
 }

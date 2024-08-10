@@ -8,23 +8,37 @@ const FFMPEG_OPTION = {
   workerURL: chrome.runtime.getURL('ffmpeg/ffmpeg-core.worker.js')
 }
 
-export function useFFmpeg (): readonly [React.MutableRefObject<FFmpeg>, boolean, number] {
+export function useFFmpeg (videoDur: number): readonly [React.MutableRefObject<FFmpeg>, boolean, number] {
   const ffmpeg = useRef<FFmpeg>(new FFmpeg())
 
+  const [videoDuration, setVideoDuration] = useState(0)
   const [isReady, setIsReady] = useState(false)
   const [progress, setProgress] = useState(0)
+
+  useEffect(() => {
+    setVideoDuration(videoDur)
+  }
+  , [videoDur])
 
   useEffect(() => {
     ffmpeg.current.load({ ...FFMPEG_OPTION })
       .then(
         () => {
-          ffmpeg.current.on('log', ({ message }) => { console.log(message) })
-          ffmpeg.current.on('progress', ({ progress }) => { setProgress(progress * 100) })
+          // ffmpeg.current.on('log', ({ message }) => { console.log(message) })
+          ffmpeg.current.on('progress', ({ time }) => {
+            const val = Math.floor(((time / 1000000) / videoDuration * 100))
+
+            if (val > 100 || val < 0 || isNaN(val)) {
+              return
+            }
+
+            setProgress(val)
+          })
           setIsReady(true)
         }
       )
       .catch(console.log)
-  }, [])
+  }, [videoDuration])
 
   return [ffmpeg, isReady, progress] as const
 }

@@ -17,8 +17,11 @@ export function ProgressModal ({ progress }: { progress: number }): React.ReactN
     <div className='progress-modal'>
       <div className='progress-modal-content'>
         <span>변환 중...</span>
-        <div className='progress-bar' style={{ width: `${progress}%` }} />
-        progress: {progress}%
+        <div className='progress-bar'>
+          <div className='progress-bar-inner' style={{ width: `${progress}%` }} />
+        </div>
+
+        {progress}%
       </div>
     </div>
   )

@@ -4,11 +4,12 @@ import { ModalBase } from './ModalBase'
 import type { DownloadInfo } from '../../../types/record_info'
 import style from './SegmentizeModal.module.css'
 import { ButtonBase } from './Button'
-import { useRef } from 'react'
-import { segmentize, useFFmpeg } from '../../../src/utils/record/transcode'
+import { useRef, useState } from 'react'
+import { segmentize } from '../../../src/utils/record/transcode'
 import type { FFmpeg } from '@ffmpeg/ffmpeg'
+import { ProgressModal } from './ProgressModal'
 
-export function SegmentizeModalPortal ({ setModalState, downloadInfo, ffmpeg }: { setModalState: (x: boolean) => void, downloadInfo: DownloadInfo | undefined, ffmpeg: FFmpeg | undefined }): React.ReactNode {
+export function SegmentizeModalPortal ({ setModalState, downloadInfo, ffmpeg, progress }: { setModalState: (x: boolean) => void, downloadInfo: DownloadInfo | undefined, ffmpeg: FFmpeg | undefined, progress: number }): React.ReactNode {
   const segmentModal = document.getElementById('segmentize-modal')
 
   if (segmentModal == null) {
@@ -20,15 +21,16 @@ export function SegmentizeModalPortal ({ setModalState, downloadInfo, ffmpeg }: 
       setModalState={setModalState}
       downloadInfo={downloadInfo}
       ffmpeg={ffmpeg}
+      progress={progress}
     />, segmentModal
   )
 }
 
 function SegmentizeModal (
-  { setModalState, downloadInfo, ffmpeg }:
-  { setModalState: (x: boolean) => void, downloadInfo: DownloadInfo | undefined, ffmpeg: FFmpeg | undefined }): React.ReactNode {
+  { setModalState, downloadInfo, ffmpeg, progress }:
+  { setModalState: (x: boolean) => void, downloadInfo: DownloadInfo | undefined, ffmpeg: FFmpeg | undefined, progress: number }): React.ReactNode {
   const targetRef = useRef<HTMLInputElement>(null)
-
+  const [progressModal, setProgressModal] = useState(false)
   return (
     <ModalBase>
       <div className={style.header}>
@@ -60,17 +62,23 @@ function SegmentizeModal (
               return
             }
 
-            void segmentize(ffmpeg, downloadInfo.recordInfo.resultBlobURL, x | 0).then(
-              (urls) => {
-                urls.forEach((url, i) => {
-                  const a = document.createElement('a')
-                  a.href = url
-                  a.download = `${downloadInfo.fileName ?? 'title'}_${i}.mp4`
-                  a.click()
-                })
+            setModalState(false)
+            setProgressModal(true)
+            void segmentize(ffmpeg, downloadInfo.recordInfo.resultBlobURL, x | 0)
+              .then(
+                (urls) => {
+                  urls.forEach((url, i) => {
+                    const a = document.createElement('a')
+                    a.href = url
+                    a.download = `${downloadInfo.fileName ?? 'title'}_${i}.mp4`
+                    a.click()
+                  })
+                }
+              )
+              .finally(() => {
+                setProgressModal(false)
                 setModalState(false)
-              }
-            )
+              })
           }}
         >다운로드
         </ButtonBase>
@@ -81,6 +89,7 @@ function SegmentizeModal (
         >닫기
         </ButtonBase>
       </div>
+      {progressModal ? <ProgressModal progress={progress} /> : null}
     </ModalBase>
   )
 }

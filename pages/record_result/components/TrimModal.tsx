@@ -4,12 +4,12 @@ import { ModalBase } from './ModalBase'
 import type { DownloadInfo } from '../../../types/record_info'
 import style from './TrimModal.module.css'
 import { ButtonBase } from './Button'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { trim } from '../../../src/utils/record/transcode'
 import type { FFmpeg } from '@ffmpeg/ffmpeg'
 import { ProgressModalPortal } from './ProgressModal'
 
-export function TrimModalPortal ({ setModalState, downloadInfo, ffmpeg }: { setModalState: (x: boolean) => void, downloadInfo: DownloadInfo | undefined, ffmpeg: FFmpeg | undefined }): React.ReactNode {
+export function TrimModalPortal ({ setModalState, downloadInfo, ffmpeg, progress }: { setModalState: (x: boolean) => void, downloadInfo: DownloadInfo | undefined, ffmpeg: FFmpeg | undefined, progress: number }): React.ReactNode {
   const trimModal = document.getElementById('trim-modal')
 
   if (trimModal == null) {
@@ -21,19 +21,22 @@ export function TrimModalPortal ({ setModalState, downloadInfo, ffmpeg }: { setM
       setModalState={setModalState}
       downloadInfo={downloadInfo}
       ffmpeg={ffmpeg}
+      progress={progress}
     />, trimModal
   )
 }
 
 function TrimModal (
-  { setModalState, downloadInfo, ffmpeg }:
-  { setModalState: (x: boolean) => void, downloadInfo: DownloadInfo | undefined, ffmpeg: FFmpeg | undefined }): React.ReactNode {
+  { setModalState, downloadInfo, ffmpeg, progress }:
+  { setModalState: (x: boolean) => void, downloadInfo: DownloadInfo | undefined, ffmpeg: FFmpeg | undefined, progress: number }): React.ReactNode {
   const startRef = useRef<HTMLInputElement>(null)
   const endRef = useRef <HTMLInputElement>(null)
 
+  const [progressModal, setProgressModal] = useState(false)
+
   return (
     <ModalBase>
-      <ProgressModalPortal progress={0} />
+      {progressModal && <ProgressModalPortal progress={progress} />}
 
       <div className={style.header}>
         <h1>자르고 다운로드</h1>
@@ -62,16 +65,17 @@ function TrimModal (
                  start >= end) {
               return
             }
+            setModalState(false)
 
             void trim(ffmpeg, downloadInfo.recordInfo.resultBlobURL, start | 0, end | 0)
               .then((url) => {
                 const a = document.createElement('a')
                 a.href = url
-                a.download = `${downloadInfo.fileName ?? 'title'}_trim_${start | 0}-${end | 0}.mp4` ?? ''
+                a.download = `${downloadInfo.fileName ?? 'title'}_trim_${start | 0}-${end}.mp4` ?? ''
                 a.click()
-
-                console.log('Downlaod After trim')
-
+              })
+              .finally(() => {
+                setProgressModal(false)
                 setModalState(false)
               })
           }}
