@@ -31,6 +31,7 @@ export function InjectButtons (): React.ReactNode {
       {((options?.pip) ?? false) && <PIPPortal tg={target} />}
       {((options?.screenshot) ?? false) && <ScreenShotPortal tg={target} />}
       {((options?.rec) ?? false) && <RecordPortal tg={target} />}
+
     </>
   )
 }

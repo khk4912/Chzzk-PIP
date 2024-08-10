@@ -21,7 +21,7 @@
   "permissions": ["storage", "downloads"],
   "web_accessible_resources": [
     {
-      "resources": ["js/*", "ffmpeg/*", "pages/*"],
+      "resources": ["src/*", "ffmpeg/*", "pages/*"],
       "matches": ["<all_urls>"]
     }
   ],
