@@ -30,7 +30,7 @@ export function DownloadButtons (
 
   const isMP4 = downloadInfo?.recordInfo.isMP4 ?? false
 
-  const [ffmpeg, isFFmpegReady, progress] = useFFmpeg(downloadInfo?.length ?? NaN)
+  const [ffmpeg, isFFmpegReady, progress, setProgress] = useFFmpeg(downloadInfo?.length ?? NaN)
   useEffect(() => { console.log(isFFmpegReady) }, [isFFmpegReady])
 
   return (
@@ -47,6 +47,7 @@ export function DownloadButtons (
         {!isMP4 &&
           <>
             <ButtonBase onClick={() => {
+              setProgress(0)
               setProgressModalState(true)
               void toMP4(ffmpeg.current, downloadInfo?.recordInfo.resultBlobURL ?? '')
                 .then((url) => { download(url, 'mp4') })
@@ -57,6 +58,7 @@ export function DownloadButtons (
             >MP4
             </ButtonBase>
             <ButtonBase onClick={() => {
+              setProgress(0)
               setProgressModalState(true)
               void toMP4AAC(ffmpeg.current, downloadInfo?.recordInfo.resultBlobURL ?? '')
                 .then((url) => { download(url, 'mp4') })
@@ -68,6 +70,7 @@ export function DownloadButtons (
             </ButtonBase>
           </>}
         <ButtonBase onClick={() => {
+          setProgress(0)
           setProgressModalState(true)
           void toGIF(ffmpeg.current, downloadInfo?.recordInfo.resultBlobURL ?? '')
             .then((url) => { download(url, 'gif') })
@@ -78,6 +81,7 @@ export function DownloadButtons (
         >GIF
         </ButtonBase>
         <ButtonBase onClick={() => {
+          setProgress(0)
           setProgressModalState(true)
           void toWEBP(ffmpeg.current, downloadInfo?.recordInfo.resultBlobURL ?? '')
             .then((url) => { download(url, 'webp') })
@@ -90,11 +94,13 @@ export function DownloadButtons (
       </div>
       <div className={`after-transcode ${!isFFmpegReady ? 'disabled' : ''}`}>
         <ButtonBase onClick={() => {
+          setProgress(0)
           setTrimModalState(true)
         }}
         >자르고 다운로드
         </ButtonBase>
         <ButtonBase onClick={() => {
+          setProgress(0)
           setSegmentizeModalState(true)
         }}
         >분할 다운로드

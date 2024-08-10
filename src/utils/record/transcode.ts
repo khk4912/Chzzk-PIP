@@ -8,7 +8,7 @@ const FFMPEG_OPTION = {
   workerURL: chrome.runtime.getURL('ffmpeg/ffmpeg-core.worker.js')
 }
 
-export function useFFmpeg (videoDur: number): readonly [React.MutableRefObject<FFmpeg>, boolean, number] {
+export function useFFmpeg (videoDur: number): readonly [React.MutableRefObject<FFmpeg>, boolean, number, React.Dispatch<React.SetStateAction<number>> ] {
   const ffmpeg = useRef<FFmpeg>(new FFmpeg())
 
   const [videoDuration, setVideoDuration] = useState(0)
@@ -40,7 +40,7 @@ export function useFFmpeg (videoDur: number): readonly [React.MutableRefObject<F
       .catch(console.log)
   }, [videoDuration])
 
-  return [ffmpeg, isReady, progress] as const
+  return [ffmpeg, isReady, progress, setProgress] as const
 }
 
 export async function toMP4 (ffmpeg: FFmpeg, inputFileURL: string): Promise<string> {
