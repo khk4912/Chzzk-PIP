@@ -21,7 +21,7 @@
   "permissions": ["storage", "downloads"],
   "web_accessible_resources": [
     {
-      "resources": ["src/*", "ffmpeg/*", "pages/*"],
+      "resources": ["src/*", "ffmpeg/*", "pages/*", "monekypatch/*"],
       "matches": ["<all_urls>"]
     }
   ],
