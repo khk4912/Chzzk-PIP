@@ -126,7 +126,7 @@ function RecordButton (): React.ReactNode {
         onClick={() => { void clickHandler() }}
       >
         <span className='pzp-pc-ui-button__tooltip pzp-pc-ui-button__tooltip--top'>
-          {isRecording ? '녹화 중지' : '녹화'} (r)
+          {isRecording ? '녹화 중지' : '녹화'} (R)
         </span>
         <span className='pzp-ui-icon pzp-pc-setting-button__icon'>
           <RecIcon fill={isRecording ? 'red' : 'white'} />
