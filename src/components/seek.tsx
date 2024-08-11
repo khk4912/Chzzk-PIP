@@ -6,6 +6,7 @@ import LeftSVG from '../../static/seek_left.svg?react'
 import RightSVG from '../../static/seek_right.svg?react'
 import { useShortcut } from '../utils/hooks'
 import { waitForElement } from '../inject_btn'
+import { seekLeft, seekRight } from '../utils/seek/seek'
 
 function SeekLeft ({ state }: { state: boolean }): React.ReactNode {
   return (
@@ -18,7 +19,6 @@ function SeekLeft ({ state }: { state: boolean }): React.ReactNode {
 
 function SeekRight ({ state }: { state: boolean }): React.ReactNode {
   return (
-
     <div className='chzzk-seek-overlay seek-right' style={{ opacity: Number(state) }}>
       <RightSVG />
       <span>+ 5초</span>
@@ -51,6 +51,7 @@ function Seek (): React.ReactNode {
   const leftTimer = useRef<number | undefined>(undefined)
   const rightTimer = useRef<number | undefined>(undefined)
 
+
   useEffect(() => {
     return () => {
       window.clearTimeout(leftTimer.current)
@@ -61,6 +62,9 @@ function Seek (): React.ReactNode {
   }, [])
 
   useShortcut('ArrowLeft', () => {
+    const video = document.querySelector('.webplayer-internal-video')
+    seekLeft(video as HTMLVideoElement)
+
     setLeft(true)
 
     window.clearTimeout(leftTimer.current)
@@ -70,6 +74,9 @@ function Seek (): React.ReactNode {
   })
 
   useShortcut('ArrowRight', () => {
+    const video = document.querySelector('.webplayer-internal-video')
+    seekRight(video as HTMLVideoElement)
+
     setRight(true)
 
     window.clearTimeout(rightTimer.current)
@@ -79,9 +86,9 @@ function Seek (): React.ReactNode {
   })
 
   return (
-    <div>
+    <>
       <SeekLeft state={left} />
       <SeekRight state={right} />
-    </div>
+    </>
   )
 }
