@@ -51,7 +51,6 @@ function Seek (): React.ReactNode {
   const leftTimer = useRef<number | undefined>(undefined)
   const rightTimer = useRef<number | undefined>(undefined)
 
-
   useEffect(() => {
     return () => {
       window.clearTimeout(leftTimer.current)
