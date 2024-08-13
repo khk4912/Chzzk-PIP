@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 import { isVODPage, isClipPage } from '../utils/download/download'
 import DownloadIcon from '../../static/download.svg?react'
 import { DownloadVODModalPortal } from './download_modal'
+import { downloadClip } from '../utils/download/clip'
 
 export function DownloadPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {
   if (tg === undefined) {
@@ -28,7 +29,7 @@ function DownloadButton (): React.ReactNode {
           if (isVODPage()) {
             setDownloadModalState(true)
           } else if (isClipPage()) {
-            // Download Clip
+            downloadClip().catch(console.error)
           }
         }}
         className='pzp-button pzp-pc-setting-button pzp-pc__setting-button pzp-pc-ui-button'
