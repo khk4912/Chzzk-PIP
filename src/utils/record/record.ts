@@ -2,14 +2,18 @@ import type { RecordInfo } from '../../../types/record_info'
 import { getStreamInfo } from '../stream_info'
 import { getRecordInfo, setRecordInfo } from './record_info_helper'
 
+const getChromeVersion = (): number | false => {
+  const raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./)
+
+  return (raw != null) ? parseInt(raw[2], 10) : false
+}
+
 export async function startRecord (video: HTMLVideoElement): Promise<MediaRecorder | null> {
   const streamInfo = getStreamInfo(document)
   const stream = video.captureStream()
 
-  const isAboveChrome128 = false
-  // Check chrome ver >= 128
-  // navigator.userAgent.includes('Chrome') &&
-  // parseInt((navigator.userAgent.match(/Chrome\/(\d+)/) ?? [null, '0'])[1], 10) >= 128
+  // Check if chrome version is above 128
+  const isAboveChrome128 = Number(getChromeVersion()) >= 128
 
   const isSupportMP4 = MediaRecorder.isTypeSupported('video/mp4;codecs=avc1,mp4a.40.2')
   const recorder = new MediaRecorder(stream, {
