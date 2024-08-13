@@ -1,10 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+
 async function patchPlayer () {
   const player = await getCorePlayer()
+
   if (player === null) {
     return
   }
 
-  const config = player.hls.config
+  const config = player.player._mediaController_hls.config
 
   config.liveMaxLatencyDurationCount = Infinity
 
@@ -14,7 +18,7 @@ async function patchPlayer () {
 }
 
 function getMemoizedState (target, stateName, maxTraversal = 100) {
-  const getFiberOf = target => {
+  const getFiberOf = (target) => {
     return Object.entries(target).find(([key]) =>
       key.startsWith('__reactFiber$')
     )?.[1]
@@ -52,7 +56,29 @@ async function getCorePlayer () {
   }
 
   const player = getMemoizedState(x, '_corePlayer')
+
   return player
 }
 
-void patchPlayer().catch(console.error)
+async function waitForElement (selector, threshold = 3000) {
+  let cnt = 0
+
+  return await new Promise((resolve, reject) => {
+    const interval = setInterval(() => {
+      const element = document.querySelector(selector)
+      if (element !== null) {
+        clearInterval(interval)
+        resolve(element)
+      }
+
+      if (cnt >= threshold) {
+        clearInterval(interval)
+        reject(new Error('Cannot find element within threshold time'))
+      }
+
+      cnt += 100
+    }, 100)
+  })
+}
+
+patchPlayer().catch(console.error)
