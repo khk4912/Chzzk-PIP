@@ -18,6 +18,10 @@
       "all_frames": true
     }
   ],
+  "background": {
+    "service_worker": "src/background.ts",
+    "type": "module"
+  },
   "permissions": ["storage", "downloads"],
   "web_accessible_resources": [
     {

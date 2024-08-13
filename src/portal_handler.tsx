@@ -8,6 +8,8 @@ import { PIPPortal } from './components/pip_button'
 import { RecordPortal } from './components/rec_button'
 import { ScreenShotPortal } from './components/screenshot_button'
 import { SeekPortal } from './components/seek'
+import { DownloadPortal } from './components/download_button'
+import { isClipPage, isVODPage } from './utils/download/download'
 
 export function InjectButtons (): React.ReactNode {
   const [target, setTarget] = useState<Element | undefined>(undefined)
@@ -35,6 +37,7 @@ export function InjectButtons (): React.ReactNode {
   return (
     <>
       {((options?.seek) ?? false) && <SeekPortal />}
+      {(isVODPage() || isClipPage()) && <DownloadPortal tg={target} />}
       {((options?.pip) ?? false) && <PIPPortal tg={target} />}
       {((options?.screenshot) ?? false) && <ScreenShotPortal tg={target} />}
       {((options?.rec) ?? false) && <RecordPortal tg={target} />}
