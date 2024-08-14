@@ -36,8 +36,9 @@ export function InjectButtons (): React.ReactNode {
 
   return (
     <>
-      {((options?.seek) ?? false) && <SeekPortal />}
       {(isVODPage() || isClipPage()) && <DownloadPortal tg={target} />}
+
+      {((options?.seek) ?? false) && <SeekPortal />}
       {((options?.pip) ?? false) && <PIPPortal tg={target} />}
       {((options?.screenshot) ?? false) && <ScreenShotPortal tg={target} />}
       {((options?.rec) ?? false) && <RecordPortal tg={target} />}

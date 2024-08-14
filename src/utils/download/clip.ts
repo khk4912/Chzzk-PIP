@@ -62,8 +62,8 @@ export async function download (url: string, title: string): Promise<void> {
   )
 }
 
-export async function downloadClip (): Promise<void> {
-  const videoID = location.pathname.split('/')[3]
+export async function downloadClip (id?: string): Promise<void> {
+  const videoID = id ?? location.pathname.split('/')[3]
 
   const contentInfo = await getClipInfo(videoID)
   const playBackURL = await getPlayBackURL(contentInfo.contentID, contentInfo.inKey)

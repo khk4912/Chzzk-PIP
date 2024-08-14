@@ -13,7 +13,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://chzzk.naver.com/*"],
+      "matches": ["https://chzzk.naver.com/*", "https://m.naver.com/shorts/*"],
       "js": ["src/content_script.tsx"],
       "all_frames": true
     }

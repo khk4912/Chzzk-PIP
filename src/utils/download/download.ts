@@ -8,6 +8,10 @@ export const isClipPage = (): boolean => {
   return window.location.pathname.startsWith('/embed/clip/')
 }
 
+export const isClipsPage = (): boolean => {
+  return window.location.pathname.startsWith('/shorts/')
+}
+
 export async function getVideoInfo (videoNumber: number): Promise<VideoInfo> {
   const r = await fetch(`https://api.chzzk.naver.com/service/v2/videos/${videoNumber}`, { credentials: 'include' })
   const data: Video = await r.json()
