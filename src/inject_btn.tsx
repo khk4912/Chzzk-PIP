@@ -38,10 +38,8 @@ export async function injectButton (): Promise<void> {
 }
 
 export async function injectShortsDownloadButton (): Promise<void> {
-
   const div = document.createElement('div')
   div.id = 'chzzk-pip-clips-download-button'
-
 
   const tg = await waitForElement('.si_tool_box')
   tg?.insertBefore(div, tg.lastChild)
