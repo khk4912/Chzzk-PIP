@@ -3,8 +3,11 @@ import { useEffect } from 'react'
 export function useShortcut (key: string | string[], callback: () => void): void {
   useEffect(() => {
     const listener = (event: KeyboardEvent): void => {
-      if (event.target instanceof HTMLInputElement ||
-          event.target instanceof HTMLTextAreaElement) {
+      const activeElement = document.activeElement
+
+      if (activeElement instanceof HTMLInputElement ||
+        activeElement instanceof HTMLTextAreaElement ||
+         activeElement instanceof HTMLPreElement) {
         return
       }
 
