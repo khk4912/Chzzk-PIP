@@ -9,7 +9,7 @@ export const isClipPage = (): boolean => {
 }
 
 export const isClipsPage = (): boolean => {
-  return window.location.pathname.startsWith('/shorts/')
+  return window.location.pathname.startsWith('/clips/')
 }
 
 export async function getVideoInfo (videoNumber: number): Promise<VideoInfo> {

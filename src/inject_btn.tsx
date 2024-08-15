@@ -1,7 +1,7 @@
 import { createRoot, type Root } from 'react-dom/client'
 import { InjectButtons } from './portal_handler'
 
-import { ClipsDownloadButton } from './components/clips_download_button'
+import { ClipsDownloadButtonPortal } from './components/clips_download_button'
 
 export const waitForElement = async (querySelector: string): Promise<Element> => {
   return await new Promise((resolve) => {
@@ -41,12 +41,9 @@ export async function injectShortsDownloadButton (): Promise<void> {
   const div = document.createElement('div')
   div.id = 'chzzk-pip-clips-download-button'
 
-  const tg = await waitForElement('.si_tool_box')
-  tg?.insertBefore(div, tg.lastChild)
+  document.body.insertBefore(div, document.body.lastChild)
 
-  console.log(tg, div)
-
-  let root = inject(<ClipsDownloadButton />, div)
+  let root = inject(<ClipsDownloadButtonPortal />, div)
 
   window.navigation?.addEventListener('navigate', () => {
     root.unmount()
@@ -55,8 +52,8 @@ export async function injectShortsDownloadButton (): Promise<void> {
     const newDiv = document.createElement('div')
     newDiv.id = 'chzzk-pip-clips-download-button'
 
-    tg?.insertBefore(newDiv, tg.lastChild)
-    root = inject(<ClipsDownloadButton />, newDiv)
+    document.body.insertBefore(newDiv, document.body.lastChild)
+    root = inject(<ClipsDownloadButtonPortal />, newDiv)
   })
 }
 

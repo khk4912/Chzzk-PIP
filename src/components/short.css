@@ -1,0 +1,8 @@
+#downloadBtn {
+  position: absolute;
+  min-height: 40px;
+  min-width: 40px;
+  margin: 2%;
+  z-index: 99999;
+  cursor: pointer !important;
+}
