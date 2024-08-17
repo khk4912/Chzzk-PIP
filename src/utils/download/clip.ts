@@ -50,13 +50,13 @@ export async function getPlayBackURL (contentID: string, inKey: string): Promise
   return res[0]
 }
 
-export async function download (url: string, title: string): Promise<void> {
+export async function download (url: string, title: string, ext?: string): Promise<void> {
   await chrome.runtime.sendMessage(
     {
       type: 'download',
       data: {
         url,
-        fileName: `${title}.mp4`
+        fileName: `${title}.${ext ?? 'mp4'}`
       }
     } satisfies DownloadMessage
   )

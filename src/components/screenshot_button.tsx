@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom'
 import ScreenshotIcon from '../../static/screenshot.svg?react'
 import { getOption } from '../../types/options'
 import { useShortcut } from '../utils/hooks'
-import { saveScreenshot } from '../utils/screenshot/save'
 import { getStreamInfo } from '../utils/stream_info'
 import { createDraggablePreview } from '../utils/screenshot/screenshot_preview'
+import { download } from '../utils/download/clip'
 
 export function ScreenShotPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {
   if (tg === undefined) {
@@ -85,6 +85,6 @@ async function saveOrPreview (dataURL: string): Promise<void> {
   if (screenshotPreview) {
     createDraggablePreview(dataURL, title)
   } else {
-    saveScreenshot(dataURL, title)
+    void download(dataURL, `${title}`, 'png')
   }
 }
