@@ -55,6 +55,10 @@ export async function stopRecord (recorder: MediaRecorder): Promise<RecordInfo> 
         return
       }
 
+      if (info.chunks === undefined || info.chunks.length === 0) {
+        return
+      }
+
       info.stopDateTime = new Date().getTime()
       info.resultBlobURL = URL.createObjectURL(new Blob(info.chunks, { type: recorder.mimeType }))
 
