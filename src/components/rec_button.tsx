@@ -6,6 +6,7 @@ import { useShortcut } from '../utils/hooks'
 import { startRecord, stopRecord } from '../utils/record/record'
 import { RecordOverlayPortal } from './rec_overlay'
 import { getOption } from '../../types/options'
+import { download } from '../utils/download/clip'
 
 export function RecordPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {
   if (tg === undefined) {
@@ -55,13 +56,9 @@ async function _stopRecord (
 
         duration = video.duration
 
-        const fileName = `${info.streamInfo.streamerName}_${duration.toFixed(2)}s.${info.isMP4 ? 'mp4' : 'webm'}`
-        const a = document.createElement('a')
+        const fileName = `${info.streamInfo.streamerName}_${duration.toFixed(2)}`
 
-        a.href = info.resultBlobURL
-        a.download = fileName
-        a.click()
-
+        await download(info.resultBlobURL, fileName, info.isMP4 ? 'mp4' : 'webm')
         URL.revokeObjectURL(info.resultBlobURL)
       })()
     }
