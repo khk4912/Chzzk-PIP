@@ -16,12 +16,12 @@ export const waitForElement = async (querySelector: string): Promise<Element> =>
 }
 
 export async function injectButton (): Promise<void> {
-  const tg = await waitForElement('.pzp-pc__bottom-buttons-right') as HTMLElement
+  await waitForElement('.pzp-pc__bottom-buttons-right')
 
   let div = document.createElement('div')
   div.id = 'chzzk-pip-buttons'
 
-  tg.insertBefore(div, tg.firstChild)
+  document.body.insertBefore(div, document.body.lastChild)
 
   let root = inject(<InjectButtons />, div)
 
@@ -32,13 +32,15 @@ export async function injectButton (): Promise<void> {
     div = document.createElement('div')
     div.id = 'chzzk-pip-buttons'
 
-    tg.insertBefore(div, tg.firstChild)
+    document.body.insertBefore(div, document.body.lastChild)
     root = inject(<InjectButtons />, div)
   })
 }
 
 export async function injectShortsDownloadButton (): Promise<void> {
-  const div = document.createElement('div')
+  await waitForElement('[class^="clip_viewer_viewer_area"]')
+
+  let div = document.createElement('div')
   div.id = 'chzzk-pip-clips-download-button'
 
   document.body.insertBefore(div, document.body.lastChild)
@@ -49,11 +51,11 @@ export async function injectShortsDownloadButton (): Promise<void> {
     root.unmount()
     div.remove()
 
-    const newDiv = document.createElement('div')
-    newDiv.id = 'chzzk-pip-clips-download-button'
+    div = document.createElement('div')
+    div.id = 'chzzk-pip-clips-download-button'
 
-    document.body.insertBefore(newDiv, document.body.lastChild)
-    root = inject(<ClipsDownloadButtonPortal />, newDiv)
+    document.body.insertBefore(div, document.body.lastChild)
+    root = inject(<ClipsDownloadButtonPortal />, div)
   })
 }
 
