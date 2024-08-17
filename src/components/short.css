@@ -2,7 +2,8 @@
   position: absolute;
   min-height: 40px;
   min-width: 40px;
-  margin: 2%;
+  margin-left: 1%;
+  margin-top: 0.5%;
   z-index: 99999;
   cursor: pointer !important;
 }
