@@ -56,7 +56,7 @@ async function _stopRecord (
 
         duration = video.duration
 
-        const fileName = `${info.streamInfo.streamerName}_${duration.toFixed(2)}`
+        const fileName = `${info.streamInfo.streamerName}_${duration.toFixed(2)}s`
 
         await download(info.resultBlobURL, fileName, info.isMP4 ? 'mp4' : 'webm')
         URL.revokeObjectURL(info.resultBlobURL)
