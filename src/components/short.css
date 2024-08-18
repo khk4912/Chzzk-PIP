@@ -1,9 +1,4 @@
-#downloadBtn {
-  position: absolute;
-  min-height: 40px;
-  min-width: 40px;
-  margin-left: 1%;
-  margin-top: 0.5%;
-  z-index: 99999;
-  cursor: pointer !important;
+.si_ico_download {
+  width: 30px;
+  height: 30px;
 }

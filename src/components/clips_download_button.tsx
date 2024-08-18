@@ -1,31 +1,47 @@
 import './short.css'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 
 import { waitForElement } from '../inject_btn'
 import DownloadIcon from '../../static/download.svg?react'
-import { downloadClip } from '../utils/download/clip'
+import { download } from '../utils/download/clip'
 
 export function ClipsDownloadButton (): React.ReactNode {
   const onClick = (): void => {
-    const id = window.location.pathname.split('/').pop()
+    const url = document.querySelector('video')?.getAttribute('src')
+    const sectionInfo = self.current?.closest('div.section_info')
 
-    if (id === undefined) {
+    const title = sectionInfo?.querySelector('.si_desc_box > p.si_desc')?.innerHTML
+
+    if (url === null || url === undefined) {
       return
     }
 
-    void downloadClip(id)
+    download(url, title ?? 'clip').catch(console.error)
   }
 
-  return <button title='다운로드' onClick={onClick} id='downloadBtn' type='button'><DownloadIcon /></button>
+  const self = useRef<HTMLButtonElement>(null)
+
+  return (
+    <button
+      className='si_btn'
+      onClick={onClick}
+      id='downloadBtn'
+      type='button'
+      ref={self}
+    >
+      <span className='si_ico'><DownloadIcon /></span>
+      <span className='si_text'>다운로드</span>
+    </button>
+  )
 }
 
 export function ClipsDownloadButtonPortal (): React.ReactNode {
   const [target, setTarget] = useState<Element | undefined>(undefined)
 
   useEffect(() => {
-    waitForElement('[class^="clip_viewer_viewer_area"]')
+    waitForElement('.si_tool_box')
       .then((x) => {
         const div = document.createElement('div')
         div.id = 'chzzk-pip-shorts-download-button'
@@ -40,5 +56,17 @@ export function ClipsDownloadButtonPortal (): React.ReactNode {
       })
   }, [])
 
-  return (target !== undefined) ? ReactDOM.createPortal(<ClipsDownloadButton />, target) : null
+  useEffect(() => {
+    return () => {
+      if (target !== undefined) {
+        target.remove()
+      }
+    }
+  }, [target])
+
+  return (
+    <>
+      {target !== undefined && ReactDOM.createPortal(<ClipsDownloadButton />, target)}
+    </>
+  )
 }

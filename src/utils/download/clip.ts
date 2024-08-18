@@ -56,7 +56,7 @@ export async function download (url: string, title: string, ext?: string): Promi
       type: 'download',
       data: {
         url,
-        fileName: `${title}.${ext ?? 'mp4'}`
+        fileName: `${title.replace(/[/\\?%*:|"<>]/g, '_')}.${ext ?? 'mp4'}`
       }
     } satisfies DownloadMessage
   )

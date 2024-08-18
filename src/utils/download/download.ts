@@ -8,8 +8,8 @@ export const isClipPage = (): boolean => {
   return window.location.pathname.startsWith('/embed/clip/')
 }
 
-export const isClipsPage = (): boolean => {
-  return window.location.pathname.startsWith('/clips/')
+export const isShortsPage = (): boolean => {
+  return window.location.pathname.startsWith('/shorts/')
 }
 
 export async function getVideoInfo (videoNumber: number): Promise<VideoInfo> {
