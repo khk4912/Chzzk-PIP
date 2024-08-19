@@ -32,7 +32,9 @@ function RecordOverlay (): React.ReactNode {
 }
 
 export function RecordOverlayPortal (): React.ReactNode {
-  const target = document.querySelector('[class^=live_information_player_area]')
+  // const target = document.querySelector('[class^=live_information_player_area]')
+  const target = document.querySelector('.header_info')
+
   const overlay = document.createElement('div')
   overlay.id = 'timer-wrapper'
   target?.insertBefore(overlay, target.firstChild)
