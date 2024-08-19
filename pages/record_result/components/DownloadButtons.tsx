@@ -35,7 +35,7 @@ export function DownloadButtons (
 
   return (
     <div className={`download-buttons ${downloadInfo === undefined || trimModalState || segmentizeModalState ? 'disabled' : ''}`}>
-      <ButtonBase onClick={() => { download(downloadInfo?.recordInfo?.resultBlobURL, 'webm') }}>
+      <ButtonBase onClick={() => { download(downloadInfo?.recordInfo?.resultBlobURL, isMP4 ? 'mp4' : 'webm') }}>
         다운로드
       </ButtonBase>
 
