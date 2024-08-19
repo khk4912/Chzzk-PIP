@@ -42,7 +42,7 @@ export function DownloadVODModalPortal ({ setState }: { setState: (x: boolean) =
 function DownloadVODModal ({ playbackURLs, setState }: { playbackURLs: PlayBackURL[], setState: (x: boolean) => void }): React.ReactNode {
   const download = (url: string): void => {
     const streamInfo = getStreamInfo(document)
-    const fileName = `${streamInfo.streamTitle}.mp4`
+    const fileName = `${streamInfo.streamTitle}.mp4`.replace(/[/\\?%*:|"<>]/g, '_')
 
     // TODO: 다운로드 처리
     void chrome.runtime.sendMessage({
