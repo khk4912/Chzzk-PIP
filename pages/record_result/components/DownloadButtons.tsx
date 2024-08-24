@@ -14,6 +14,53 @@ export function DownloadButtons (
   const [segmentizeModalState, setSegmentizeModalState] = useState(false)
   const [progressModalState, setProgressModalState] = useState(false)
 
+  const isMP4 = downloadInfo?.recordInfo.isMP4 ?? false
+
+  const [ffmpeg, isFFmpegReady, progress, setProgress] = useFFmpeg(downloadInfo?.length ?? NaN)
+  useEffect(() => { console.log(isFFmpegReady) }, [isFFmpegReady])
+
+  const downloadAfterTranscode = (to: 'MP4' | 'MP4-AAC' | 'GIF' | 'WEBP'): void => {
+    setProgress(0)
+    setProgressModalState(true)
+
+    const url = downloadInfo?.recordInfo.resultBlobURL
+
+    if (url === undefined) {
+      return
+    }
+
+    switch (to) {
+      case 'MP4':
+        void toMP4(ffmpeg.current, url)
+          .then((url) => { download(url, 'mp4') })
+          .finally(
+            () => { setProgressModalState(false) }
+          )
+        break
+      case 'MP4-AAC':
+        void toMP4AAC(ffmpeg.current, url)
+          .then((url) => { download(url, 'mp4') })
+          .finally(
+            () => { setProgressModalState(false) }
+          )
+        break
+      case 'GIF':
+        void toGIF(ffmpeg.current, url)
+          .then((url) => { download(url, 'gif') })
+          .finally(
+            () => { setProgressModalState(false) }
+          )
+        break
+      case 'WEBP':
+        void toWEBP(ffmpeg.current, url)
+          .then((url) => { download(url, 'webp') })
+          .finally(
+            () => { setProgressModalState(false) }
+          )
+        break
+    }
+  }
+
   const download = (
     url: string | undefined,
     ext: string,
@@ -28,11 +75,6 @@ export function DownloadButtons (
     a.click()
   }
 
-  const isMP4 = downloadInfo?.recordInfo.isMP4 ?? false
-
-  const [ffmpeg, isFFmpegReady, progress, setProgress] = useFFmpeg(downloadInfo?.length ?? NaN)
-  useEffect(() => { console.log(isFFmpegReady) }, [isFFmpegReady])
-
   return (
     <div className={`download-buttons ${downloadInfo === undefined || trimModalState || segmentizeModalState ? 'disabled' : ''}`}>
       <ButtonBase onClick={() => { download(downloadInfo?.recordInfo?.resultBlobURL, isMP4 ? 'mp4' : 'webm') }}>
@@ -46,51 +88,11 @@ export function DownloadButtons (
 
         {!isMP4 &&
           <>
-            <ButtonBase onClick={() => {
-              setProgress(0)
-              setProgressModalState(true)
-              void toMP4(ffmpeg.current, downloadInfo?.recordInfo.resultBlobURL ?? '')
-                .then((url) => { download(url, 'mp4') })
-                .finally(
-                  () => { setProgressModalState(false) }
-                )
-            }}
-            >MP4
-            </ButtonBase>
-            <ButtonBase onClick={() => {
-              setProgress(0)
-              setProgressModalState(true)
-              void toMP4AAC(ffmpeg.current, downloadInfo?.recordInfo.resultBlobURL ?? '')
-                .then((url) => { download(url, 'mp4') })
-                .finally(
-                  () => { setProgressModalState(false) }
-                )
-            }}
-            >MP4 (호환성)
-            </ButtonBase>
+            <ButtonBase onClick={() => { downloadAfterTranscode('MP4') }}>MP4</ButtonBase>
+            <ButtonBase onClick={() => { downloadAfterTranscode('MP4-AAC') }}>MP4 (호환성)</ButtonBase>
           </>}
-        <ButtonBase onClick={() => {
-          setProgress(0)
-          setProgressModalState(true)
-          void toGIF(ffmpeg.current, downloadInfo?.recordInfo.resultBlobURL ?? '')
-            .then((url) => { download(url, 'gif') })
-            .finally(
-              () => { setProgressModalState(false) }
-            )
-        }}
-        >GIF
-        </ButtonBase>
-        <ButtonBase onClick={() => {
-          setProgress(0)
-          setProgressModalState(true)
-          void toWEBP(ffmpeg.current, downloadInfo?.recordInfo.resultBlobURL ?? '')
-            .then((url) => { download(url, 'webp') })
-            .finally(
-              () => { setProgressModalState(false) }
-            )
-        }}
-        >WEBP
-        </ButtonBase>
+        <ButtonBase onClick={() => { downloadAfterTranscode('GIF') }}>GIF</ButtonBase>
+        <ButtonBase onClick={() => { downloadAfterTranscode('WEBP') }}>WEBP</ButtonBase>
       </div>
       <div className={`after-transcode ${!isFFmpegReady ? 'disabled' : ''}`}>
         <ButtonBase onClick={() => {
