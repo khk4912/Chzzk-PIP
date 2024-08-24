@@ -31,6 +31,41 @@ function SegmentizeModal (
   { setModalState: (x: boolean) => void, downloadInfo: DownloadInfo | undefined, ffmpeg: FFmpeg | undefined, progress: number }): React.ReactNode {
   const targetRef = useRef<HTMLInputElement>(null)
   const [progressModal, setProgressModal] = useState(false)
+
+  const segmentizeHandler = (): void => {
+    if (downloadInfo === undefined || ffmpeg === undefined) {
+      return
+    }
+
+    const target = targetRef.current?.value
+    if (target === undefined) {
+      return
+    }
+
+    const x = Number(target)
+    if (isNaN(x) || x <= 0) {
+      return
+    }
+
+    setModalState(false)
+    setProgressModal(true)
+    void segmentize(ffmpeg, downloadInfo.recordInfo.resultBlobURL, x | 0)
+      .then(
+        (urls) => {
+          urls.forEach((url, i) => {
+            const a = document.createElement('a')
+            a.href = url
+            a.download = `${downloadInfo.fileName ?? 'title'}_${i}.mp4`
+            a.click()
+          })
+        }
+      )
+      .finally(() => {
+        setProgressModal(false)
+        setModalState(false)
+      })
+  }
+
   return (
     <ModalBase>
       <div className={style.header}>
@@ -48,37 +83,7 @@ function SegmentizeModal (
       <div className={`${style.buttons}`}>
         <ButtonBase
           onClick={() => {
-            if (downloadInfo === undefined || ffmpeg === undefined) {
-              return
-            }
-
-            const target = targetRef.current?.value
-            if (target === undefined) {
-              return
-            }
-
-            const x = Number(target)
-            if (isNaN(x) || x <= 0) {
-              return
-            }
-
-            setModalState(false)
-            setProgressModal(true)
-            void segmentize(ffmpeg, downloadInfo.recordInfo.resultBlobURL, x | 0)
-              .then(
-                (urls) => {
-                  urls.forEach((url, i) => {
-                    const a = document.createElement('a')
-                    a.href = url
-                    a.download = `${downloadInfo.fileName ?? 'title'}_${i}.mp4`
-                    a.click()
-                  })
-                }
-              )
-              .finally(() => {
-                setProgressModal(false)
-                setModalState(false)
-              })
+            segmentizeHandler()
           }}
         >다운로드
         </ButtonBase>

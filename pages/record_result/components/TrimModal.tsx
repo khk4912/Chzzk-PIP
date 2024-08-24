@@ -34,6 +34,36 @@ function TrimModal (
 
   const [progressModal, setProgressModal] = useState(false)
 
+  const trimHandler = (): void => {
+    if (downloadInfo === undefined || ffmpeg === undefined) {
+      return
+    }
+
+    const start = Number(startRef.current?.value)
+    const end = Number(endRef.current?.value)
+
+    if (isNaN(start) || isNaN(end) ||
+        start < 0 || end < 0 ||
+        start >= end) {
+      return
+    }
+
+    setModalState(false)
+    setProgressModal(true)
+
+    void trim(ffmpeg, downloadInfo.recordInfo.resultBlobURL, start | 0, end | 0)
+      .then((url) => {
+        const a = document.createElement('a')
+        a.href = url
+        a.download = `${downloadInfo.fileName ?? 'title'}_trim_${start | 0}-${end}.mp4` ?? ''
+        a.click()
+      })
+      .finally(() => {
+        setProgressModal(false)
+        setModalState(false)
+      })
+  }
+
   return (
     <ModalBase>
       {progressModal && <ProgressModalPortal progress={progress} />}
@@ -52,33 +82,7 @@ function TrimModal (
 
       <div className={`${style.buttons}`}>
         <ButtonBase
-          onClick={() => {
-            if (downloadInfo === undefined || ffmpeg === undefined) {
-              return
-            }
-
-            const start = Number(startRef.current?.value)
-            const end = Number(endRef.current?.value)
-
-            if (isNaN(start) || isNaN(end) ||
-                start < 0 || end < 0 ||
-                 start >= end) {
-              return
-            }
-            setModalState(false)
-
-            void trim(ffmpeg, downloadInfo.recordInfo.resultBlobURL, start | 0, end | 0)
-              .then((url) => {
-                const a = document.createElement('a')
-                a.href = url
-                a.download = `${downloadInfo.fileName ?? 'title'}_trim_${start | 0}-${end}.mp4` ?? ''
-                a.click()
-              })
-              .finally(() => {
-                setProgressModal(false)
-                setModalState(false)
-              })
-          }}
+          onClick={() => { trimHandler() }}
         >다운로드
         </ButtonBase>
         <ButtonBase onClick={() => { setModalState(false) }}>닫기</ButtonBase>
