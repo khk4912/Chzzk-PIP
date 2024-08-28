@@ -33,7 +33,7 @@ export default function App (): React.ReactNode {
           <Option.CheckButton optionID='screenshotPreview' />
         </Option>
         <Option>
-          <Option.Header title='MP4 선호' desc='영상 녹화 시 지원하는 경우 MP4로 녹화합니다.' />
+          <Option.Header title='MP4 선호' desc='영상 녹화 시 브라우저가 지원하는 경우 MP4(AAC)로 녹화합니다.' />
           <Option.CheckButton optionID='preferMP4' />
         </Option>
         <Option>
