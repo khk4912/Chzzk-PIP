@@ -1,3 +1,4 @@
+import { getOption } from '../../../types/options'
 import type { RecordInfo } from '../../../types/record_info'
 import { getStreamInfo } from '../stream_info'
 import { getRecordInfo, setRecordInfo } from './record_info_helper'
@@ -14,11 +15,14 @@ export async function startRecord (video: HTMLVideoElement): Promise<MediaRecord
 
   // Check if chrome version is above 128
   const isAboveChrome128 = Number(getChromeVersion()) >= 128
-
   const isSupportMP4 = MediaRecorder.isTypeSupported('video/mp4;codecs=avc1,mp4a.40.2')
+  const preferMP4 = (await getOption()).preferMP4
+
+  const isMP4 = isSupportMP4 && isAboveChrome128 && preferMP4
+
   const recorder = new MediaRecorder(stream, {
     mimeType:
-     isSupportMP4 && isAboveChrome128
+     isMP4
        ? 'video/mp4;codecs=avc1,mp4a.40.2'
        : 'video/webm;codecs=avc1',
     videoBitsPerSecond: 8000000
@@ -29,7 +33,7 @@ export async function startRecord (video: HTMLVideoElement): Promise<MediaRecord
     stopDateTime: -1,
     resultBlobURL: '',
     streamInfo,
-    isMP4: isSupportMP4 && isAboveChrome128,
+    isMP4,
     chunks: []
   }
 
