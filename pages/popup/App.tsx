@@ -33,6 +33,10 @@ export default function App (): React.ReactNode {
           <Option.CheckButton optionID='screenshotPreview' />
         </Option>
         <Option>
+          <Option.Header title='MP4 선호' desc='영상 녹화 시 지원하는 경우 MP4로 녹화합니다.' />
+          <Option.CheckButton optionID='preferMP4' />
+        </Option>
+        <Option>
           <Option.Header title='PIP' desc='방송 화면에 PIP 버튼을 추가합니다.' />
           <Option.CheckButton optionID='pip' />
         </Option>

@@ -6,6 +6,7 @@ export interface Option {
   screenshot?: boolean
   screenshotPreview?: boolean
   highFrameRateRec?: boolean
+  preferMP4?: boolean
 }
 
 export const DEFAULT_OPTIONS: Record<keyof Option, boolean> = {
@@ -15,7 +16,8 @@ export const DEFAULT_OPTIONS: Record<keyof Option, boolean> = {
   seek: false,
   screenshot: true,
   screenshotPreview: true,
-  highFrameRateRec: false
+  highFrameRateRec: false,
+  preferMP4: false
 }
 
 export const getOption = async (): Promise<typeof DEFAULT_OPTIONS> => {
