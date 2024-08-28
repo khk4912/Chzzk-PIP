@@ -9,7 +9,6 @@ export interface RecordInfo {
   resultBlobURL: string
   streamInfo: StreamInfo
   isMP4: boolean
-  chunks?: Blob[] // temp stroed chunks, would not be sent to page
 }
 
 export interface DownloadInfo {

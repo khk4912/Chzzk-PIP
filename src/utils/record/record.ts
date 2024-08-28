@@ -33,15 +33,19 @@ export async function startRecord (video: HTMLVideoElement): Promise<MediaRecord
     stopDateTime: -1,
     resultBlobURL: '',
     streamInfo,
-    isMP4,
-    chunks: []
+    isMP4
   }
 
   recorder.recordInfo = newRecordInfo
 
   recorder.ondataavailable = async (event) => {
     if (event.data.size === 0) return
-    newRecordInfo.chunks?.push(event.data)
+
+    if (recorder.recordInfo === undefined) {
+      return
+    }
+
+    recorder.recordInfo.resultBlobURL = URL.createObjectURL(event.data)
   }
 
   recorder.start()
@@ -59,12 +63,7 @@ export async function stopRecord (recorder: MediaRecorder): Promise<RecordInfo> 
         return
       }
 
-      if (info.chunks === undefined || info.chunks.length === 0) {
-        return
-      }
-
       info.stopDateTime = new Date().getTime()
-      info.resultBlobURL = URL.createObjectURL(new Blob(info.chunks, { type: info.isMP4 ? 'video/mp4' : 'video/webm' }))
 
       await setRecordInfo(info)
       resolve(null)
