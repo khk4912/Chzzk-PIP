@@ -1,7 +1,7 @@
 {
   "name": "Chzzk-PIP",
-  "version": "2.0.9",
-  "description": "치지직 PIP, 녹화, 스크린샷 확장 프로그램",
+  "version": "2.0.10",
+  "description": "치지직에 녹화, 스크린샷 등 다양한 기능을 추가",
   "manifest_version": 3,
   "action": {
     "default_popup": "pages/popup/index.html"
