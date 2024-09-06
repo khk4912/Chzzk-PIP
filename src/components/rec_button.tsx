@@ -58,7 +58,12 @@ async function _stopRecord (
 
         const fileName = `${info.streamInfo.streamerName}_${duration.toFixed(2)}s`
 
-        await download(info.resultBlobURL, fileName, info.isMP4 ? 'mp4' : 'webm')
+        const a = document.createElement('a')
+        a.href = info.resultBlobURL
+        a.download = `${fileName.replace(/[/\\?%*:|"<>]/g, '_')}.${info.isMP4 ? 'mp4' : 'webm'}`
+
+        a.click()
+
         URL.revokeObjectURL(info.resultBlobURL)
       })()
     }
