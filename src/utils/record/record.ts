@@ -22,13 +22,14 @@ export async function startRecord (video: HTMLVideoElement): Promise<MediaRecord
   const streamInfo = getStreamInfo(document)
   const stream = video.captureStream()
 
+  const videoBitsPerSecond = (await getOption()).videoBitsPerSecond
   const isMP4 = await checkMP4()
   const recorder = new MediaRecorder(stream, {
     mimeType:
     isMP4
       ? 'video/mp4;codecs=avc1,mp4a.40.2'
       : 'video/webm;codecs=avc1',
-    videoBitsPerSecond: 8000000
+    videoBitsPerSecond
   })
 
   const newRecordInfo: RecordInfo = {
@@ -57,6 +58,7 @@ export async function startRecord (video: HTMLVideoElement): Promise<MediaRecord
 export async function startHighFrameRateRecord (video: HTMLVideoElement): Promise<readonly [MediaRecorder, number] | null> {
   const streamInfo = getStreamInfo(document)
   const isMP4 = await checkMP4()
+  const videoBitsPerSecond = (await getOption()).videoBitsPerSecond
 
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')
@@ -94,7 +96,7 @@ export async function startHighFrameRateRecord (video: HTMLVideoElement): Promis
       mimeType: isMP4
         ? 'video/mp4;codecs=avc1,mp4a.40.2'
         : 'video/webm;codecs=avc1',
-      videoBitsPerSecond: 8000000
+      videoBitsPerSecond
     }
   )
   videoRecorder.recordInfo = newRecordInfo
