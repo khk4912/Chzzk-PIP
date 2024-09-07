@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useRef } from 'react'
 
 import { DEFAULT_OPTIONS, setOption, type Option as OptionType, type OtherOptions } from '../../../types/options'
 import style from './Option.module.css'
@@ -52,26 +52,41 @@ function CheckButton ({ optionID }: { optionID: Exclude<keyof OptionType, keyof 
   )
 }
 
-function NumberInput ({ optionID }: { optionID: keyof OtherOptions }): React.ReactNode {
+function NumberInput ({ optionID, max, min }: { optionID: keyof OtherOptions, max?: number, min?: number }): React.ReactNode {
   const [optionContext, setOptionContext] = useContext(OptionContext)
   const option = optionContext[optionID]
+
+  const input = useRef<HTMLInputElement>(null)
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setOptionContext((prev) => {
       const next = { ...prev }
+      let newValue = Number(e.target.value)
 
-      const newValue = Number(e.target.value)
       if (Number.isNaN(newValue)) {
-        next[optionID] = DEFAULT_OPTIONS[optionID]
+        newValue = DEFAULT_OPTIONS[optionID]
       }
 
-      if (typeof next[optionID] === 'number') {
-        next[optionID] = newValue
+      if (typeof next[optionID] !== 'number') {
+        return next
+      }
+
+      if (max !== undefined && newValue > max) {
+        newValue = max
+      }
+
+      if (min !== undefined && newValue < min) {
+        newValue = min
+      }
+
+      next[optionID] = newValue
+
+      if (input.current !== null) {
+        input.current.value = String(next[optionID])
       }
 
       return next
     })
-
     void setOption(optionID, Number(e.target.value)).catch(console.error)
   }
 
@@ -81,9 +96,10 @@ function NumberInput ({ optionID }: { optionID: keyof OtherOptions }): React.Rea
 
   return (
     <input
+      ref={input}
       onChange={onChange}
       className={style.numberInput}
-      defaultValue={optionContext[optionID] ?? DEFAULT_OPTIONS[optionID]}
+      value={optionContext[optionID] ?? DEFAULT_OPTIONS[optionID]}
       type='number'
     />
   )

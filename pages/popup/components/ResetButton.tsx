@@ -5,7 +5,7 @@ import { OptionContext } from './OptionView'
 import { DEFAULT_OPTIONS } from '../../../types/options'
 
 export function ResetButton (): React.ReactNode {
-  const [optionContext, setOptionContext] = useContext(OptionContext)
+  const [, setOptionContext] = useContext(OptionContext)
 
   const handleClick = (): void => {
     chrome.storage.local.remove('option')

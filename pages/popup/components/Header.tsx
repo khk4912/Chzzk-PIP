@@ -1,8 +1,8 @@
 import style from './Header.module.css'
 import logo from '../../../logos/logo.png'
+
 export function Header (): React.ReactNode {
   return (
-
     <div className={style.header}>
       <img id={style.logoImg} src={logo} alt='Chzzk-PIP 로고' />
       <span id={style.logo}>Chzzk-PIP</span>

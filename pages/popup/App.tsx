@@ -67,7 +67,11 @@ export default function App (): React.ReactNode {
 
                     (기본값: 8000000)'
             />
-            <Option.NumberInput optionID='videoBitsPerSecond' />
+            <Option.NumberInput
+              optionID='videoBitsPerSecond'
+              min={1}
+              max={25000000}
+            />
           </Option>
         </Collapsable>
         <ResetButton />
