@@ -7,9 +7,16 @@ export function Collapsable ({ title, desc, children }: { title: string, desc: s
   return (
     <div className={style.collapsable}>
       <div className={style.title} onClick={() => { setIsOpen((x) => !x) }}>
-        <div className={style.arrow}>
+        <div
+          className={style.arrow}
+          style={{
+            color: isOpen ? 'gray' : undefined
+          }}
+        >
           {isOpen ? '▼' : '▶'}
-          <span id={style.title}>{title} </span>
+          <span id={style.title}>
+            {title}
+          </span>
         </div>
         {!isOpen && <span id={style.desc}>{desc}</span>}
       </div>
