@@ -41,10 +41,17 @@ export default function App (): React.ReactNode {
           <Option.CheckButton optionID='preferMP4' />
         </Option>
         <Option>
+          <Option.Header
+            title='고프레임 녹화(베타)'
+            desc='영상 녹화 시 최대 60fps로 녹화합니다.
+                 `영상 빠른 저장` 사용 시 작동하지 않습니다.'
+          />
+          <Option.CheckButton optionID='highFrameRateRec' />
+        </Option>
+        <Option>
           <Option.Header title='PIP' desc='방송 화면에 PIP 버튼을 추가합니다.' />
           <Option.CheckButton optionID='pip' />
         </Option>
-
       </OptionView>
     </div>
   )
