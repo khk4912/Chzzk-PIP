@@ -33,9 +33,14 @@ export default function App (): React.ReactNode {
           />
           <Option.CheckButton optionID='screenshotPreview' />
         </Option>
+        <Option>
+          <Option.Header title='PIP' desc='방송 화면에 PIP 버튼을 추가합니다.' />
+          <Option.CheckButton optionID='pip' />
+        </Option>
         <Collapsable
           title='고급 옵션'
-          desc='일부 기기에서 문제를 일으킬 수 있는 옵션입니다.
+          desc='확장 프로그램의 작동 방식에 큰 변화를 주는 옵션들입니다.
+                이 옵션들을 변경하면 오류가 발생할 수 있습니다.
                 옵션을 변경한 후 정상적으로 작동하는지 확인해주세요.'
         >
           <Option>
@@ -51,10 +56,6 @@ export default function App (): React.ReactNode {
               desc='영상 녹화 시 최대 60fps로 녹화합니다.'
             />
             <Option.CheckButton optionID='highFrameRateRec' />
-          </Option>
-          <Option>
-            <Option.Header title='PIP' desc='방송 화면에 PIP 버튼을 추가합니다.' />
-            <Option.CheckButton optionID='pip' />
           </Option>
         </Collapsable>
       </OptionView>
