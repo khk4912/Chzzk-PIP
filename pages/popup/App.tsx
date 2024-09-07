@@ -2,6 +2,7 @@ import { Header } from './components/Header'
 import { OptionView } from './components/OptionView'
 import Option from './components/Option'
 import './style.css'
+import { Collapsable } from './components/Collapsable'
 
 export default function App (): React.ReactNode {
   return (
@@ -32,25 +33,31 @@ export default function App (): React.ReactNode {
           />
           <Option.CheckButton optionID='screenshotPreview' />
         </Option>
-        <Option>
-          <Option.Header
-            title='MP4 선호'
-            desc='영상 녹화 시 브라우저가 지원하는 경우 MP4(AAC)로 녹화합니다.
+        <Collapsable
+          title='고급 옵션'
+          desc='일부 기기에서 문제를 일으킬 수 있는 옵션입니다.
+                옵션을 변경한 후 정상적으로 작동하는지 확인해주세요.'
+        >
+          <Option>
+            <Option.Header
+              title='MP4 선호'
+              desc='영상 녹화 시 브라우저가 지원하는 경우 MP4(AAC)로 녹화합니다.
                   (사용 시 일부 기기에서 녹화 중 오류가 발생할 수 있어요.)'
-          />
-          <Option.CheckButton optionID='preferMP4' />
-        </Option>
-        <Option>
-          <Option.Header
-            title='고프레임 녹화(베타)'
-            desc='영상 녹화 시 최대 60fps로 녹화합니다.'
-          />
-          <Option.CheckButton optionID='highFrameRateRec' />
-        </Option>
-        <Option>
-          <Option.Header title='PIP' desc='방송 화면에 PIP 버튼을 추가합니다.' />
-          <Option.CheckButton optionID='pip' />
-        </Option>
+            />
+            <Option.CheckButton optionID='preferMP4' />
+          </Option>
+          <Option>
+            <Option.Header
+              title='고프레임 녹화(베타)'
+              desc='영상 녹화 시 최대 60fps로 녹화합니다.'
+            />
+            <Option.CheckButton optionID='highFrameRateRec' />
+          </Option>
+          <Option>
+            <Option.Header title='PIP' desc='방송 화면에 PIP 버튼을 추가합니다.' />
+            <Option.CheckButton optionID='pip' />
+          </Option>
+        </Collapsable>
       </OptionView>
     </div>
   )
