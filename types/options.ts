@@ -14,7 +14,7 @@ export interface OtherOptions {
 }
 
 export interface Option extends BooleanOptions, OtherOptions { }
-export const DEFAULT_OPTIONS: Option = {
+export const DEFAULT_OPTIONS: Required<Option> = {
   pip: false,
   rec: true,
   fastRec: false,
@@ -24,16 +24,16 @@ export const DEFAULT_OPTIONS: Option = {
   highFrameRateRec: false,
   preferMP4: false,
   videoBitsPerSecond: 8000000
-} as const
+}
 
-export const getOption = async (): Promise<Option> => {
-  const option = (await chrome.storage.local.get('option'))?.option ?? {}
+export const getOption = async (): Promise<Required<Option>> => {
+  const option: Option = (await chrome.storage.local.get('option'))?.option ?? {}
   const result = { ...DEFAULT_OPTIONS }
 
   for (const key in option) {
     if (key in DEFAULT_OPTIONS) {
       const k = key as keyof Option
-      result[k] = option[k] ?? DEFAULT_OPTIONS[k]
+      Object.assign(result, { [k]: option[k] })
     }
   }
 
