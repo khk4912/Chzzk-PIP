@@ -6,7 +6,6 @@ import { useShortcut } from '../utils/hooks'
 import { startRecord, stopRecord } from '../utils/record/record'
 import { RecordOverlayPortal } from './rec_overlay'
 import { getOption } from '../../types/options'
-import { download } from '../utils/download/clip'
 
 export function RecordPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {
   if (tg === undefined) {
