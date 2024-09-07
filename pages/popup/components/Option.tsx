@@ -1,6 +1,7 @@
 import { useContext } from 'react'
+
+import { DEFAULT_OPTIONS, setOption, type Option as OptionType, type OtherOptions } from '../../../types/options'
 import style from './Option.module.css'
-import { DEFAULT_OPTIONS, setOption, type Option as OptionType } from '../../../types/options'
 import { OptionContext } from './OptionView'
 
 function Option ({ children }: { children: React.ReactNode }): React.ReactNode {
@@ -20,13 +21,22 @@ function OptionHeader ({ title, desc }: { title: string, desc: string }): React.
   )
 }
 
-function CheckButton ({ optionID }: { optionID: keyof OptionType }): React.ReactNode {
+function CheckButton ({ optionID }: { optionID: Exclude<keyof OptionType, keyof OtherOptions> }): React.ReactNode {
   const [optionContext, setOptionContext] = useContext(OptionContext)
+  const option = optionContext[optionID]
+
+  if (typeof option !== 'boolean') {
+    return <></>
+  }
 
   const handleClick = (): void => {
     setOptionContext((prev) => {
       const next = { ...prev }
-      next[optionID] = !(next[optionID] ?? false)
+
+      if (typeof next[optionID] === 'boolean') {
+        next[optionID] = !next[optionID]
+      }
+
       return next
     })
 
@@ -36,12 +46,50 @@ function CheckButton ({ optionID }: { optionID: keyof OptionType }): React.React
   return (
     <input
       onChange={handleClick}
-      className={style.checkBox} role='switch' type='checkbox' checked={optionContext[optionID] ?? DEFAULT_OPTIONS[optionID]}
+      className={style.checkBox} role='switch' type='checkbox'
+      checked={optionContext[optionID] ?? DEFAULT_OPTIONS[optionID] ?? false}
+    />
+  )
+}
+
+function NumberInput ({ optionID }: { optionID: keyof OtherOptions }): React.ReactNode {
+  const [optionContext, setOptionContext] = useContext(OptionContext)
+  const option = optionContext[optionID]
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setOptionContext((prev) => {
+      const next = { ...prev }
+
+      const newValue = Number(e.target.value)
+      if (Number.isNaN(newValue)) {
+        return next
+      }
+
+      if (typeof next[optionID] === 'number') {
+        next[optionID] = newValue
+      }
+
+      return next
+    })
+
+    void setOption(optionID, Number(e.target.value)).catch(console.error)
+  }
+
+  if (typeof option === 'boolean') {
+    return <></>
+  }
+
+  return (
+    <input
+      onChange={onChange}
+      className={style.numberInput}
+      type='number'
     />
   )
 }
 
 Option.Header = OptionHeader
 Option.CheckButton = CheckButton
+Option.NumberInput = NumberInput
 
 export default Option

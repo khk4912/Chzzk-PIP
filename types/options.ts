@@ -1,4 +1,4 @@
-export interface Option {
+interface BooleanOptions {
   pip?: boolean
   rec?: boolean
   fastRec?: boolean
@@ -9,7 +9,12 @@ export interface Option {
   preferMP4?: boolean
 }
 
-export const DEFAULT_OPTIONS: Record<keyof Option, boolean> = {
+export interface OtherOptions {
+  videoBitsPerSecond?: number
+}
+
+export interface Option extends BooleanOptions, OtherOptions { }
+export const DEFAULT_OPTIONS: Option = {
   pip: false,
   rec: true,
   fastRec: false,
@@ -17,11 +22,12 @@ export const DEFAULT_OPTIONS: Record<keyof Option, boolean> = {
   screenshot: true,
   screenshotPreview: true,
   highFrameRateRec: false,
-  preferMP4: false
-}
+  preferMP4: false,
+  videoBitsPerSecond: 8000000
+} as const
 
-export const getOption = async (): Promise<typeof DEFAULT_OPTIONS> => {
-  const option: Option = (await chrome.storage.local.get('option'))?.option ?? {}
+export const getOption = async (): Promise<Option> => {
+  const option = (await chrome.storage.local.get('option'))?.option ?? {}
   const result = { ...DEFAULT_OPTIONS }
 
   for (const key in option) {
@@ -34,8 +40,9 @@ export const getOption = async (): Promise<typeof DEFAULT_OPTIONS> => {
   return result
 }
 
-export const setOption = async (option: keyof Option, value: boolean): Promise<void> => {
-  const options: Option = (await chrome.storage.local.get('option'))?.option ?? {}
+export const setOption = async <T extends keyof Option>(option: T, value: NonNullable<Option[T]>): Promise<void> => {
+  const options = (await chrome.storage.local.get('option'))?.option ?? {}
   options[option] = value
+
   await chrome.storage.local.set({ option: options })
 }
