@@ -21,7 +21,8 @@ const DEFAULT_RECORD_INFO: RecordInfo = {
   streamInfo: {
     streamerName: 'streamer',
     streamTitle: 'title'
-  }
+  },
+  highFrameRec: false
 }
 
 export const setRecordInfo = async (info: RecordInfo): Promise<void> => {
