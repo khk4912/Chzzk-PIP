@@ -134,21 +134,3 @@ export async function stopRecord (recorder: MediaRecorder): Promise<RecordInfo> 
   const info = await getRecordInfo()
   return info
 }
-
-export async function stopHighFrameRec (videoRecorder: MediaRecorder, canvasInterval: number): Promise<RecordInfo> {
-  videoRecorder.stop()
-  clearInterval(canvasInterval)
-
-  await new Promise((resolve) => {
-    videoRecorder.onstop = async () => {
-      const info = await getRecordInfo()
-      info.stopDateTime = new Date().getTime()
-
-      await setRecordInfo(info)
-      resolve(null)
-    }
-  })
-
-  const info = await getRecordInfo()
-  return info
-}

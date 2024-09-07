@@ -43,8 +43,7 @@ export default function App (): React.ReactNode {
         <Option>
           <Option.Header
             title='고프레임 녹화(베타)'
-            desc='영상 녹화 시 최대 60fps로 녹화합니다.
-                 `영상 빠른 저장` 사용 시 작동하지 않습니다.'
+            desc='영상 녹화 시 최대 60fps로 녹화합니다.'
           />
           <Option.CheckButton optionID='highFrameRateRec' />
         </Option>

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 
 import RecIcon from '../../static/rec.svg?react'
 import { useShortcut } from '../utils/hooks'
-import { startHighFrameRateRecord, startRecord, stopHighFrameRec, stopRecord } from '../utils/record/record'
+import { startHighFrameRateRecord, startRecord, stopRecord } from '../utils/record/record'
 import { RecordOverlayPortal } from './rec_overlay'
 import { getOption } from '../../types/options'
 
@@ -122,8 +122,6 @@ function RecordButton (): React.ReactNode {
 
         recorder.current = _videoRecorder
         canvasInterval.current = _canvasInterval
-
-        console.log('high frame rate recording started', recorder.current, canvasInterval.current)
       } else {
         const _recorder = await startRecord(video)
 
@@ -132,18 +130,17 @@ function RecordButton (): React.ReactNode {
         }
         recorder.current = _recorder
       }
-    } else {
-      if ((recorder.current?.recordInfo?.highFrameRec) ?? false) {
-        if (recorder.current === undefined || canvasInterval.current === undefined) {
-          return
-        }
-        console.log('stop high frame rate recording', recorder.current, canvasInterval.current)
-        await stopHighFrameRec(recorder.current, canvasInterval.current)
-        window.open(chrome.runtime.getURL('/pages/record_result/index.html'))
-      }
 
-      await _stopRecord(recorder, fastRec.current)
+      return
     }
+
+    if ((recorder.current?.recordInfo?.highFrameRec) ?? false) {
+      if (recorder.current === undefined || canvasInterval.current === undefined) {
+        return
+      }
+      clearInterval(canvasInterval.current)
+    }
+    await _stopRecord(recorder, fastRec.current)
   }
 
   return (
