@@ -62,7 +62,7 @@ function NumberInput ({ optionID }: { optionID: keyof OtherOptions }): React.Rea
 
       const newValue = Number(e.target.value)
       if (Number.isNaN(newValue)) {
-        return next
+        next[optionID] = DEFAULT_OPTIONS[optionID]
       }
 
       if (typeof next[optionID] === 'number') {
@@ -75,7 +75,7 @@ function NumberInput ({ optionID }: { optionID: keyof OtherOptions }): React.Rea
     void setOption(optionID, Number(e.target.value)).catch(console.error)
   }
 
-  if (typeof option === 'boolean') {
+  if (typeof option !== 'number') {
     return <></>
   }
 
