@@ -3,6 +3,7 @@ import { OptionView } from './components/OptionView'
 import Option from './components/Option'
 import './style.css'
 import { Collapsable } from './components/Collapsable'
+import { ResetButton } from './components/ResetButton'
 
 export default function App (): React.ReactNode {
   return (
@@ -69,6 +70,7 @@ export default function App (): React.ReactNode {
             <Option.NumberInput optionID='videoBitsPerSecond' />
           </Option>
         </Collapsable>
+        <ResetButton />
       </OptionView>
     </div>
   )

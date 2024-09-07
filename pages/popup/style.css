@@ -6,15 +6,18 @@
   --chzzk-light-gray: #a0a0a0;
 }
 
+* {
+  font-family: "Pretendard Variable", Pretendard, -apple-system,
+    BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
+    "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+}
+
 body {
   width: 300px;
   height: 500px;
   background-color: var(--color-bg);
   color: white;
-  font-family: "Pretendard Variable", Pretendard, -apple-system,
-    BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
-    "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
 
   display: grid;
 }
