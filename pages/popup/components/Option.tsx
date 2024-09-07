@@ -47,7 +47,7 @@ function CheckButton ({ optionID }: { optionID: Exclude<keyof OptionType, keyof 
     <input
       onChange={handleClick}
       className={style.checkBox} role='switch' type='checkbox'
-      checked={optionContext[optionID] ?? DEFAULT_OPTIONS[optionID] ?? false}
+      checked={optionContext[optionID] ?? DEFAULT_OPTIONS[optionID]}
     />
   )
 }
