@@ -41,14 +41,13 @@ export default function App (): React.ReactNode {
           <Option>
             <Option.Header
               title='MP4 선호'
-              desc='영상 녹화 시 브라우저가 지원하는 경우 MP4(AAC)로 녹화합니다.
-                  (일부 기기에서 녹화 중 오류가 발생할 수 있어요.)'
+              desc='영상 녹화 시 브라우저가 지원하는 경우 MP4(AAC)로 녹화합니다.'
             />
             <Option.CheckButton optionID='preferMP4' />
           </Option>
           <Option>
             <Option.Header
-              title='고프레임 녹화(베타)'
+              title='고프레임 녹화'
               desc='영상 녹화 시 최대 60fps로 녹화합니다.'
             />
             <Option.CheckButton optionID='highFrameRateRec' />
