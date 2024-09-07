@@ -63,3 +63,21 @@
   transition: background-color 0.2s;
   background-color: gray;
 }
+
+.number-input {
+  width: 90%;
+  font-size: small;
+  background-color: rgba(0, 0, 0, 0);
+  color: white;
+
+  border: none;
+  border-bottom: solid lightgray 1px;
+  text-align: center;
+}
+
+/* Remove selector */
+
+.number-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

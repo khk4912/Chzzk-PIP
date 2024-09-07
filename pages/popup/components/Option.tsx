@@ -83,6 +83,7 @@ function NumberInput ({ optionID }: { optionID: keyof OtherOptions }): React.Rea
     <input
       onChange={onChange}
       className={style.numberInput}
+      defaultValue={optionContext[optionID] ?? DEFAULT_OPTIONS[optionID]}
       type='number'
     />
   )
