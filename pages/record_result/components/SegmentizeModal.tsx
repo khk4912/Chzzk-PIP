@@ -26,6 +26,11 @@ export function SegmentizeModalPortal ({ setModalState, downloadInfo, ffmpeg, pr
   )
 }
 
+/**
+ * SegmentizeModal component
+ *
+ * 분할 다운로드를 위한 모달 컴포넌트입니다.
+ */
 function SegmentizeModal (
   { setModalState, downloadInfo, ffmpeg, progress }:
   { setModalState: (x: boolean) => void, downloadInfo: DownloadInfo | undefined, ffmpeg: FFmpeg | undefined, progress: number }): React.ReactNode {
@@ -49,6 +54,7 @@ function SegmentizeModal (
 
     setModalState(false)
     setProgressModal(true)
+
     void segmentize(ffmpeg, downloadInfo.recordInfo.resultBlobURL, x | 0)
       .then(
         (urls) => {

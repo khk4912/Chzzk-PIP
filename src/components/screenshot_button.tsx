@@ -19,6 +19,11 @@ export function ScreenShotPortal ({ tg }: { tg: Element | undefined }): React.Re
   return ReactDOM.createPortal(<ScreenshotButton />, div)
 }
 
+/**
+ * ScreenshotButton component
+ *
+ * 스크린샷 버튼 컴포넌트입니다.
+ */
 function ScreenshotButton (): React.ReactNode {
   const clickHandler = (): void => {
     const dataURL = screenshot()
@@ -43,6 +48,11 @@ function ScreenshotButton (): React.ReactNode {
   )
 }
 
+/**
+ * 스트림 화면을 스크린샷 합니다.
+ *
+ * @returns 스크린샷 이미지 dataURL (Base64)
+ */
 function screenshot (): string | undefined {
   const video: HTMLVideoElement | null = document.querySelector('.webplayer-internal-video')
   if (video === null) {
@@ -64,6 +74,11 @@ function screenshot (): string | undefined {
   return canvas.toDataURL('image/png')
 }
 
+/**
+ * 설정에 따라 이미지 미리보기를 표시하거나 즉시 다운로드합니다.
+ *
+ * @param dataURL 스크린샷 이미지 dataURL (Base64)
+ */
 async function saveOrPreview (dataURL: string): Promise<void> {
   const { screenshotPreview } = await getOption()
   const info = getStreamInfo(document)

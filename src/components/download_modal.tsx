@@ -36,6 +36,11 @@ export function DownloadVODModalPortal ({ setState }: { setState: (x: boolean) =
   return ReactDOM.createPortal(<DownloadVODModal playbackURLs={playbackURLs} setState={setState} />, target)
 }
 
+/**
+ * DownloadVODModal component
+ *
+ * VOD 다운로드를 위한 모달 컴포넌트입니다.
+ */
 function DownloadVODModal ({ playbackURLs, setState }: { playbackURLs: PlayBackURL[], setState: (x: boolean) => void }): React.ReactNode {
   const download = (url: string): void => {
     const streamInfo = getStreamInfo(document)

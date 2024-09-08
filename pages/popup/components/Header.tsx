@@ -1,6 +1,11 @@
 import style from './Header.module.css'
 import logo from '../../../logos/logo.png'
 
+/**
+ * Header component
+ *
+ * Popup 페이지의 상단에 위치하는 헤더 컴포넌트입니다.
+ */
 export function Header (): React.ReactNode {
   return (
     <div className={style.header}>

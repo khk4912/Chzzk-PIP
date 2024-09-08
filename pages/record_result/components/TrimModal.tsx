@@ -26,6 +26,11 @@ export function TrimModalPortal ({ setModalState, downloadInfo, ffmpeg, progress
   )
 }
 
+/**
+ * TrimModal component
+ *
+ * '자르고 다운로드' 기능을 위한 모달 컴포넌트입니다.
+ */
 function TrimModal (
   { setModalState, downloadInfo, ffmpeg, progress }:
   { setModalState: (x: boolean) => void, downloadInfo: DownloadInfo | undefined, ffmpeg: FFmpeg | undefined, progress: number }): React.ReactNode {

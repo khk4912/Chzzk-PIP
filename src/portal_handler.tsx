@@ -11,6 +11,13 @@ import { SeekPortal } from './components/seek'
 import { DownloadPortal } from './components/download_button'
 import { isClipPage, isVODPage } from './utils/download/download'
 
+/**
+ * InjectButtons component
+ *
+ * Chzzk-PIP 확장에서 추가하는 대부분의 버튼을 주입하는 컴포넌트입니다.
+ *
+ * @returns 주입될 버튼 컴포넌트
+ */
 export function InjectButtons (): React.ReactNode {
   const [target, setTarget] = useState<Element | undefined>(undefined)
   const [options, setOptions] = useState<typeof DEFAULT_OPTIONS>()

@@ -16,6 +16,9 @@ export const waitForElement = async (querySelector: string): Promise<Element> =>
   })
 }
 
+/**
+ * InjectButtons 컴포넌트를 목표 위치에 주입합니다.
+ */
 export async function injectButton (): Promise<void> {
   const tg = await waitForElement('.pzp-pc__bottom-buttons-right') as HTMLElement
 
@@ -38,6 +41,9 @@ export async function injectButton (): Promise<void> {
   })
 }
 
+/**
+ * Shorts (클립) 페이지에 다운로드 버튼을 주입합니다.
+ */
 export async function injectShortsDownloadButton (): Promise<void> {
   if (!isShortsPage()) {
     return
@@ -51,6 +57,7 @@ export async function injectShortsDownloadButton (): Promise<void> {
   const divs: Element[] = []
   const roots: Root[] = []
 
+  // 여러 toolbox가 존재, 모든 toolbox에 버튼 주입
   for (const toolBox of toolBoxes) {
     const div = document.createElement('div')
     div.id = 'chzzk-shorts-download-button'
@@ -65,6 +72,7 @@ export async function injectShortsDownloadButton (): Promise<void> {
     return
   }
 
+  // toolbox가 추가되거나 삭제될 때마다 버튼 재주입
   const observer = new MutationObserver((mutationLists) => {
     mutationLists.forEach((mutation) => {
       if (mutation.type !== 'childList') {
@@ -93,6 +101,7 @@ export async function injectShortsDownloadButton (): Promise<void> {
     })
   })
 
+  // 현재 보여지는 camera 감시, camera 내부가 바뀔 때마다 버튼 재주입
   observer.observe(isCurrent, { childList: true, attributes: true })
 }
 

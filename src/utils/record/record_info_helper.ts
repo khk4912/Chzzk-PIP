@@ -18,7 +18,7 @@ const DEFAULT_RECORD_INFO: RecordInfo = {
     streamTitle: 'title'
   },
   highFrameRec: false
-}
+} // 기본으로 사용되는 RecordInfo
 
 export const setRecordInfo = async (info: RecordInfo): Promise<void> => {
   await chrome.storage.local.set({ recordInfo: info })

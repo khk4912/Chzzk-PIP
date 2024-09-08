@@ -44,6 +44,12 @@ export function SeekPortal (): React.ReactNode {
   return target === null ? target : ReactDOM.createPortal(<Seek />, target)
 }
 
+/**
+ * Seek component
+ *
+ * 스트림을 앞뒤로 탐색하고,
+ * 스트림 화면에 탐색 중임을 표시해주는 컴포넌트입니다.
+ */
 function Seek (): React.ReactNode {
   const [left, setLeft] = useState(false)
   const [right, setRight] = useState(false)

@@ -7,6 +7,11 @@ import { waitForElement } from '../inject_btn'
 import DownloadIcon from '../../static/download.svg?react'
 import { download } from '../utils/download/clip'
 
+/**
+ * ClipsDownloadButton component
+ *
+ * 클립 다운로드에 사용되는 컴포넌트입니다.
+ */
 export function ClipsDownloadButton (): React.ReactNode {
   const onClick = (): void => {
     const url = document.querySelector('video')?.getAttribute('src')

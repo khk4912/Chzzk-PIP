@@ -18,6 +18,11 @@ export function DownloadPortal ({ tg }: { tg: Element | undefined }): React.Reac
   return ReactDOM.createPortal(<DownloadButton />, div)
 }
 
+/**
+ * DownloadButton component
+ *
+ * VOD나 embed된 클립에 삽입되는 다운로드 버튼 컴포넌트입니다.
+ */
 function DownloadButton (): React.ReactNode {
   const [downloadModalState, setDownloadModalState] = useState(false)
 
@@ -27,8 +32,10 @@ function DownloadButton (): React.ReactNode {
       <button
         onClick={() => {
           if (isVODPage()) {
+            // VOD 페이지에서 다운로드 버튼 클릭 시, 다운로드 모달
             setDownloadModalState(true)
           } else if (isClipPage()) {
+            // 클립 embed 페이지에서 다운로드 버튼 클릭 시, 클립 다운로드
             downloadClip().catch(console.error)
           }
         }}

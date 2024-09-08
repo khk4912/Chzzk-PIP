@@ -15,6 +15,11 @@ export function PIPPortal ({ tg }: { tg: Element | undefined }): React.ReactNode
   return ReactDOM.createPortal(<PIPButton />, div)
 }
 
+/**
+ * PIPButton component
+ *
+ * PIP 버튼 컴포넌트입니다.
+ */
 function PIPButton (): React.ReactNode {
   const clickHandler = (): void => { void makeVideoPIP() }
   useShortcut(['p', 'P', 'ㅔ'], clickHandler)

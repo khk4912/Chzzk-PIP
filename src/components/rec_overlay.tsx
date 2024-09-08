@@ -9,6 +9,11 @@ const secondsToTime = (seconds: number): string => {
   return `${minutes}:${remainSeconds}`
 }
 
+/**
+ * RecordOverlay component
+ *
+ * 녹화 중 녹화 시간을 화면에 표시하는 컴포넌트입니다.
+ */
 function RecordOverlay (): React.ReactNode {
   const [sec, setSec] = useState(0)
   const timer = useRef<number>()

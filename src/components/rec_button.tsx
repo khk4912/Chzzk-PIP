@@ -19,6 +19,13 @@ export function RecordPortal ({ tg }: { tg: Element | undefined }): React.ReactN
   return ReactDOM.createPortal(<RecordButton />, div)
 }
 
+/**
+ * 영상 녹화를 중지하는 함수입니다.
+ *
+ * @param recorder 녹화에 사용된 MediaRecorder Ref
+ * @param fastRec '영상 빠른 저장' 기능 사용 여부
+ * @returns
+ */
 async function _stopRecord (
   recorder: React.MutableRefObject<MediaRecorder | undefined>,
   fastRec: boolean
@@ -34,6 +41,7 @@ async function _stopRecord (
     return
   }
 
+  // '영상 빠른 저장' 기능 사용시, 결과 페이지 표시 없이 즉시 다운
   if (fastRec) {
     const video = document.createElement('video')
     video.src = info.resultBlobURL
@@ -49,12 +57,14 @@ async function _stopRecord (
 
         duration = video.duration
 
+        // video.duration이 Infinity일 경우, 녹화 시작 시간과 종료 시간을 이용하여 대략적인 계산
         if (duration === Infinity) {
           duration = (info.stopDateTime - info.startDateTime) / 1000 - 0.1
         }
 
         const fileName = `${info.streamInfo.streamerName}_${duration.toFixed(2)}s`
 
+        // 다운로드
         const a = document.createElement('a')
         a.href = info.resultBlobURL
         a.download = `${fileName.replace(/[/\\?%*:|"<>]/g, '_')}.${info.isMP4 ? 'mp4' : 'webm'}`
@@ -67,16 +77,22 @@ async function _stopRecord (
     return
   }
 
+  // '영상 빠른 저장' 미사용시 결과 페이지 표시
   window.open(chrome.runtime.getURL('/pages/record_result/index.html'))
 }
 
+/**
+ * RecordButton component
+ *
+ * 녹화 버튼 컴포넌트입니다.
+ */
 function RecordButton (): React.ReactNode {
   const [isRecording, setIsRecording] = useState(false)
   const fastRec = useRef(false)
   const highFrameRateRec = useRef(false)
 
-  const recorder = useRef<MediaRecorder>()
-  const canvasInterval = useRef<number>()
+  const recorder = useRef<MediaRecorder>() // 녹화에 사용된 MediaRecorder
+  const canvasInterval = useRef<number>() // 고프레임 녹화에 사용된 canvas interval
 
   useEffect(() => {
     return () => {
@@ -110,7 +126,9 @@ function RecordButton (): React.ReactNode {
     const newRec = !isRecording
     setIsRecording(newRec)
 
+    // 녹화 시작
     if (newRec) {
+      // 고프레임 녹화 시
       if (highFrameRateRec.current) {
         const [_videoRecorder, _canvasInterval] = await startHighFrameRateRecord(video) ?? [null, null, null]
 
@@ -120,7 +138,7 @@ function RecordButton (): React.ReactNode {
 
         recorder.current = _videoRecorder
         canvasInterval.current = _canvasInterval
-      } else {
+      } else { // 일반 녹화 시
         const _recorder = await startRecord(video)
 
         if (_recorder === null) {
@@ -132,11 +150,12 @@ function RecordButton (): React.ReactNode {
       return
     }
 
+    // 녹화 중지
     if ((recorder.current?.recordInfo?.highFrameRec) ?? false) {
       if (recorder.current === undefined || canvasInterval.current === undefined) {
         return
       }
-      clearInterval(canvasInterval.current)
+      clearInterval(canvasInterval.current) // 고프레임 녹화 canvas interval 제거
     }
     await _stopRecord(recorder, fastRec.current)
   }
