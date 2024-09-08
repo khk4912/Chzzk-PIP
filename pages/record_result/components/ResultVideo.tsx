@@ -12,11 +12,11 @@ export function ResultVideo ({ setDownloadInfo }: { setDownloadInfo: React.Dispa
 
     const video = document.querySelector('video')
 
-    if (!(video instanceof HTMLVideoElement) || recordInfo === undefined) {
+    if (!(video instanceof HTMLVideoElement)) {
       return
     }
 
-    let duration: number = 0
+    let duration: number
 
     video.currentTime = Number.MAX_SAFE_INTEGER
     await new Promise(resolve => setTimeout(resolve, 500))

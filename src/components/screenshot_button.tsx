@@ -61,9 +61,7 @@ function screenshot (): string | undefined {
   }
 
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
-  const dataURL = canvas.toDataURL('image/png')
-
-  return dataURL
+  return canvas.toDataURL('image/png')
 }
 
 async function saveOrPreview (dataURL: string): Promise<void> {

@@ -17,9 +17,6 @@ export function DownloadVODModalPortal ({ setState }: { setState: (x: boolean) =
       const videoInfo = await getVideoInfo(videoNumber)
 
       const playbackURLs = await getPlayBackURL(videoInfo.videoID, videoInfo.inKey)
-      if (videoInfo === undefined) {
-        return
-      }
 
       setPlaybackURLs(playbackURLs)
     }

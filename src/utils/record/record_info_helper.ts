@@ -3,14 +3,9 @@ import type { RecordInfo } from '../../../types/record_info'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const checkRecordInfo = (x: any): x is RecordInfo => {
-  if (!(typeof x.startDateTime === 'number' &&
-    typeof x.resultBlobURL === 'string' &&
-    typeof x.streamInfo === 'object')
-  ) {
-    return false
-  }
-
-  return true
+  return typeof x.startDateTime === 'number' &&
+      typeof x.resultBlobURL === 'string' &&
+      typeof x.streamInfo === 'object'
 }
 
 const DEFAULT_RECORD_INFO: RecordInfo = {

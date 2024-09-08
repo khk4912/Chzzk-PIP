@@ -41,7 +41,7 @@
 }
 
 .progress-bar-inner {
-  width: 0%;
+  width: 0;
   height: 100%;
   background-color: var(--chzzk-green);
   border-radius: 10px;

@@ -14,8 +14,7 @@ const checkMP4 = async (): Promise<boolean> => {
   const isSupportMP4 = MediaRecorder.isTypeSupported('video/mp4;codecs=avc1,mp4a.40.2')
   const preferMP4 = (await getOption()).preferMP4
 
-  const isMP4 = isSupportMP4 && isAboveChrome128 && preferMP4
-  return isMP4
+  return isSupportMP4 && isAboveChrome128 && preferMP4
 }
 
 export async function startRecord (video: HTMLVideoElement): Promise<MediaRecorder | null> {
@@ -32,15 +31,13 @@ export async function startRecord (video: HTMLVideoElement): Promise<MediaRecord
     videoBitsPerSecond
   })
 
-  const newRecordInfo: RecordInfo = {
+  recorder.recordInfo = {
     startDateTime: new Date().getTime(),
     stopDateTime: -1,
     resultBlobURL: '',
     streamInfo,
     isMP4
   }
-
-  recorder.recordInfo = newRecordInfo
   recorder.ondataavailable = async (event) => {
     if (event.data.size === 0) return
 
@@ -133,6 +130,5 @@ export async function stopRecord (recorder: MediaRecorder): Promise<RecordInfo> 
     }
   })
 
-  const info = await getRecordInfo()
-  return info
+  return await getRecordInfo()
 }

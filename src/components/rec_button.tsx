@@ -53,8 +53,6 @@ async function _stopRecord (
           duration = (info.stopDateTime - info.startDateTime) / 1000 - 0.1
         }
 
-        duration = video.duration
-
         const fileName = `${info.streamInfo.streamerName}_${duration.toFixed(2)}s`
 
         const a = document.createElement('a')
