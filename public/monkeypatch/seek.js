@@ -8,10 +8,12 @@ async function patchPlayer () {
     return
   }
 
-  const config = player.player._mediaController_hls.config
+  const config = player.player._mediaController._hls.config
+  console.log('[Chzzk-PIP] Monekypatching HLS Config', config)
 
   config.liveMaxLatencyDurationCount = Infinity
 
+  config.backBufferLength = Infinity
   config.maxBufferLength = Infinity
   config.maxBufferSize = Infinity
   config.maxBufferLength = Infinity
@@ -47,16 +49,13 @@ function getMemoizedState (target, stateName, maxTraversal = 100) {
 }
 
 async function getCorePlayer () {
-  const x =
-    document.querySelector('[class^=live_information_player_header]') ??
-    document.querySelector('[class^=od_tooltip_video_tooltip]')
+  const x = await waitForElement('#live_player_layout')
 
   if (x === null || x === undefined) {
     return null
   }
 
   const player = getMemoizedState(x, '_corePlayer')
-
   return player
 }
 
