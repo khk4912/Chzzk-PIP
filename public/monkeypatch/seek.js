@@ -11,12 +11,8 @@ async function patchPlayer () {
   const config = player.player._mediaController._hls.config
   console.log('[Chzzk-PIP] Monekypatching HLS Config', config)
 
-  config.liveMaxLatencyDurationCount = Infinity
-
-  config.backBufferLength = Infinity
-  config.maxBufferLength = Infinity
-  config.maxBufferSize = Infinity
-  config.maxBufferLength = Infinity
+  config.backBufferLength = 900
+  config.maxBufferLength = 930
 }
 
 function getMemoizedState (target, stateName, maxTraversal = 100) {
