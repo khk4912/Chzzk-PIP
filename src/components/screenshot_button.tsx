@@ -94,7 +94,7 @@ async function saveOrPreview (dataURL: string): Promise<void> {
     return `${yyyy}${mm}${dd}${hh}${mi}${ss}`
   }
 
-  const title = `${info.streamerName}_${info.streamTitle}}_${yyyymmddhhmmss(new Date())}`
+  const title = `${info.streamerName}_${info.streamTitle}_${yyyymmddhhmmss(new Date())}`
 
   if (screenshotPreview) {
     createDraggablePreview(dataURL, title)
