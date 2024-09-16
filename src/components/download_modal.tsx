@@ -6,6 +6,7 @@ import { getVideoInfo, getPlayBackURL } from '../utils/download/download'
 import type { PlayBackURL } from '../../types/download'
 import { getStreamInfo } from '../utils/stream_info'
 import type { DownloadMessage } from '../../types/message'
+import { sanitizeFileName } from '../utils/record/save'
 
 export function DownloadVODModalPortal ({ setState }: { setState: (x: boolean) => void }): React.ReactNode {
   let target = document.querySelector('#chzzk-download-modal')
@@ -44,7 +45,7 @@ export function DownloadVODModalPortal ({ setState }: { setState: (x: boolean) =
 function DownloadVODModal ({ playbackURLs, setState }: { playbackURLs: PlayBackURL[], setState: (x: boolean) => void }): React.ReactNode {
   const download = (url: string): void => {
     const streamInfo = getStreamInfo(document)
-    const fileName = `${streamInfo.streamTitle}.mp4`.replace(/[/\\?%*:|"<>]/g, '_')
+    const fileName = sanitizeFileName(`${streamInfo.streamTitle}.mp4`)
 
     // TODO: 다운로드 처리
     void chrome.runtime.sendMessage({

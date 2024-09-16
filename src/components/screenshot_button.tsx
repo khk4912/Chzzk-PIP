@@ -6,6 +6,7 @@ import { useShortcut } from '../utils/hooks'
 import { getStreamInfo } from '../utils/stream_info'
 import { createDraggablePreview } from '../utils/screenshot/screenshot_preview'
 import { download } from '../utils/download/clip'
+import { sanitizeFileName } from '../utils/record/save'
 
 export function ScreenShotPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {
   if (tg === undefined) {
@@ -93,11 +94,11 @@ async function saveOrPreview (dataURL: string): Promise<void> {
     return `${yyyy}${mm}${dd}${hh}${mi}${ss}`
   }
 
-  const title = `${info.streamerName}_${info.streamTitle.replace(/[/\\?%*:|"<>]/g, '_')}}_${yyyymmddhhmmss(new Date())}`
+  const title = `${info.streamerName}_${info.streamTitle}}_${yyyymmddhhmmss(new Date())}`
 
   if (screenshotPreview) {
     createDraggablePreview(dataURL, title)
   } else {
-    void download(dataURL, `${title}`, 'png')
+    void download(dataURL, sanitizeFileName(title), 'png')
   }
 }

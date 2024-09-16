@@ -1,5 +1,6 @@
 import type { PlayBackURL, Clip, ContentInfo } from '../../../types/download'
 import type { DownloadMessage } from '../../../types/message'
+import { sanitizeFileName } from '../record/save'
 
 // https://apis.naver.com/neonplayer/vodplay/v1/playback/185E84C6EEAC13828C3A6ADFD10800810E81?key=V1257d3d223e05ce67f809b5051667aa86f181e3ae1c23455289eccb2031fde8a47809b5051667aa86f18&sid=2113&env=real&lc=ko&cpl=ko
 
@@ -76,7 +77,7 @@ export async function download (url: string, title: string, ext?: string): Promi
       type: 'download',
       data: {
         url,
-        fileName: `${title.replace(/[/\\?%*:|"<>]/g, '_')}.${ext ?? 'mp4'}`
+        fileName: sanitizeFileName(`${title}.${ext ?? 'mp4'}`)
       }
     } satisfies DownloadMessage
   )

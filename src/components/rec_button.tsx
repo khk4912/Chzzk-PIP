@@ -6,6 +6,7 @@ import { useShortcut } from '../utils/hooks'
 import { startHighFrameRateRecord, startRecord, stopRecord } from '../utils/record/record'
 import { RecordOverlayPortal } from './rec_overlay'
 import { getOption } from '../../types/options'
+import { sanitizeFileName } from '../utils/record/save'
 
 const checkIsLive = (): boolean => {
   const guideButton = document.querySelector('[class^="player_guide_button"')
@@ -73,7 +74,7 @@ async function _stopRecord (
         // 다운로드
         const a = document.createElement('a')
         a.href = info.resultBlobURL
-        a.download = `${fileName.replace(/[/\\?%*:|"<>]/g, '_')}.${info.isMP4 ? 'mp4' : 'webm'}`
+        a.download = sanitizeFileName(`${fileName}.${info.isMP4 ? 'mp4' : 'webm'}`)
 
         a.click()
 
