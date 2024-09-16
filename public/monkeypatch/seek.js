@@ -3,16 +3,23 @@
 
 async function patchPlayer () {
   const player = await getCorePlayer()
+  // console.log('[Chzzk-PIP] Player', player)
 
   if (player === null) {
     return
   }
 
   const config = player.player._mediaController._hls.config
-  console.log('[Chzzk-PIP] Monekypatching HLS Config', config)
+  // console.log('[Chzzk-PIP] Default HLS Config', config)
 
-  config.backBufferLength = 900
-  config.maxBufferLength = 930
+  config.backBufferLength = 300
+  config.maxBufferLength = 330
+  config.maxBufferSize = 100000000
+
+  config.liveSyncDurationCount = 300
+  config.liveSyncDuration = 300
+
+  console.log('[Chzzk-PIP] Monekypatching HLS Config', config)
 }
 
 function getMemoizedState (target, stateName, maxTraversal = 100) {
