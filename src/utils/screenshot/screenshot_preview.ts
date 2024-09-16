@@ -22,6 +22,7 @@ export function createDraggablePreview (
     position: absolute;
     width: 100%;
     height: auto;
+
     `
 
   const wrappedOverlay = wrapWithOverlay(preview, fileName)
@@ -33,6 +34,7 @@ export function createDraggablePreview (
     width: 40%;
     aspect-ratio: 16/9;
     z-index: 15000;
+    max-width: 500px;
     `
 
   const target = document.querySelector('[class^="toolbar_container"]') ??
