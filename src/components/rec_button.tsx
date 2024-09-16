@@ -104,6 +104,9 @@ function RecordButton (): React.ReactNode {
   useEffect(() => {
     return () => {
       if (isRecording) {
+        window.clearInterval(canvasInterval.current)
+        window.clearInterval(liveCheckingInterval.current)
+
         void _stopRecord(recorder, fastRec.current)
       }
     }
