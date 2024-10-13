@@ -11,6 +11,10 @@ interface BooleanOptions {
 
 export interface OtherOptions {
   videoBitsPerSecond?: number
+  keyBind?: {
+    rec?: string
+    screenshot?: string
+  }
 }
 
 export interface Option extends BooleanOptions, OtherOptions { }
@@ -23,7 +27,11 @@ export const DEFAULT_OPTIONS: Required<Option> = {
   screenshotPreview: true,
   highFrameRateRec: false,
   preferMP4: false,
-  videoBitsPerSecond: 8000000
+  videoBitsPerSecond: 8000000,
+  keyBind: {
+    rec: 'r',
+    screenshot: 's'
+  }
 }
 
 export const getOption = async (): Promise<Required<Option>> => {
