@@ -8,7 +8,7 @@ export function ResetButton (): React.ReactNode {
   const [, setOptionContext] = useContext(OptionContext)
 
   const handleClick = (): void => {
-    chrome.storage.local.remove('option')
+    chrome.storage.local.remove(['option', 'keyBindings'])
       .catch(console.error)
 
     setOptionContext(() => DEFAULT_OPTIONS)

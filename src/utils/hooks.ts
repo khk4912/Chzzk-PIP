@@ -1,5 +1,34 @@
 import { useEffect } from 'react'
 
+export const koreanToEnglish = {
+  ㄱ: 'R',
+  ㄴ: 'S',
+  ㄷ: 'E',
+  ㄹ: 'F',
+  ㅁ: 'A',
+  ㅂ: 'Q',
+  ㅅ: 'T',
+  ㅇ: 'D',
+  ㅈ: 'W',
+  ㅊ: 'C',
+  ㅋ: 'Z',
+  ㅌ: 'X',
+  ㅍ: 'V',
+  ㅎ: 'G',
+  ㅏ: 'K',
+  ㅑ: 'I',
+  ㅓ: 'J',
+  ㅕ: 'U',
+  ㅗ: 'H',
+  ㅛ: 'Y',
+  ㅜ: 'N',
+  ㅠ: 'B',
+  ㅡ: 'M',
+  ㅣ: 'L',
+  ㅐ: 'O',
+  ㅔ: 'P'
+} as const
+
 /**
  * 키보드 키를 감지하여 callback을 실행하는 hook입니다.
  *
@@ -9,7 +38,10 @@ import { useEffect } from 'react'
 export function useShortcut (key: string | string[], callback: () => void): void {
   useEffect(() => {
     const listener = (event: KeyboardEvent): void => {
+      event.stopPropagation()
+
       const activeElement = document.activeElement
+      let eventKey = event.key
 
       // 입력 요소가 검색창, 채팅창 등의 입력 요소일 경우 무시
       if (activeElement instanceof HTMLInputElement ||
@@ -23,11 +55,13 @@ export function useShortcut (key: string | string[], callback: () => void): void
         return
       }
 
-      if (typeof key === 'string' && event.key === key) {
-        callback()
+      if (/[ㄱ-ㅎ|ㅏ-ㅣ]/.test(eventKey)) {
+        eventKey = koreanToEnglish[eventKey as keyof typeof koreanToEnglish]
       }
 
-      if (Array.isArray(key) && key.includes(event.key)) {
+      if (typeof key === 'string' && (eventKey.toUpperCase() === key.toUpperCase())) { callback() }
+
+      if (Array.isArray(key) && key.includes(eventKey)) {
         callback()
       }
     }

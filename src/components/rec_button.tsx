@@ -5,7 +5,7 @@ import RecIcon from '../../static/rec.svg?react'
 import { useShortcut } from '../utils/hooks'
 import { startHighFrameRateRecord, startRecord, stopRecord } from '../utils/record/record'
 import { RecordOverlayPortal } from './rec_overlay'
-import { getOption } from '../../types/options'
+import { getKeyBindings, getOption } from '../../types/options'
 import { sanitizeFileName } from '../utils/record/save'
 
 const checkIsLive = (): boolean => {
@@ -121,7 +121,15 @@ function RecordButton (): React.ReactNode {
       })
   }, [])
 
-  useShortcut(['r', 'R', 'ㄱ'], () => { void clickHandler() })
+  const [key, setKey] = useState<string>('')
+
+  useEffect(() => {
+    getKeyBindings()
+      .then((k) => { setKey(k.rec) })
+      .catch(console.error)
+  }, [])
+
+  useShortcut(key, () => { void clickHandler() })
 
   const clickHandler = async (): Promise<void> => {
     const video: HTMLVideoElement | null = document.querySelector('.webplayer-internal-video')
@@ -191,7 +199,7 @@ function RecordButton (): React.ReactNode {
         onClick={() => { void clickHandler() }}
       >
         <span className='pzp-pc-ui-button__tooltip pzp-pc-ui-button__tooltip--top'>
-          {isRecording ? '녹화 중지' : '녹화'} (R)
+          {isRecording ? '녹화 중지' : '녹화'} ({key})
         </span>
         <span className='pzp-ui-icon pzp-pc-setting-button__icon'>
           <RecIcon fill={isRecording ? 'red' : 'white'} />

@@ -2,8 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { getKeyBindings, type KeyBindings, setKeyBindings } from '../../../types/options'
 import style from './ShortcutOptionModal.module.css'
 import { useModal } from './Modal'
+import { koreanToEnglish } from '../../../src/utils/hooks'
 
 const sanitizeKey = (key: string): string => {
+  const isKorean = /[ㄱ-ㅎ|ㅏ-ㅣ]/.test(key)
+
+  if (isKorean) {
+    return koreanToEnglish[key as keyof typeof koreanToEnglish]
+  }
+
   if (key.length === 1) {
     return key.toUpperCase()
   }

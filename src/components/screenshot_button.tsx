@@ -1,12 +1,13 @@
 import ReactDOM from 'react-dom'
 
 import ScreenshotIcon from '../../static/screenshot.svg?react'
-import { getOption } from '../../types/options'
+import { getKeyBindings, getOption } from '../../types/options'
 import { useShortcut } from '../utils/hooks'
 import { getStreamInfo } from '../utils/stream_info'
 import { createDraggablePreview } from '../utils/screenshot/screenshot_preview'
 import { download } from '../utils/download/clip'
 import { sanitizeFileName } from '../utils/record/save'
+import { useEffect, useState } from 'react'
 
 export function ScreenShotPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {
   if (tg === undefined) {
@@ -34,14 +35,22 @@ function ScreenshotButton (): React.ReactNode {
 
     void saveOrPreview(dataURL)
   }
-  useShortcut(['s', 'S', 'ㄴ'], clickHandler)
+  const [key, setKey] = useState<string>('')
+
+  useEffect(() => {
+    getKeyBindings()
+      .then((k) => { setKey(k.screenshot) })
+      .catch(console.error)
+  }, [])
+
+  useShortcut(key, clickHandler)
 
   return (
     <button
       className='pzp-button pzp-pc-setting-button pzp-pc__setting-button pzp-pc-ui-button chzzk-screenshot-button'
       onClick={clickHandler}
     >
-      <span className='pzp-pc-ui-button__tooltip pzp-pc-ui-button__tooltip--top'>스크린샷 (S)</span>
+      <span className='pzp-pc-ui-button__tooltip pzp-pc-ui-button__tooltip--top'>스크린샷 ({key})</span>
       <span className='pzp-ui-icon pzp-pc-setting-button__icon'>
         <ScreenshotIcon />
       </span>

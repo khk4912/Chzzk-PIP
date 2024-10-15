@@ -2,6 +2,8 @@ import ReactDOM from 'react-dom'
 
 import PIPIcon from '../../static/pip.svg?react'
 import { useShortcut } from '../utils/hooks'
+import { getKeyBindings } from '../../types/options'
+import { useEffect, useState } from 'react'
 
 export function PIPPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {
   if (tg === undefined) {
@@ -22,14 +24,22 @@ export function PIPPortal ({ tg }: { tg: Element | undefined }): React.ReactNode
  */
 function PIPButton (): React.ReactNode {
   const clickHandler = (): void => { void makeVideoPIP() }
-  useShortcut(['p', 'P', 'ㅔ'], clickHandler)
+  const [key, setKey] = useState<string>('')
+
+  useEffect(() => {
+    getKeyBindings()
+      .then((k) => { setKey(k.pip) })
+      .catch(console.error)
+  }, [])
+
+  useShortcut(key, clickHandler)
 
   return (
     <button
       onClick={clickHandler}
       className='pzp-button pzp-pc-setting-button pzp-pc__setting-button pzp-pc-ui-button'
     >
-      <span className='pzp-pc-ui-button__tooltip pzp-pc-ui-button__tooltip--top'>PIP (P)</span>
+      <span className='pzp-pc-ui-button__tooltip pzp-pc-ui-button__tooltip--top'>PIP ({key})</span>
       <span className='pzp-ui-icon pzp-pc-setting-button__icon'>
         <PIPIcon />
       </span>
