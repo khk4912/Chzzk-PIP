@@ -1,9 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import { getOption, setOption, type DEFAULT_OPTIONS } from '../../../types/options'
+import { getKeyBindings, type KeyBindings, setKeyBindings } from '../../../types/options'
 import style from './ShortcutOptionModal.module.css'
-import { get } from 'http'
+import { useModal } from './Modal'
 
-export function ShortcutOptionModal ({ closeModal }: { closeModal: () => void }): React.ReactNode {
+const sanitizeKey = (key: string): string => {
+  if (key.length === 1) {
+    return key.toUpperCase()
+  }
+
+  return key
+}
+
+export function ShortcutOptionModal (): React.ReactNode {
+  const { closeModal } = useModal()
+
+  // Refresh when the option is changed
+
   return (
     <div className={style.modalWrapper} onClick={closeModal}>
       <div className={style.modalContent}>
@@ -14,16 +26,45 @@ export function ShortcutOptionModal ({ closeModal }: { closeModal: () => void })
   )
 }
 
-function ShortcutKey ({ keyName, optionID }: { keyName: string, optionID: keyof typeof DEFAULT_OPTIONS['keyBind'] }): React.ReactNode {
+export function KeyPendingModal ({ optionID }: { optionID: keyof KeyBindings }): React.ReactNode {
+  const { closeModal } = useModal()
+
+  useEffect(() => {
+    const listener = (e: KeyboardEvent): void => {
+      setKeyBindings(optionID, sanitizeKey(e.key))
+        .catch(console.error)
+        .finally(() => { closeModal() })
+    }
+
+    document.addEventListener('keydown', listener, { once: true })
+
+    return () => {
+      document.removeEventListener('keydown', listener)
+    }
+  }, [optionID, closeModal])
+
+  return (
+    <div className={style.modalWrapper}>
+      <div className={style.modalContent}>
+        <div className={style.pendingMessage}>
+          새로운 키를 눌러주세요...
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ShortcutKey ({ keyName, optionID }: { keyName: string, optionID: keyof KeyBindings }): React.ReactNode {
   const [key, setKey] = useState<string>('')
 
   useEffect(() => {
-    void (async () => {
-      const { keyBind } = await getOption()
-
-      setKey(keyBind[optionID])
-    })()
-  }, [])
+    getKeyBindings()
+      .then(
+        (keyBind) => {
+          setKey(keyBind[optionID])
+        })
+      .catch(console.error)
+  })
 
   return (
     <div className={style.shortcutItem} onClick={(e) => { e.stopPropagation() }}>
@@ -36,21 +77,20 @@ function ShortcutKey ({ keyName, optionID }: { keyName: string, optionID: keyof 
   )
 }
 
-function ShortcutSetButton ({ optionID }: { optionID: keyof typeof DEFAULT_OPTIONS['keyBind'] }): React.ReactNode {
-  // ASYNC
+function ShortcutSetButton ({ optionID }: { optionID: keyof KeyBindings }): React.ReactNode {
+  const { openModal } = useModal()
   const onClick = (): void => {
-    document.addEventListener('keydown', (e) => {
-      const key = e.key
-      void (async () => {
-        const { keyBind } = await getOption()
-
-        keyBind[optionID] = key
-        await setOption('keyBind', keyBind)
-      })()
-    }, { once: true })
+    openModal(<KeyPendingModal optionID={optionID} key={`${optionID}_pending`} />)
   }
 
   return (
-    <button className={style.setButton} onClick={onClick}>변경</button>
+    <button
+      className={style.setButton} onClick={(e) => {
+        e.stopPropagation()
+        onClick()
+      }}
+    >
+      설정
+    </button>
   )
 }

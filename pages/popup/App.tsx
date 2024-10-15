@@ -4,7 +4,7 @@ import Option from './components/Option'
 import './style.css'
 import { Collapsable } from './components/Collapsable'
 import { ResetButton } from './components/ResetButton'
-import { Modal, ModalProvider, useModal } from './components/Modal'
+import { Modal, ModalProvider } from './components/Modal'
 import { ShortcutOptionButton } from './components/ShortcutOptionButton'
 
 export default function App (): React.ReactNode {

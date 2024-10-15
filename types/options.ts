@@ -11,10 +11,6 @@ interface BooleanOptions {
 
 export interface OtherOptions {
   videoBitsPerSecond?: number
-  keyBind?: {
-    rec?: string
-    screenshot?: string
-  }
 }
 
 export interface Option extends BooleanOptions, OtherOptions { }
@@ -27,11 +23,19 @@ export const DEFAULT_OPTIONS: Required<Option> = {
   screenshotPreview: true,
   highFrameRateRec: false,
   preferMP4: false,
-  videoBitsPerSecond: 8000000,
-  keyBind: {
-    rec: 'r',
-    screenshot: 's'
-  }
+  videoBitsPerSecond: 8000000
+}
+
+export interface KeyBindings {
+  rec?: string
+  screenshot?: string
+  pip?: string
+}
+
+export const DEFAULT_KEYBINDINGS: Required<KeyBindings> = {
+  rec: 'R',
+  screenshot: 'S',
+  pip: 'P'
 }
 
 export const getOption = async (): Promise<Required<Option>> => {
@@ -53,4 +57,25 @@ export const setOption = async <T extends keyof Option>(option: T, value: NonNul
   options[option] = value
 
   await chrome.storage.local.set({ option: options })
+}
+
+export const getKeyBindings = async (): Promise<Required<KeyBindings>> => {
+  const keyBindings: KeyBindings = (await chrome.storage.local.get('keyBindings'))?.keyBindings ?? {}
+  const result = { ...DEFAULT_KEYBINDINGS }
+
+  for (const key in keyBindings) {
+    if (key in DEFAULT_KEYBINDINGS) {
+      const k = key as keyof KeyBindings
+      Object.assign(result, { [k]: keyBindings[k] })
+    }
+  }
+
+  return result
+}
+
+export const setKeyBindings = async <T extends keyof KeyBindings>(key: T, value: NonNullable<KeyBindings[T]>): Promise<void> => {
+  const keyBindings = (await chrome.storage.local.get('keyBindings'))?.keyBindings ?? {}
+  keyBindings[key] = value
+
+  await chrome.storage.local.set({ keyBindings })
 }

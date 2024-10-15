@@ -3,10 +3,10 @@ import style from './ResetButton.module.css'
 import { ShortcutOptionModal } from './ShortcutOptionModal'
 
 export function ShortcutOptionButton (): React.ReactNode {
-  const { openModal, closeModal } = useModal()
+  const { openModal } = useModal()
 
   const onClick = (): void => {
-    openModal(<ShortcutOptionModal closeModal={closeModal} />)
+    openModal(<ShortcutOptionModal key={0} />)
   }
 
   return (
