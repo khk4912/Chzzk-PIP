@@ -28,6 +28,7 @@ export function ShortcutOptionModal (): React.ReactNode {
       <div className={style.modalContent}>
         <ShortcutKey keyName='녹화' optionID='rec' />
         <ShortcutKey keyName='스크린샷' optionID='screenshot' />
+        <ShortcutKey keyName='PIP' optionID='pip' />
       </div>
     </div>
   )
