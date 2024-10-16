@@ -38,8 +38,6 @@ export const koreanToEnglish = {
 export function useShortcut (key: string | string[], callback: () => void): void {
   useEffect(() => {
     const listener = (event: KeyboardEvent): void => {
-      event.stopPropagation()
-
       const activeElement = document.activeElement
       let eventKey = event.key
 
