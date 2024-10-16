@@ -1,6 +1,6 @@
 {
   "name": "Chzzk-PIP",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "치지직에 녹화, 스크린샷 등 다양한 기능을 추가합니다.",
   "manifest_version": 3,
   "action": {
