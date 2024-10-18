@@ -8,12 +8,6 @@ import { RecordOverlayPortal } from './rec_overlay'
 import { getKeyBindings, getOption } from '../../types/options'
 import { sanitizeFileName } from '../utils/record/save'
 
-const checkIsLive = (): boolean => {
-  const guideButton = document.querySelector('[class^="player_guide_button"')
-
-  return guideButton === null
-}
-
 export function RecordPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {
   if (tg === undefined) {
     return null
@@ -100,13 +94,11 @@ function RecordButton (): React.ReactNode {
 
   const recorder = useRef<MediaRecorder>() // 녹화에 사용된 MediaRecorder
   const canvasInterval = useRef<number>() // 고프레임 녹화에 사용된 canvas interval
-  const liveCheckingInterval = useRef<number>() // 스트림 라이브 여부를 확인하고 방송이 종료되었을 경우 녹화 중지를 위한 interval
 
   useEffect(() => {
     return () => {
       if (isRecording) {
         window.clearInterval(canvasInterval.current)
-        window.clearInterval(liveCheckingInterval.current)
 
         void _stopRecord(recorder, fastRec.current)
       }
@@ -135,6 +127,11 @@ function RecordButton (): React.ReactNode {
     const video: HTMLVideoElement | null = document.querySelector('.webplayer-internal-video')
     if (video === null) {
       return
+    }
+
+    // 방송 종료 시 자동 녹화 종료
+    video.onended = () => {
+      setIsRecording(false)
     }
 
     if (video.muted) {
@@ -166,18 +163,6 @@ function RecordButton (): React.ReactNode {
         recorder.current = _recorder
       }
 
-      // 방송 종료 여부 확인
-
-      liveCheckingInterval.current =
-         window.setInterval(() => {
-           if (!checkIsLive()) {
-             void _stopRecord(recorder, fastRec.current)
-
-             window.clearInterval(liveCheckingInterval.current)
-             window.clearInterval(canvasInterval.current)
-           }
-         }, 3000)
-
       return
     }
 
@@ -188,7 +173,6 @@ function RecordButton (): React.ReactNode {
       }
       clearInterval(canvasInterval.current) // 고프레임 녹화 canvas interval 제거
     }
-    clearInterval(liveCheckingInterval.current) // 방송 종료 확인 interval 제거
     await _stopRecord(recorder, fastRec.current)
   }
 
