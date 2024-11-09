@@ -70,3 +70,21 @@
 
   font-size: smaller;
 }
+
+.pending-message {
+  display: grid;
+  text-align: center;
+
+  & .header {
+    font-size: 1.3em;
+    font-weight: 600;
+  }
+
+  & .text {
+    margin-top: 0.5em;
+    word-break: keep-all;
+    font-weight: 500;
+    font-size: smaller;
+    color: var(--chzzk-gray);
+  }
+}

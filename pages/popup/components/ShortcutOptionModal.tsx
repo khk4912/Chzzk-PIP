@@ -55,7 +55,8 @@ export function KeyPendingModal ({ optionID }: { optionID: keyof KeyBindings }):
     <div className={style.modalWrapper}>
       <div className={style.modalContent}>
         <div className={style.pendingMessage}>
-          새로운 키를 눌러주세요...
+          <span className={style.header}>새로운 키를 눌러주세요!</span>
+          <span className={style.text}>치지직 기본 단축키와 중복되도록 설정할 경우, 충돌이 발생할 가능성이 있으니 주의하세요.</span>
         </div>
       </div>
     </div>
