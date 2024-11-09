@@ -40,6 +40,10 @@ export default function App (): React.ReactNode {
           <Option.Header title='PIP' desc='방송 화면에 PIP 버튼을 추가합니다.' />
           <Option.CheckButton optionID='pip' />
         </Option>
+        <Option>
+          <Option.Header title='최대 해상도 선호' desc='스트림의 해상도를 자동으로 최고화질로 적용합니다.' />
+          <Option.CheckButton optionID='preferHQ' />
+        </Option>
         <Collapsable
           title='고급 옵션'
           desc='확장 프로그램의 작동 방식에 큰 변화를 주는 옵션들입니다.

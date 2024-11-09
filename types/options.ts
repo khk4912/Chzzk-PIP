@@ -7,6 +7,7 @@ interface BooleanOptions {
   screenshotPreview?: boolean
   highFrameRateRec?: boolean
   preferMP4?: boolean
+  preferHQ?: boolean
 }
 
 export interface OtherOptions {
@@ -23,7 +24,8 @@ export const DEFAULT_OPTIONS: Required<Option> = {
   screenshotPreview: true,
   highFrameRateRec: false,
   preferMP4: false,
-  videoBitsPerSecond: 8000000
+  videoBitsPerSecond: 8000000,
+  preferHQ: false
 }
 
 export interface KeyBindings {

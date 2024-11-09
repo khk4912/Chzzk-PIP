@@ -10,6 +10,7 @@ import { ScreenShotPortal } from './components/screenshot_button'
 import { SeekPortal } from './components/seek'
 import { DownloadPortal } from './components/download_button'
 import { isClipPage, isVODPage } from './utils/download/download'
+import { setMaxHQ } from './utils/max_hq'
 
 /**
  * InjectButtons component
@@ -40,6 +41,15 @@ export function InjectButtons (): React.ReactNode {
         .catch(console.error)
     }
   }, [target])
+
+  // Inject preferHQ
+  useEffect(() => {
+    setTimeout(() => {
+      if ((options?.preferHQ) ?? false) {
+        void setMaxHQ()
+      }
+    }, 1000)
+  }, [options?.preferHQ])
 
   return (
     <>
