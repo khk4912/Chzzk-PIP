@@ -3,13 +3,20 @@ import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
-import love from 'eslint-config-love'
+import neostandard from 'neostandard'
 
 export default tseslint.config(
+  ...neostandard({
+    ignores: ['dist', 'Chzzk-PIP-*', 'public/**/*'],
+    filesTs: ['**/*.{ts,tsx}'],
+    ts: true
+  }),
   { ignores: ['dist', 'Chzzk-PIP-*'] },
   {
-    ...love,
-    extends: [js.configs.recommended, ...tseslint.configs.recommendedTypeChecked],
+    extends: [
+      js.configs.recommended,
+      ...tseslint.configs.recommendedTypeChecked
+    ],
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2020,
