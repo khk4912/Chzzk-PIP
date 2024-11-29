@@ -48,13 +48,14 @@ function DownloadVODModal ({ playbackURLs, setState }: { playbackURLs: PlayBackU
     const fileName = sanitizeFileName(`${streamInfo.streamTitle}.mp4`)
 
     // TODO: 다운로드 처리
-    void chrome.runtime.sendMessage({
+    chrome.runtime.sendMessage({
       type: 'download',
       data: {
         url,
         fileName
       }
     } satisfies DownloadMessage)
+      .catch(console.info)
 
     setState(false)
   }

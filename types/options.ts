@@ -8,6 +8,7 @@ interface BooleanOptions {
   highFrameRateRec?: boolean
   preferMP4?: boolean
   preferHQ?: boolean
+  autoPIP?: boolean
 }
 
 export interface OtherOptions {
@@ -25,7 +26,8 @@ export const DEFAULT_OPTIONS: Required<Option> = {
   highFrameRateRec: false,
   preferMP4: false,
   videoBitsPerSecond: 8000000,
-  preferHQ: false
+  preferHQ: false,
+  autoPIP: true
 }
 
 export interface KeyBindings {
@@ -41,7 +43,7 @@ export const DEFAULT_KEYBINDINGS: Required<KeyBindings> = {
 }
 
 export const getOption = async (): Promise<Required<Option>> => {
-  const option: Option = (await chrome.storage.local.get('option'))?.option ?? {}
+  const option = ((await chrome.storage.local.get('option'))?.option ?? {}) as Option
   const result = { ...DEFAULT_OPTIONS }
 
   for (const key in option) {
@@ -55,14 +57,14 @@ export const getOption = async (): Promise<Required<Option>> => {
 }
 
 export const setOption = async <T extends keyof Option>(option: T, value: NonNullable<Option[T]>): Promise<void> => {
-  const options = (await chrome.storage.local.get('option'))?.option ?? {}
+  const options = ((await chrome.storage.local.get('option'))?.option ?? {}) as Option
   options[option] = value
 
   await chrome.storage.local.set({ option: options })
 }
 
 export const getKeyBindings = async (): Promise<Required<KeyBindings>> => {
-  const keyBindings: KeyBindings = (await chrome.storage.local.get('keyBindings'))?.keyBindings ?? {}
+  const keyBindings = ((await chrome.storage.local.get('keyBindings'))?.keyBindings ?? {}) as KeyBindings
   const result = { ...DEFAULT_KEYBINDINGS }
 
   for (const key in keyBindings) {
@@ -76,7 +78,7 @@ export const getKeyBindings = async (): Promise<Required<KeyBindings>> => {
 }
 
 export const setKeyBindings = async <T extends keyof KeyBindings>(key: T, value: NonNullable<KeyBindings[T]>): Promise<void> => {
-  const keyBindings = (await chrome.storage.local.get('keyBindings'))?.keyBindings ?? {}
+  const keyBindings = ((await chrome.storage.local.get('keyBindings'))?.keyBindings ?? {}) as KeyBindings
   keyBindings[key] = value
 
   await chrome.storage.local.set({ keyBindings })

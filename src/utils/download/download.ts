@@ -24,7 +24,7 @@ export const isShortsPage = (): boolean => {
  */
 export async function getVideoInfo (videoNumber: number): Promise<VideoInfo> {
   const r = await fetch(`https://api.chzzk.naver.com/service/v2/videos/${videoNumber}`, { credentials: 'include' })
-  const data: Video = await r.json()
+  const data = await r.json() as Video
 
   const videoTitle = data.content.videoTitle
   const inKey = data.content.inKey

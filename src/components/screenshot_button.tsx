@@ -33,7 +33,8 @@ function ScreenshotButton (): React.ReactNode {
       return
     }
 
-    void saveOrPreview(dataURL)
+    saveOrPreview(dataURL)
+      .catch(console.info)
   }
   const [key, setKey] = useState<string>('')
 
@@ -108,6 +109,7 @@ async function saveOrPreview (dataURL: string): Promise<void> {
   if (screenshotPreview) {
     createDraggablePreview(dataURL, title)
   } else {
-    void download(dataURL, sanitizeFileName(title), 'png')
+    download(dataURL, sanitizeFileName(title), 'png')
+      .catch(console.error)
   }
 }

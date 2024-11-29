@@ -56,13 +56,14 @@ function TrimModal (
     setModalState(false)
     setProgressModal(true)
 
-    void trim(ffmpeg, downloadInfo.recordInfo.resultBlobURL, start | 0, end | 0)
+    trim(ffmpeg, downloadInfo.recordInfo.resultBlobURL, start | 0, end | 0)
       .then((url) => {
         const a = document.createElement('a')
         a.href = url
-        a.download = `${downloadInfo.fileName ?? 'title'}_trim_${start | 0}-${end}.mp4` ?? ''
+        a.download = `${downloadInfo.fileName ?? 'title'}_trim_${start | 0}-${end}.mp4`
         a.click()
       })
+      .catch(console.info)
       .finally(() => {
         setProgressModal(false)
         setModalState(false)

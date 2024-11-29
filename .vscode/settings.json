@@ -1,13 +1,6 @@
 {
-  "editor.tabSize": 2,
-
-  "[typescript]": {
-    "editor.defaultFormatter": "standard.vscode-standard"
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "standard.vscode-standard"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "standard.vscode-standard"
-  }
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit",
+        "source.fixAll.ts": "explicit"
+    }
 }

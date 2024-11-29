@@ -31,29 +31,33 @@ export function DownloadButtons (
 
     switch (to) {
       case 'MP4':
-        void toMP4(ffmpeg.current, url)
+        toMP4(ffmpeg.current, url)
           .then((url) => { download(url, 'mp4') })
+          .catch(console.info)
           .finally(
             () => { setProgressModalState(false) }
           )
         break
       case 'MP4-AAC':
-        void toMP4AAC(ffmpeg.current, url)
+        toMP4AAC(ffmpeg.current, url)
           .then((url) => { download(url, 'mp4') })
+          .catch(console.info)
           .finally(
             () => { setProgressModalState(false) }
           )
         break
       case 'GIF':
-        void toGIF(ffmpeg.current, url)
+        toGIF(ffmpeg.current, url)
           .then((url) => { download(url, 'gif') })
+          .catch(console.info)
           .finally(
             () => { setProgressModalState(false) }
           )
         break
       case 'WEBP':
-        void toWEBP(ffmpeg.current, url)
+        toWEBP(ffmpeg.current, url)
           .then((url) => { download(url, 'webp') })
+          .catch(console.info)
           .finally(
             () => { setProgressModalState(false) }
           )

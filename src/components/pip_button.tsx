@@ -23,7 +23,7 @@ export function PIPPortal ({ tg }: { tg: Element | undefined }): React.ReactNode
  * PIP 버튼 컴포넌트입니다.
  */
 function PIPButton (): React.ReactNode {
-  const clickHandler = (): void => { void makeVideoPIP() }
+  const clickHandler = (): void => { makeVideoPIP().catch(console.info) }
   const [key, setKey] = useState<string>('')
 
   useEffect(() => {

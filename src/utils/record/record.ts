@@ -55,7 +55,7 @@ export async function startRecord (video: HTMLVideoElement): Promise<MediaRecord
     streamInfo,
     isMP4
   }
-  recorder.ondataavailable = async (event) => {
+  recorder.ondataavailable = (event) => {
     if (event.data.size === 0) return
 
     if (recorder.recordInfo === undefined) {
@@ -124,7 +124,7 @@ export async function startHighFrameRateRecord (video: HTMLVideoElement): Promis
     }
   )
   videoRecorder.recordInfo = newRecordInfo
-  videoRecorder.ondataavailable = async (event) => {
+  videoRecorder.ondataavailable = (event) => {
     if (event.data.size === 0) return
 
     if (videoRecorder.recordInfo === undefined) {
