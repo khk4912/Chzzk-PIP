@@ -12,7 +12,7 @@ import { sanitizeFileName } from '../record/save'
  */
 export async function getClipInfo (videoID: string): Promise<ContentInfo> {
   const r = await fetch(`https://api.chzzk.naver.com/service/v1/play-info/clip/${videoID}`, { credentials: 'include' })
-  const data: Clip = await r.json()
+  const data = await r.json() as Clip
 
   const contentTitle = data.content.contentTitle
   const inKey = data.content.inKey

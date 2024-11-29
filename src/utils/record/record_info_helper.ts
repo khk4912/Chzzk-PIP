@@ -1,11 +1,19 @@
 import { createContext } from 'react'
 import type { RecordInfo } from '../../../types/record_info'
 
+const isObject = (x: unknown): x is Record<string, unknown> => {
+  return typeof x === 'object' && x !== null
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const checkRecordInfo = (x: any): x is RecordInfo => {
-  return typeof x.startDateTime === 'number' &&
-      typeof x.resultBlobURL === 'string' &&
-      typeof x.streamInfo === 'object'
+  if (!isObject(x)) return false
+
+  return (
+    typeof x.startDateTime === 'number' &&
+    typeof x.resultBlobURL === 'string' &&
+    typeof x.streamInfo === 'object'
+  )
 }
 
 const DEFAULT_RECORD_INFO: RecordInfo = {
@@ -31,7 +39,7 @@ export const getRecordInfo = async (): Promise<RecordInfo> => {
     console.error('recordInfo is corrupted!')
     return DEFAULT_RECORD_INFO
   }
-  const recordInfo = data.recordInfo
+  const recordInfo = data.recordInfo as RecordInfo
 
   // Check if data is RecordInfo
   if (!checkRecordInfo(recordInfo)) {

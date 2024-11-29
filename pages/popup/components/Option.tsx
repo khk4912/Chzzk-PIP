@@ -57,7 +57,8 @@ function CheckButton ({ optionID }: { optionID: Exclude<keyof OptionType, keyof 
       return next
     })
 
-    void setOption(optionID, !(optionContext[optionID] ?? false)).catch(console.error)
+    setOption(optionID, !(optionContext[optionID] ?? false))
+      .catch(console.error)
   }
 
   return (
@@ -110,7 +111,9 @@ function NumberInput ({ optionID, max, min }: { optionID: keyof OtherOptions, ma
 
       return next
     })
-    void setOption(optionID, Number(e.target.value)).catch(console.error)
+
+    setOption(optionID, Number(e.target.value))
+      .catch(console.error)
   }
 
   if (typeof option !== 'number') {

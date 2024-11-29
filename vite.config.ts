@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite'
-import {resolve} from 'path'
+import { resolve } from 'path'
 
 import react from '@vitejs/plugin-react'
 import { crx } from '@crxjs/vite-plugin'
@@ -22,8 +22,8 @@ export default defineConfig({
       localsConvention: 'camelCase'
     }
   },
-  optimizeDeps:{
-    exclude:['@ffmpeg/ffmpeg']
+  optimizeDeps: {
+    exclude: ['@ffmpeg/ffmpeg']
   },
   server: {
     port: 5173,

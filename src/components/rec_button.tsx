@@ -49,7 +49,7 @@ async function _stopRecord (
     video.preload = 'metadata'
 
     video.onloadedmetadata = () => {
-      void (async (): Promise<void> => {
+      (async (): Promise<void> => {
         let duration: number = 0
 
         video.currentTime = Number.MAX_SAFE_INTEGER
@@ -74,6 +74,7 @@ async function _stopRecord (
 
         URL.revokeObjectURL(info.resultBlobURL)
       })()
+        .catch(console.error)
     }
     return
   }
@@ -100,17 +101,19 @@ function RecordButton (): React.ReactNode {
       if (isRecording) {
         window.clearInterval(canvasInterval.current)
 
-        void _stopRecord(recorder, fastRec.current)
+        _stopRecord(recorder, fastRec.current)
+          .catch(console.error)
       }
     }
   }, [isRecording, fastRec])
 
   useEffect(() => {
-    void getOption()
+    getOption()
       .then((opt) => {
         fastRec.current = opt.fastRec
         highFrameRateRec.current = opt.highFrameRateRec
       })
+      .catch(console.error)
   }, [])
 
   const [key, setKey] = useState<string>('')
@@ -121,7 +124,7 @@ function RecordButton (): React.ReactNode {
       .catch(console.error)
   }, [])
 
-  useShortcut(key, () => { void clickHandler() })
+  useShortcut(key, () => { clickHandler().catch(console.error) })
 
   const clickHandler = async (): Promise<void> => {
     const video: HTMLVideoElement | null = document.querySelector('.webplayer-internal-video')
@@ -179,8 +182,8 @@ function RecordButton (): React.ReactNode {
   return (
     <>
       <button
-        className='pzp-button pzp-setting-button pzp-pc-setting-button pzp-pc__setting-button chzzk-record-button'
-        onClick={() => { void clickHandler() }}
+        className='pzp-button pzp-pc-setting-button pzp-pc__setting-button pzp-pc-ui-button chzzk-record-button'
+        onClick={() => { clickHandler().catch(console.error) }}
       >
         <span className='pzp-button__tooltip pzp-button__tooltip--top'>
           {isRecording ? '녹화 중지' : '녹화'} ({key})

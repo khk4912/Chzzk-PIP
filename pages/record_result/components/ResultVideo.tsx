@@ -45,7 +45,7 @@ export function ResultVideo ({ setDownloadInfo }: { setDownloadInfo: React.Dispa
       preload='metadata'
       src={recordInfo?.resultBlobURL}
       controls muted
-      onLoadedMetadata={() => { void onLoadedMetadataHandler() }}
+      onLoadedMetadata={() => { onLoadedMetadataHandler().catch(console.log) }}
     />
   )
 }

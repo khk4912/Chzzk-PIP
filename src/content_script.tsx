@@ -1,8 +1,8 @@
 import { injectButton, injectShortsDownloadButton } from './inject_btn'
 
-async function main (): Promise<void> {
-  void injectButton()
-  void injectShortsDownloadButton()
+function main () {
+  injectButton().catch(console.error)
+  injectShortsDownloadButton().catch(console.error)
 }
 
-void main().catch(console.error)
+main()

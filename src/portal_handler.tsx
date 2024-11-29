@@ -52,7 +52,8 @@ export function InjectButtons (): React.ReactNode {
   useEffect(() => {
     setTimeout(() => {
       if ((options?.preferHQ) ?? false) {
-        void setMaxHQ()
+        setMaxHQ()
+          .catch(console.info)
       }
     }, 1000)
   }, [options?.preferHQ])

@@ -55,7 +55,7 @@ function SegmentizeModal (
     setModalState(false)
     setProgressModal(true)
 
-    void segmentize(ffmpeg, downloadInfo.recordInfo.resultBlobURL, x | 0)
+    segmentize(ffmpeg, downloadInfo.recordInfo.resultBlobURL, x | 0)
       .then(
         (urls) => {
           urls.forEach((url, i) => {
@@ -66,6 +66,7 @@ function SegmentizeModal (
           })
         }
       )
+      .catch(console.info)
       .finally(() => {
         setProgressModal(false)
         setModalState(false)
