@@ -5,9 +5,10 @@ chrome.runtime.onMessage.addListener((request: MessageType) => {
   if (request.type === 'download') {
     const msg = request as DownloadMessage
 
-    void chrome.downloads.download({
+    chrome.downloads.download({
       url: msg.data.url,
       filename: msg.data.fileName
     })
+      .catch(console.error)
   }
 })
