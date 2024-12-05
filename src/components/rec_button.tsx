@@ -95,11 +95,13 @@ function RecordButton (): React.ReactNode {
 
   const recorder = useRef<MediaRecorder>() // 녹화에 사용된 MediaRecorder
   const canvasInterval = useRef<number>() // 고프레임 녹화에 사용된 canvas interval
+  const sizeCheckInterval = useRef<number>() // 영상의 크기를 확인하여, 일정 크기 이상일 경우 녹화 중지
 
   useEffect(() => {
     return () => {
       if (isRecording) {
         window.clearInterval(canvasInterval.current)
+        window.clearInterval(sizeCheckInterval.current)
 
         _stopRecord(recorder, fastRec.current)
           .catch(console.error)
@@ -166,6 +168,17 @@ function RecordButton (): React.ReactNode {
         recorder.current = _recorder
       }
 
+      // 파일 크기 체크를 위해 주기적으로 MeidaRecorder.requestData를 호출하는 interval
+      const sizeCheck = window.setInterval(
+        () => {
+          if (recorder.current === undefined) {
+            return
+          }
+          console.log('[Chzzk-PIP] Calling requestData')
+          recorder.current.requestData()
+        }, 1000)
+      sizeCheckInterval.current = sizeCheck
+
       return
     }
 
@@ -176,6 +189,7 @@ function RecordButton (): React.ReactNode {
       }
       clearInterval(canvasInterval.current) // 고프레임 녹화 canvas interval 제거
     }
+    window.clearInterval(sizeCheckInterval.current) // 파일 크기 체크 interval 제거
     await _stopRecord(recorder, fastRec.current)
   }
 
