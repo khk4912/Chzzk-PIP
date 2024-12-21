@@ -47,10 +47,10 @@ function ScreenshotButton (): React.ReactNode {
 
   return (
     <button
-      className='pzp-button pzp-pc-setting-button pzp-pc__setting-button pzp-pc-ui-button chzzk-screenshot-button'
+      className='pzp-button pzp-setting-button pzp-pc-setting-button pzp-pc__setting-button chzzk-screenshot-button'
       onClick={clickHandler}
     >
-      <span className='pzp-pc-ui-button__tooltip pzp-pc-ui-button__tooltip--top'>스크린샷 ({key})</span>
+      <span className='pzp-button__tooltip pzp-button__tooltip--top'>스크린샷 ({key})</span>
       <span className='pzp-ui-icon pzp-pc-setting-button__icon'>
         <ScreenshotIcon />
       </span>

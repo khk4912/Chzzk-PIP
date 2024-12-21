@@ -179,10 +179,10 @@ function RecordButton (): React.ReactNode {
   return (
     <>
       <button
-        className='pzp-button pzp-pc-setting-button pzp-pc__setting-button pzp-pc-ui-button chzzk-record-button'
+        className='pzp-button pzp-setting-button pzp-pc-setting-button pzp-pc__setting-button chzzk-record-button'
         onClick={() => { void clickHandler() }}
       >
-        <span className='pzp-pc-ui-button__tooltip pzp-pc-ui-button__tooltip--top'>
+        <span className='pzp-button__tooltip pzp-button__tooltip--top'>
           {isRecording ? '녹화 중지' : '녹화'} ({key})
         </span>
         <span className='pzp-ui-icon pzp-pc-setting-button__icon'>

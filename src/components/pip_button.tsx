@@ -37,9 +37,9 @@ function PIPButton (): React.ReactNode {
   return (
     <button
       onClick={clickHandler}
-      className='pzp-button pzp-pc-setting-button pzp-pc__setting-button pzp-pc-ui-button'
+      className='pzp-button pzp-setting-button pzp-pc-setting-button pzp-pc__setting-button chzzk-pip-button'
     >
-      <span className='pzp-pc-ui-button__tooltip pzp-pc-ui-button__tooltip--top'>PIP ({key})</span>
+      <span className='pzp-button__tooltip pzp-button__tooltip--top'>PIP ({key})</span>
       <span className='pzp-ui-icon pzp-pc-setting-button__icon'>
         <PIPIcon />
       </span>
