@@ -124,6 +124,8 @@ export async function startHighFrameRateRecord (video: HTMLVideoElement): Promis
     }
   )
   videoRecorder.recordInfo = newRecordInfo
+  videoRecorder.blobSize = 0
+
   videoRecorder.ondataavailable = (event) => {
     if (event.data.size === 0) return
 
@@ -131,9 +133,12 @@ export async function startHighFrameRateRecord (video: HTMLVideoElement): Promis
       return
     }
 
-    videoRecorder.recordInfo.resultBlobURL = URL.createObjectURL(event.data)
+    videoRecorder.videoBlob?.push(event.data)
+    if (videoRecorder.blobSize !== undefined) {
+      videoRecorder.blobSize += event.data.size
+    }
   }
-  videoRecorder.start()
+  videoRecorder.start(1000)
   await setRecordInfo(newRecordInfo)
 
   return [videoRecorder, highFrameRateCanvasInteval] as const
@@ -158,6 +163,9 @@ export async function stopRecord (recorder: MediaRecorder): Promise<RecordInfo> 
       }
 
       info.stopDateTime = new Date().getTime()
+
+      const blob = new Blob(recorder.videoBlob, { type: recorder.mimeType })
+      info.resultBlobURL = URL.createObjectURL(blob)
 
       await setRecordInfo(info)
       resolve(null)

@@ -175,7 +175,6 @@ function RecordButton (): React.ReactNode {
             return
           }
           console.log('[Chzzk-PIP] Calling requestData')
-          recorder.current.requestData()
         }, 1000)
       sizeCheckInterval.current = sizeCheck
 
