@@ -34,9 +34,15 @@ export function InjectButtons (): React.ReactNode {
       waitForElement('.pzp-pc__bottom-buttons-right')
         .then(setTarget)
         .then(() => {
-          const script = document.createElement('script')
-          script.src = chrome.runtime.getURL('monkeypatch/seek.js')
-          document.body.appendChild(script)
+          getOption().then(
+            (options) => {
+              if (options.seek) {
+                const script = document.createElement('script')
+                script.src = chrome.runtime.getURL('monkeypatch/seek.js')
+                document.body.appendChild(script)
+              }
+            }
+          ).catch(console.error)
         })
         .catch(console.error)
     }
