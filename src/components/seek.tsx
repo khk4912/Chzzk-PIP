@@ -30,7 +30,7 @@ export function SeekPortal (): React.ReactNode {
   const [target, setTarget] = useState<Element | null>(null)
 
   useEffect(() => {
-    waitForElement('.pzp-pc-command-icon--animate')
+    waitForElement('.pzp-command-icon')
       .then(
         (element) => {
           const div = document.createElement('div')
