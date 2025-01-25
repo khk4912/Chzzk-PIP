@@ -7,7 +7,7 @@
   "module": "ESNext",
   "scripts": {
     "dev": "vite",
-    "build": "vite build:chrome && vite build:firefox",
+    "build": "pnpm build:chrome && pnpm build:firefox",
     "build:chrome": "vite build --config vite.config.ts",
     "build:firefox": "vite build --config vite.config.firefox.ts"
   },
