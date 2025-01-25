@@ -8,6 +8,8 @@ import { RecordOverlayPortal } from './rec_overlay'
 import { getKeyBindings, getOption } from '../../types/options'
 import { sanitizeFileName } from '../utils/record/save'
 
+const isMoz = navigator.userAgent.includes('Firefox')
+
 export function RecordPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {
   if (tg === undefined) {
     return null
@@ -81,6 +83,20 @@ async function _stopRecord (
 
   // '영상 빠른 저장' 미사용시 결과 페이지 표시
   window.open(chrome.runtime.getURL('/pages/record_result/index.html'))
+  setTimeout(() => {
+    if (isMoz) { // Firefox 브라우저에서 녹화 Blob을 메시지로
+      fetch(info.resultBlobURL)
+        .then(res => res.blob())
+        .then(blob => {
+          chrome.runtime.sendMessage({
+            type: 'mozRecordBlob',
+            resultBlob: blob
+          })
+            .catch(console.error)
+        })
+        .catch(console.error)
+    }
+  }, 500)
 }
 
 /**
