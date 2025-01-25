@@ -16,6 +16,7 @@ export const waitForElement = async (querySelector: string): Promise<Element> =>
   })
 }
 
+const isMoz = navigator.userAgent.includes('Firefox')
 /**
  * InjectButtons 컴포넌트를 목표 위치에 주입합니다.
  */
@@ -28,6 +29,33 @@ export async function injectButton (): Promise<void> {
   tg.insertBefore(div, tg.firstChild)
 
   let root = inject(<InjectButtons />, div)
+
+  if (isMoz) {
+    root.unmount()
+    div.remove()
+
+    let oldHref = window.location.href
+    const body = document.querySelector('body') as HTMLElement
+
+    const _observer = new MutationObserver(() => {
+      if (oldHref !== window.location.href) {
+        oldHref = window.location.href
+
+        div = document.createElement('div')
+        div.id = 'chzzk-pip-buttons'
+
+        tg.insertBefore(div, tg.firstChild)
+        root = inject(<InjectButtons />, div)
+      }
+    })
+
+    _observer.observe(body, {
+      childList: true,
+      subtree: true
+    })
+
+    return
+  }
 
   window.navigation?.addEventListener('navigate', () => {
     root.unmount()
