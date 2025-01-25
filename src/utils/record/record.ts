@@ -14,6 +14,8 @@ const getChromeVersion = (): number | false => {
   return (raw != null) ? parseInt(raw[2], 10) : false
 }
 
+const isMoz = navigator.userAgent.includes('Firefox')
+
 /**
  * 녹화 기능에서 MP4로 녹화 여부를 확인합니다.
  * (Chrome 128 이상, video/mp4;codecs=avc1,mp4a.40.2 지원 여부, 사용자 설정)
@@ -36,7 +38,7 @@ const checkMP4 = async (): Promise<boolean> => {
  */
 export async function startRecord (video: HTMLVideoElement): Promise<MediaRecorder | null> {
   const streamInfo = getStreamInfo(document)
-  const stream = video.captureStream()
+  const stream = isMoz ? video.mozCaptureStream() : video.captureStream()
 
   const videoBitsPerSecond = (await getOption()).videoBitsPerSecond
   const isMP4 = await checkMP4()
@@ -44,7 +46,9 @@ export async function startRecord (video: HTMLVideoElement): Promise<MediaRecord
     mimeType:
     isMP4
       ? 'video/mp4;codecs=avc1,mp4a.40.2'
-      : 'video/webm;codecs=avc1',
+      : isMoz
+        ? 'video/webm'
+        : 'video/webm;codecs=avc1',
     videoBitsPerSecond
   })
 
@@ -117,9 +121,12 @@ export async function startHighFrameRateRecord (video: HTMLVideoElement): Promis
   const videoRecorder = new MediaRecorder(
     recordingStream,
     {
-      mimeType: isMP4
-        ? 'video/mp4;codecs=avc1,mp4a.40.2'
-        : 'video/webm;codecs=avc1',
+      mimeType:
+        isMP4
+          ? 'video/mp4;codecs=avc1,mp4a.40.2'
+          : isMoz
+            ? 'video/webm'
+            : 'video/webm;codecs=avc1',
       videoBitsPerSecond
     }
   )
