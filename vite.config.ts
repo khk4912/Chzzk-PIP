@@ -4,18 +4,11 @@ import { resolve } from 'path'
 import react from '@vitejs/plugin-react'
 import { crx } from '@crxjs/vite-plugin'
 import svgr from 'vite-plugin-svgr'
-import zipPack from 'vite-plugin-zip-pack'
 
 import manifest from './manifest.json'
 
 export default defineConfig({
-  plugins: [react(), crx({ manifest }), svgr(), zipPack(
-    {
-      outDir: 'packages',
-      inDir: 'dist',
-      outFileName: `${manifest.name.replaceAll(' ', '-')}-v${manifest.version}.zip`,
-    }
-  )],
+  plugins: [react(), crx({ manifest }), svgr()],
   root: resolve(__dirname, ''),
   build: {
     rollupOptions: {
