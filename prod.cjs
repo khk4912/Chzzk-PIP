@@ -10,6 +10,11 @@ if (!fs.existsSync(path.resolve(__dirname, 'packages'))) {
   fs.mkdirSync(path.resolve(__dirname, 'packages'))
 }
 
+fs.readdirSync(path.resolve(__dirname, 'packages')).forEach((file) => {
+  fs.unlinkSync(path.resolve(__dirname, 'packages', file))
+})
+
+
 const chromeOutput = path.resolve(
   __dirname,
   `packages/${manifest.name}-v${manifest.version}.zip`

@@ -4,11 +4,23 @@ import { resolve } from 'path'
 import react from '@vitejs/plugin-react'
 import { crx } from '@crxjs/vite-plugin'
 import svgr from 'vite-plugin-svgr'
+import zipPack from 'vite-plugin-zip-pack'
 
 import manifest from './manifest.json'
 
+const isWatch = process.argv.includes('--watch')
+
 export default defineConfig({
-  plugins: [react(), crx({ manifest }), svgr()],
+  plugins: [react(), crx({ manifest }), svgr(),
+    isWatch
+      ? null
+      : zipPack(
+        {
+          outDir: 'packages',
+          inDir: 'dist',
+          outFileName: `${manifest.name.replaceAll(' ', '-')}-v${manifest.version}.zip`,
+        }
+      )],
   root: resolve(__dirname, ''),
   build: {
     rollupOptions: {
