@@ -7,11 +7,11 @@ import neostandard from 'neostandard'
 
 export default tseslint.config(
   ...neostandard({
-    ignores: ['dist', 'Chzzk-PIP-*', 'public/**/*'],
+    ignores: ['dist*', 'Chzzk-PIP-*', 'public/**/*'],
     filesTs: ['**/*.{ts,tsx}'],
     ts: true
   }),
-  { ignores: ['dist', 'Chzzk-PIP-*'] },
+  { ignores: ['dist*', 'Chzzk-PIP-*'] },
   {
     extends: [
       js.configs.recommended,
