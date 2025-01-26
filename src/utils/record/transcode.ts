@@ -30,7 +30,7 @@ export function useFFmpeg (videoDur: number): readonly [React.MutableRefObject<F
     ffmpeg.current.load({ ...FFMPEG_OPTION })
       .then(
         () => {
-          // ffmpeg.current.on('log', ({ message }) => { console.log(message) })
+          ffmpeg.current.on('log', ({ message }) => { console.log(message) })
           ffmpeg.current.on('progress', ({ time }) => {
             const val = Math.floor(((time / 1000000) / videoDuration * 100))
 
