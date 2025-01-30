@@ -39,6 +39,9 @@ export async function injectButton (): Promise<void> {
 
     const _observer = new MutationObserver(() => {
       if (oldHref !== window.location.href) {
+        root.unmount()
+        div.remove()
+
         oldHref = window.location.href
 
         div = document.createElement('div')
