@@ -31,9 +31,6 @@ export async function injectButton (): Promise<void> {
   let root = inject(<InjectButtons />, div)
 
   if (isMoz) {
-    root.unmount()
-    div.remove()
-
     let oldHref = window.location.href
     const body = document.querySelector('body') as HTMLElement
 
