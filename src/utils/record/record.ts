@@ -49,7 +49,8 @@ export async function startRecord (video: HTMLVideoElement): Promise<MediaRecord
       : isMoz
         ? 'video/webm;codecs:avc1'
         : 'video/webm;codecs=avc1',
-    videoBitsPerSecond
+    videoBitsPerSecond,
+    audioBitsPerSecond: 128000,
   })
 
   recorder.recordInfo = {
