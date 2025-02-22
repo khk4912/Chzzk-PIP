@@ -71,11 +71,11 @@ export default function App (): React.ReactNode {
               desc='녹화 시 사용할 비트레이트를 설정합니다.
                     단위는 bps(초당 비트)입니다.
 
-                    (기본값: 8000000)'
+                    (기본값: 4000000)'
             />
             <Option.NumberInput
               optionID='videoBitsPerSecond'
-              min={1}
+              min={1000}
               max={25000000}
             />
           </Option>

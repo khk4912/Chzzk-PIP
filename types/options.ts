@@ -25,7 +25,7 @@ export const DEFAULT_OPTIONS: Required<Option> = {
   screenshotPreview: true,
   highFrameRateRec: false,
   preferMP4: false,
-  videoBitsPerSecond: 8000000,
+  videoBitsPerSecond: 4000000,
   preferHQ: false,
   autoPIP: true
 }
