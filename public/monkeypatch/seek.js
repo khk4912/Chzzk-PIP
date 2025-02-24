@@ -16,9 +16,6 @@ async function patchPlayer () {
   config.maxBufferLength = 330
   config.maxBufferSize = 100000000
 
-  config.liveSyncDurationCount = 300
-  config.liveSyncDuration = 300
-
   console.log('[Chzzk-PIP] Monekypatching HLS Config', config)
 }
 
