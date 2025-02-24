@@ -9,6 +9,7 @@ interface BooleanOptions {
   preferMP4?: boolean
   preferHQ?: boolean
   autoPIP?: boolean
+  favorites?: boolean
 }
 
 export interface OtherOptions {
@@ -27,7 +28,8 @@ export const DEFAULT_OPTIONS: Required<Option> = {
   preferMP4: false,
   videoBitsPerSecond: 4000000,
   preferHQ: false,
-  autoPIP: true
+  autoPIP: true,
+  favorites: false
 }
 
 export interface KeyBindings {
@@ -82,4 +84,8 @@ export const setKeyBindings = async <T extends keyof KeyBindings>(key: T, value:
   keyBindings[key] = value
 
   await chrome.storage.local.set({ keyBindings })
+}
+
+export interface FavoritesList {
+  favorites: string[]
 }

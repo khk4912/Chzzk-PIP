@@ -37,6 +37,10 @@ export default function App (): React.ReactNode {
           <Option.CheckButton optionID='screenshotPreview' />
         </Option>
         <Option>
+          <Option.Header title='팔로우 즐겨찾기(베타)' desc='팔로우 중인 스트리머 목록에 항상 상단에 유지시킬 스트리머를 설정합니다.' />
+          <Option.CheckButton optionID='favorites' />
+        </Option>
+        <Option>
           <Option.Header title='PIP' desc='방송 화면에 PIP 버튼을 추가합니다.' />
           <Option.CheckButton optionID='pip' />
         </Option>
