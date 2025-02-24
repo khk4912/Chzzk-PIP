@@ -16,7 +16,9 @@ async function patchPlayer () {
   config.maxBufferLength = 330
   config.maxBufferSize = 100000000
 
-  console.log('[Chzzk-PIP] Monekypatching HLS Config', config)
+  config.liveMaxLatencyDuration = 120
+
+  console.log('[Chzzk-PIP] Updated HLS Config', config)
 }
 
 function getMemoizedState (target, stateName, maxTraversal = 100) {
