@@ -20,13 +20,13 @@ const isMoz = navigator.userAgent.includes('Firefox')
 /**
  * InjectButtons 컴포넌트를 목표 위치에 주입합니다.
  */
-export async function injectButton (): Promise<void> {
-  const tg = await waitForElement('.pzp-pc__bottom-buttons-right') as HTMLElement
+export function injectButton () {
+  // const tg = await waitForElement('.pzp-pc__bottom-buttons-right') as HTMLElement
 
   let div = document.createElement('div')
   div.id = 'chzzk-pip-buttons'
 
-  tg.insertBefore(div, tg.firstChild)
+  document.body.appendChild(div)
 
   let root = inject(<InjectButtons />, div)
 
@@ -44,7 +44,7 @@ export async function injectButton (): Promise<void> {
         div = document.createElement('div')
         div.id = 'chzzk-pip-buttons'
 
-        tg.insertBefore(div, tg.firstChild)
+        document.body.appendChild(div)
         root = inject(<InjectButtons />, div)
       }
     })
@@ -64,7 +64,8 @@ export async function injectButton (): Promise<void> {
     div = document.createElement('div')
     div.id = 'chzzk-pip-buttons'
 
-    tg.insertBefore(div, tg.firstChild)
+    // tg.insertBefore(div, tg.firstChild)
+    document.body.appendChild(div)
     root = inject(<InjectButtons />, div)
   })
 }

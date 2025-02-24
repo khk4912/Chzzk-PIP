@@ -8,6 +8,10 @@ export const isVODPage = (): boolean => {
   return window.location.pathname.startsWith('/video/')
 }
 
+export const isLivePage = (): boolean => {
+  return window.location.pathname.startsWith('/live/')
+}
+
 export const isClipPage = (): boolean => {
   return window.location.pathname.startsWith('/embed/clip/')
 }

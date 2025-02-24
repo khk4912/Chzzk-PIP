@@ -9,8 +9,9 @@ import { RecordPortal } from './components/rec_button'
 import { ScreenShotPortal } from './components/screenshot_button'
 import { SeekPortal } from './components/seek'
 import { DownloadPortal } from './components/download_button'
-import { isClipPage, isVODPage } from './utils/download/download'
+import { isClipPage, isLivePage, isVODPage } from './utils/download/download'
 import { setMaxHQ } from './utils/max_hq'
+import { FavoritesButtonPortal } from './components/FavoriteAddButton'
 
 /**
  * InjectButtons component
@@ -21,6 +22,7 @@ import { setMaxHQ } from './utils/max_hq'
  */
 export function InjectButtons (): React.ReactNode {
   const [target, setTarget] = useState<Element | undefined>(undefined)
+  const [favoriteButtonTarget, setFavoriteButtonTarget] = useState<Element | undefined>(undefined)
   const [options, setOptions] = useState<typeof DEFAULT_OPTIONS>()
 
   useEffect(() => {
@@ -48,6 +50,15 @@ export function InjectButtons (): React.ReactNode {
     }
   }, [target])
 
+  useEffect(() => {
+    if (favoriteButtonTarget === undefined) {
+      waitForElement('button[class*="video_information_alarm"], button[class*="channel_profile_alarm"]')
+        .then(setFavoriteButtonTarget)
+        .catch(console.error)
+    }
+    console.log('set as ', favoriteButtonTarget)
+  }, [favoriteButtonTarget])
+
   // Inject preferHQ
   useEffect(() => {
     setTimeout(() => {
@@ -61,12 +72,15 @@ export function InjectButtons (): React.ReactNode {
   return (
     <>
       {(isVODPage() || isClipPage()) && <DownloadPortal tg={target} />}
-
+      {(options?.favorites) && <FavoritesButtonPortal tg={favoriteButtonTarget} />}
       {((options?.seek) ?? false) && (!(isVODPage() || isClipPage())) && <SeekPortal />}
-      {((options?.pip) ?? false) && <PIPPortal tg={target} />}
-      {((options?.screenshot) ?? false) && !isClipPage() && <ScreenShotPortal tg={target} />}
-      {((options?.rec) ?? false) && <RecordPortal tg={target} />}
 
+      {(isLivePage() || isVODPage()) &&
+        <>
+          {((options?.pip) ?? false) && <PIPPortal tg={target} />}
+          {((options?.screenshot) ?? false) && !isClipPage() && <ScreenShotPortal tg={target} />}
+          {((options?.rec) ?? false) && <RecordPortal tg={target} />}
+        </>}
     </>
   )
 }
