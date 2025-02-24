@@ -87,5 +87,5 @@ export const setKeyBindings = async <T extends keyof KeyBindings>(key: T, value:
 }
 
 export interface FavoritesList {
-  favorites: string[]
+  favorites: Set<string>
 }
