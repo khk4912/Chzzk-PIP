@@ -99,7 +99,6 @@ function FavoritesButton () {
   useEffect(() => {
     const _getFavorites = async () => {
       const favorites = await getFavorites()
-      console.log(favorites)
       setChecked(favorites.has(channelID ?? ''))
     }
 
