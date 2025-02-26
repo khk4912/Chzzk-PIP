@@ -79,11 +79,22 @@ function FavoritesList (): React.ReactElement | null {
   }
 
   useEffect(() => {
+    const storageChanged = (changes: { [key: string]: chrome.storage.StorageChange }, areaName: string) => {
+      if (areaName !== 'local') return
+
+      if (changes.favorites) {
+        fetchFavorites().catch(console.error)
+      }
+    }
+
     fetchFavorites().catch(console.error)
 
-    // 3분마다 즐겨찾기 목록을 갱신
-    const interval = setInterval(() => { fetchFavorites().catch(console.error) }, 180000)
-    return () => clearInterval(interval)
+    // storage change event listener 등록
+    chrome.storage.onChanged.addListener(storageChanged)
+
+    return () => {
+      chrome.storage.onChanged.removeListener(storageChanged)
+    }
   }, [])
 
   useEffect(() => {
@@ -103,7 +114,7 @@ function FavoritesList (): React.ReactElement | null {
   if (favoriteChannels.length === 0) return null
 
   return (
-    <div className={`navigator_wrapper__ruh6f ${isExpanded ? 'navigator_is_expanded__4Q1h9' : ''}`}>
+    <div className={`navigator_wrapper__ruh6f ${isExpanded ? 'navigator_is_expanded__4Q1h9' : ''}`} style={{ paddingBottom: isExpanded ? '5px' : '' }}>
       {isExpanded
         ? (
           <div className='navigator_header__inwmE'>
@@ -152,7 +163,7 @@ function CollapsedChannelItem ({ channel }: { channel: FollowingItem }) {
           <img
             width='26' height='26'
             src={channel.channel.channelImageUrl ?? 'https://ssl.pstatic.net/cmstatic/nng/img/img_anonymous_square_gray_opacity2x.png?type=f120_120_na'}
-            className='navigator_image__T5dSp'
+            className={`navigator_image__T5dSp ${!channel.streamer.openLive ? 'navigator_default__Hk5Qm' : ''}`}
             alt={channel.channel.channelName}
           />
         </div>
