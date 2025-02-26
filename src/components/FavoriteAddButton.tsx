@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import ReactDOM from 'react-dom'
-import { ThemeContextProvider, useThemeContext } from '../utils/theme_context'
+import { useThemeContext } from '../utils/theme_context'
 import { addFavorite, getFavorites, removeFavorite } from '../../types/options'
 
 const StrokeColor = {
@@ -29,32 +29,29 @@ export function FavoritesButtonPortal ({ tg }: { tg: Element | undefined }): Rea
   const div = useMemo(() => {
     const el = document.createElement('div')
     el.id = 'chzzk-pip-favorites-add-button'
-    el.style.paddingRight = '6px'
     return el
   }, [])
 
   useEffect(() => {
-    if (!tg) {
+    if (tg === undefined) {
       return
     }
 
-    tg.parentNode?.insertBefore(div, tg.nextSibling)
-
+    tg.parentNode?.insertBefore(div, tg)
     return () => {
       div.remove()
     }
   }, [tg, div])
 
-  if (!tg) {
+  if (tg === undefined) {
     return null
   }
 
-  return ReactDOM.createPortal(
-    <ThemeContextProvider>
-      <FavoritesButton />
-    </ThemeContextProvider>, div)
+  return ReactDOM.createPortal(<FavoritesButton />, div)
 }
+
 function FavoritesButton () {
+  const [visible, setVisible] = useState(true)
   const [isHover, setIsHover] = useState(false)
   const [checked, setChecked] = useState(false)
   const [toastVisible, setToastVisible] = useState(false)
@@ -70,17 +67,6 @@ function FavoritesButton () {
     setIsHover(false)
   }
 
-  useEffect(() => {
-    const _getFavorites = async () => {
-      const favorites = await getFavorites()
-      console.log(favorites)
-      setChecked(favorites.has(channelID ?? ''))
-    }
-
-    _getFavorites().catch(() => { })
-  }
-  , [channelID])
-
   const handleChange = () => {
     const newChecked = !checked
     setChecked(newChecked)
@@ -94,23 +80,59 @@ function FavoritesButton () {
     }
   }
 
+  useEffect(() => {
+    const button = document.querySelector('[class*="button_capsule"')
+    if (!button) return
+
+    // button의 innerText가 '팔로우'가 되면 visible -> false, '팔로잉'이면 visible -> true
+    const observer = new MutationObserver(() => {
+      setVisible(button.textContent?.startsWith('팔로잉') ?? false)
+    })
+
+    observer.observe(button, { childList: true, subtree: true })
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
+
+  useEffect(() => {
+    const _getFavorites = async () => {
+      const favorites = await getFavorites()
+      console.log(favorites)
+      setChecked(favorites.has(channelID ?? ''))
+    }
+
+    _getFavorites().catch(() => { })
+  }
+  , [channelID])
+
+  useEffect(() => {
+    if (!visible) {
+      setChecked(false)
+      channelID && removeFavorite(channelID).catch(() => { })
+    }
+  }, [visible, channelID])
+
   return (
-    <>
-      <button
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onClick={handleChange}
-        type='button' className='button_container__x044H button_medium__r15mw button_circle__lcf+O button_dark__cw8hT'
-      >
-        <div
-          title='Chzzk-PIP 즐겨찾기' role='img' aria-label='animation'
+    visible &&
+      <>
+        <button
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onClick={handleChange}
+          type='button' className='button_container__x044H button_medium__r15mw button_circle__lcf+O button_dark__cw8hT'
+          style={{ marginRight: '6px' }}
         >
-          <StarIcon fill={StrokeColor[theme]} checked={checked} />
-        </div>
-        {isHover &&
-          <span className='button_label__31nEZ button_top__EerI-'>Chzzk-PIP 즐겨찾기</span>}
-      </button>
-      {toastVisible && <p className='toast_container__6QVkr toast_type_fixed__DfGkX' role='alert'>이 스트리머를 즐겨찾기 리스트에 추가합니다.</p>}
-    </>
+          <div
+            title='Chzzk-PIP 즐겨찾기' role='img' aria-label='animation'
+          >
+            <StarIcon fill={StrokeColor[theme]} checked={checked} />
+          </div>
+          {isHover &&
+            <span className='button_label__31nEZ button_top__EerI-'>Chzzk-PIP 즐겨찾기</span>}
+        </button>
+        {toastVisible && <p className='toast_container__6QVkr toast_type_fixed__DfGkX' role='alert'>이 스트리머를 즐겨찾기 리스트에 추가합니다.</p>}
+      </>
   )
 }
