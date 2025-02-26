@@ -134,7 +134,7 @@ export async function injectShortsDownloadButton (): Promise<void> {
   observer.observe(isCurrent, { childList: true, attributes: true })
 }
 
-function inject (node: React.ReactNode, target: HTMLElement): Root {
+export function inject (node: React.ReactNode, target: HTMLElement): Root {
   const root = createRoot(target)
   root.render(node)
 

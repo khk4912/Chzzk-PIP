@@ -31,6 +31,15 @@ export function InjectButtons (): React.ReactNode {
       .catch(console.error)
   }, [])
 
+  // 즐겨찾기 추가 버튼
+  useEffect(() => {
+    if (favoriteButtonTarget === undefined) {
+      waitForElement('[class*="video_information_follow"], [class*="channel_profile_follow"]')
+        .then(setFavoriteButtonTarget)
+        .catch(console.error)
+    }
+  }, [favoriteButtonTarget])
+
   useEffect(() => {
     if (target === undefined) {
       waitForElement('.pzp-pc__bottom-buttons-right')
@@ -49,15 +58,6 @@ export function InjectButtons (): React.ReactNode {
         .catch(console.error)
     }
   }, [target])
-
-  useEffect(() => {
-    if (favoriteButtonTarget === undefined) {
-      waitForElement('button[class*="video_information_alarm"], button[class*="channel_profile_alarm"]')
-        .then(setFavoriteButtonTarget)
-        .catch(console.error)
-    }
-    console.log('set as ', favoriteButtonTarget)
-  }, [favoriteButtonTarget])
 
   // Inject preferHQ
   useEffect(() => {
