@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { ThemeContextProvider, useThemeContext } from '../utils/theme_context'
+import { addFavorite, getFavorites, removeFavorite } from '../../types/options'
 
 const StrokeColor = {
   dark: 'rgb(223,226,234)',
@@ -58,6 +59,7 @@ function FavoritesButton () {
   const [checked, setChecked] = useState(false)
   const [toastVisible, setToastVisible] = useState(false)
 
+  const channelID = window.location.pathname.split('/').at(-1)
   const theme = useThemeContext()
 
   const handleMouseEnter = () => {
@@ -69,19 +71,35 @@ function FavoritesButton () {
   }
 
   useEffect(() => {
-    if (checked) {
+    const _getFavorites = async () => {
+      const favorites = await getFavorites()
+      console.log(favorites)
+      setChecked(favorites.has(channelID ?? ''))
+    }
+
+    _getFavorites().catch(() => { })
+  }
+  , [channelID])
+
+  const handleChange = () => {
+    const newChecked = !checked
+    setChecked(newChecked)
+
+    if (newChecked) {
+      channelID && addFavorite(channelID).catch(() => { })
       setToastVisible(true)
       setTimeout(() => setToastVisible(false), 2000)
+    } else {
+      channelID && removeFavorite(channelID).catch(() => { })
     }
   }
-  , [checked])
 
   return (
     <>
       <button
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        onClick={() => setChecked(!checked)}
+        onClick={handleChange}
         type='button' className='button_container__x044H button_medium__r15mw button_circle__lcf+O button_dark__cw8hT'
       >
         <div
