@@ -92,13 +92,19 @@ export interface FavoritesList {
 
 export const getFavorites = async (): Promise<Set<string>> => {
   const { favorites } = (await chrome.storage.local.get('favorites')) as FavoritesList
-  return favorites ?? new Set<string>()
+  return favorites ? new Set(favorites) : new Set<string>()
 }
 
 export const addFavorite = async (channel: string): Promise<void> => {
-  // SET
   const favorites = await getFavorites()
   favorites.add(channel)
+
+  await chrome.storage.local.set({ favorites: Array.from(favorites) })
+}
+
+export const removeFavorite = async (channel: string): Promise<void> => {
+  const favorites = await getFavorites()
+  favorites.delete(channel)
 
   await chrome.storage.local.set({ favorites: Array.from(favorites) })
 }
