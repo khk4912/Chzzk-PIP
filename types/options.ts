@@ -89,3 +89,16 @@ export const setKeyBindings = async <T extends keyof KeyBindings>(key: T, value:
 export interface FavoritesList {
   favorites: Set<string>
 }
+
+export const getFavorites = async (): Promise<Set<string>> => {
+  const { favorites } = (await chrome.storage.local.get('favorites')) as FavoritesList
+  return favorites ?? new Set<string>()
+}
+
+export const addFavorite = async (channel: string): Promise<void> => {
+  // SET
+  const favorites = await getFavorites()
+  favorites.add(channel)
+
+  await chrome.storage.local.set({ favorites: Array.from(favorites) })
+}
