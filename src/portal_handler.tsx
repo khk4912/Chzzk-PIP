@@ -34,7 +34,7 @@ export function InjectButtons (): React.ReactNode {
   // 즐겨찾기 추가 버튼
   useEffect(() => {
     if (favoriteButtonTarget === undefined) {
-      waitForElement('[class*="video_information_follow"], [class*="channel_profile_follow"]')
+      waitForElement('[class*="video_information_alarm"], [class*="channel_profile_alarm"]')
         .then(setFavoriteButtonTarget)
         .catch(console.error)
     }
