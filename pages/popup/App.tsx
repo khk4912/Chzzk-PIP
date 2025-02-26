@@ -37,7 +37,11 @@ export default function App (): React.ReactNode {
           <Option.CheckButton optionID='screenshotPreview' />
         </Option>
         <Option>
-          <Option.Header title='팔로우 즐겨찾기(베타)' desc='팔로우 중인 스트리머 목록에 항상 상단에 유지시킬 스트리머를 설정합니다.' />
+          <Option.Header
+            title='팔로우 즐겨찾기(베타)'
+            desc='팔로우 중인 스트리머 중 특정 스트리머를 즐겨찾기 탭에 추가할 수 있습니다.
+                  변경된 목록은 새로고침 후 적용됩니다.'
+          />
           <Option.CheckButton optionID='favorites' />
         </Option>
         <Option>
