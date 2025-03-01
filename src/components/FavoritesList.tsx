@@ -71,7 +71,7 @@ function FavoritesList (): React.ReactElement | null {
       toRemove.forEach(channelId => favorites.delete(channelId))
 
       // openLive 가 true 인 채널을 위로 정렬
-      favoriteChannels.sort((a, b) => (a.streamer.openLive ? -1 : 1))
+      favoriteChannels.sort((a, _) => (a.streamer.openLive ? -1 : 1))
       setFavoriteChannels(favoriteChannels)
     } catch (error) {
       console.error(error)
@@ -95,6 +95,11 @@ function FavoritesList (): React.ReactElement | null {
     return () => {
       chrome.storage.onChanged.removeListener(storageChanged)
     }
+  }, [])
+
+  useEffect(() => {
+    const interval = setInterval(() => { fetchFavorites().catch(console.error) }, 300000)
+    return () => clearInterval(interval)
   }, [])
 
   useEffect(() => {
