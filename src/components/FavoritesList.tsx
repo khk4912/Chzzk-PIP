@@ -79,6 +79,14 @@ function FavoritesList (): React.ReactElement | null {
   }
 
   useEffect(() => {
+    const interval = setInterval(() => { fetchFavorites().catch(console.error) }, 30000)
+
+    return () => {
+      window.clearInterval(interval)
+    }
+  }, [])
+
+  useEffect(() => {
     const storageChanged = (changes: { [key: string]: chrome.storage.StorageChange }, areaName: string) => {
       if (areaName !== 'local') return
 
