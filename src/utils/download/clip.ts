@@ -77,7 +77,7 @@ export async function download (url: string, title: string, ext?: string): Promi
   if (isMoz) {
     const a = document.createElement('a')
     a.href = url
-    a.download = sanitizeFileName(`${title}.${ext ?? 'mp4'}`)
+    a.download = sanitizeFileName(`${title.trim()}.${ext ?? 'mp4'}`)
     a.click()
     return
   }
@@ -87,7 +87,7 @@ export async function download (url: string, title: string, ext?: string): Promi
       type: 'download',
       data: {
         url,
-        fileName: sanitizeFileName(`${title}.${ext ?? 'mp4'}`)
+        fileName: sanitizeFileName(`${title.trim()}.${ext ?? 'mp4'}`)
       }
     } satisfies DownloadMessage
   )
