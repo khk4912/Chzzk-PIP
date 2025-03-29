@@ -8,6 +8,7 @@ import { useRef, useState } from 'react'
 import { segmentize } from '../../../src/utils/record/transcode'
 import type { FFmpeg } from '@ffmpeg/ffmpeg'
 import { ProgressModal } from './ProgressModal'
+import { sanitizeFileName } from '../../../src/utils/record/save'
 
 export function SegmentizeModalPortal ({ setModalState, downloadInfo, ffmpeg, progress }: { setModalState: (x: boolean) => void, downloadInfo: DownloadInfo | undefined, ffmpeg: FFmpeg | undefined, progress: number }): React.ReactNode {
   const segmentModal = document.getElementById('segmentize-modal')
@@ -61,7 +62,7 @@ function SegmentizeModal (
           urls.forEach((url, i) => {
             const a = document.createElement('a')
             a.href = url
-            a.download = `${downloadInfo.fileName ?? 'title'}_${i}.mp4`
+            a.download = sanitizeFileName(`${downloadInfo.fileName ?? 'title'}_${i}.mp4`)
             a.click()
           })
         }

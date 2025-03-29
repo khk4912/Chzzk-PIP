@@ -8,6 +8,7 @@ import { useRef, useState } from 'react'
 import { trim } from '../../../src/utils/record/transcode'
 import type { FFmpeg } from '@ffmpeg/ffmpeg'
 import { ProgressModalPortal } from './ProgressModal'
+import { sanitizeFileName } from '../../../src/utils/record/save'
 
 export function TrimModalPortal ({ setModalState, downloadInfo, ffmpeg, progress }: { setModalState: (x: boolean) => void, downloadInfo: DownloadInfo | undefined, ffmpeg: FFmpeg | undefined, progress: number }): React.ReactNode {
   const trimModal = document.getElementById('trim-modal')
@@ -60,7 +61,7 @@ function TrimModal (
       .then((url) => {
         const a = document.createElement('a')
         a.href = url
-        a.download = `${downloadInfo.fileName ?? 'title'}_trim_${start | 0}-${end}.mp4`
+        a.download = sanitizeFileName(`${downloadInfo.fileName ?? 'title'}_trim_${start | 0}-${end}.mp4`)
         a.click()
       })
       .catch(console.info)

@@ -5,6 +5,7 @@ import { ButtonBase } from './Button'
 import { TrimModalPortal } from './TrimModal'
 import { SegmentizeModalPortal } from './SegmentizeModal'
 import { ProgressModalPortal } from './ProgressModal'
+import { sanitizeFileName } from '../../../src/utils/record/save'
 
 export function DownloadButtons (
   { downloadInfo }:
@@ -75,7 +76,7 @@ export function DownloadButtons (
 
     const a = document.createElement('a')
     a.href = url
-    a.download = title ?? `${downloadInfo?.fileName ?? 'title'}.${ext}`
+    a.download = sanitizeFileName(title ?? `${downloadInfo?.fileName ?? 'title'}.${ext}`)
     a.click()
   }
 
