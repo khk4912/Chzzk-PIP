@@ -29,16 +29,41 @@ export function ClipsDownloadButton (): React.ReactNode {
   const self = useRef<HTMLButtonElement>(null)
 
   return (
-    <button
-      className='si_btn'
-      onClick={onClick}
-      id='downloadBtn'
-      type='button'
-      ref={self}
-    >
-      <span className='si_ico'><DownloadIcon /></span>
-      <span className='si_text'>다운로드</span>
-    </button>
+    <div className='si_btn_wrap'>
+      <button
+        className='si_btn'
+        onClick={onClick}
+        id='downloadBtn'
+        type='button'
+        ref={self}
+      >
+        <span className='si_ico' style={{ position: 'relative' }}>
+          <div style={{
+            position: 'absolute',
+            backgroundColor: 'rgba(255,255,255,.05)',
+            opacity: 0.8,
+            width: '48px',
+            height: '48px',
+            borderRadius: '50%',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, 0%)',
+            zIndex: 0
+          }}
+          />
+          <DownloadIcon style={{
+            width: '55px',
+            height: '55px',
+            marginTop: '5px',
+            opacity: 0.7,
+            position: 'relative',
+            zIndex: 1
+          }}
+          />
+        </span>
+        <span className='si_text'>다운로드</span>
+      </button>
+    </div>
   )
 }
 
