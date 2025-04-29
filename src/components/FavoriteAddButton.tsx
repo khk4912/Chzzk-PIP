@@ -28,7 +28,7 @@ const StarIcon = ({ fill = StrokeColor.dark, checked = false } : { fill?: string
 export function FavoritesButtonPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {
   const div = useMemo(() => {
     const el = document.createElement('div')
-    el.id = 'chzzk-pip-favorites-add-button'
+    el.id = 'cheese-pip-favorites-add-button'
     return el
   }, [])
 
@@ -124,12 +124,12 @@ function FavoritesButton () {
           style={{ marginRight: '6px' }}
         >
           <div
-            title='Chzzk-PIP 즐겨찾기' role='img' aria-label='animation'
+            title='Cheese-PIP 즐겨찾기' role='img' aria-label='animation'
           >
             <StarIcon fill={StrokeColor[theme]} checked={checked} />
           </div>
           {isHover &&
-            <span className='button_label__31nEZ button_top__EerI-'>Chzzk-PIP 즐겨찾기</span>}
+            <span className='button_label__31nEZ button_top__EerI-'>Cheese-PIP 즐겨찾기</span>}
         </button>
         {toastVisible && <p className='toast_container__6QVkr toast_type_fixed__DfGkX' role='alert'>이 스트리머를 즐겨찾기 리스트에 추가합니다.</p>}
       </>

@@ -29,7 +29,7 @@ export function InjectFavoriteList () {
 
 export function injectFavoriteListComponent () {
   const div = document.createElement('div')
-  div.id = 'chzzk-pip-favorites-list-portal'
+  div.id = 'cheese-pip-favorites-list-portal'
   document.body.appendChild(div)
   inject(<InjectFavoriteList />, div)
 }

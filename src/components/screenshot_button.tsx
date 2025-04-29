@@ -5,7 +5,7 @@ import { getKeyBindings, getOption } from '../../types/options'
 import { useShortcut } from '../utils/hooks'
 import { getStreamInfo } from '../utils/stream_info'
 import { createDraggablePreview } from '../utils/screenshot/screenshot_preview'
-import { download } from '../utils/download/clip'
+import { download } from '../utils/download/download'
 import { sanitizeFileName } from '../utils/record/save'
 import { useEffect, useState } from 'react'
 
@@ -15,7 +15,7 @@ export function ScreenShotPortal ({ tg }: { tg: Element | undefined }): React.Re
   }
 
   const div = document.createElement('div')
-  div.id = 'chzzk-pip-screenshot-button'
+  div.id = 'cheese-pip-screenshot-button'
 
   tg.insertBefore(div, tg.firstChild)
   return ReactDOM.createPortal(<ScreenshotButton />, div)

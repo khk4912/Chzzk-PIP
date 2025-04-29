@@ -11,7 +11,7 @@ export function PIPPortal ({ tg }: { tg: Element | undefined }): React.ReactNode
   }
 
   const div = document.createElement('div')
-  div.id = 'chzzk-pip-pip-button'
+  div.id = 'cheese-pip-pip-button'
 
   tg.insertBefore(div, tg.firstChild)
   return ReactDOM.createPortal(<PIPButton />, div)
@@ -37,7 +37,7 @@ function PIPButton (): React.ReactNode {
   return (
     <button
       onClick={clickHandler}
-      className='pzp-button pzp-setting-button pzp-pc-setting-button pzp-pc__setting-button chzzk-pip-button'
+      className='pzp-button pzp-setting-button pzp-pc-setting-button pzp-pc__setting-button cheese-pip-button'
     >
       <span className='pzp-button__tooltip pzp-button__tooltip--top'>PIP ({key})</span>
       <span className='pzp-ui-icon pzp-pc-setting-button__icon'>

@@ -8,7 +8,7 @@ import { PIPPortal } from './components/pip_button'
 import { RecordPortal } from './components/rec_button'
 import { ScreenShotPortal } from './components/screenshot_button'
 import { SeekPortal } from './components/seek'
-import { DownloadPortal } from './components/download_button'
+
 import { isClipPage, isLivePage, isVODPage } from './utils/download/download'
 import { setMaxHQ } from './utils/max_hq'
 import { FavoritesButtonPortal } from './components/FavoriteAddButton'
@@ -16,7 +16,7 @@ import { FavoritesButtonPortal } from './components/FavoriteAddButton'
 /**
  * InjectButtons component
  *
- * Chzzk-PIP 확장에서 추가하는 대부분의 버튼을 주입하는 컴포넌트입니다.
+ * Cheese-PIP 확장에서 추가하는 대부분의 버튼을 주입하는 컴포넌트입니다.
  *
  * @returns 주입될 버튼 컴포넌트
  */
@@ -71,7 +71,7 @@ export function InjectButtons (): React.ReactNode {
 
   return (
     <>
-      {(isVODPage() || isClipPage()) && <DownloadPortal tg={target} />}
+      {/* {(isVODPage() || isClipPage()) && <DownloadPortal tg={target} />} */}
       {(options?.favorites) && <FavoritesButtonPortal tg={favoriteButtonTarget} />}
       {((options?.seek) ?? false) && (!(isVODPage() || isClipPage())) && <SeekPortal />}
 

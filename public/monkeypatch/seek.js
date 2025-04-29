@@ -3,14 +3,14 @@
 
 async function patchPlayer () {
   const player = await getCorePlayer()
-  // console.log('[Chzzk-PIP] Player', player)
+  // console.log('[Cheese-PIP] Player', player)
 
   if (player === null) {
     return
   }
 
   const config = player.player._mediaController._hls.config
-  // console.log('[Chzzk-PIP] Default HLS Config', config)
+  // console.log('[Cheese-PIP] Default HLS Config', config)
 
   config.backBufferLength = 300
   config.maxBufferLength = 330
@@ -18,7 +18,7 @@ async function patchPlayer () {
 
   config.liveMaxLatencyDuration = 120
 
-  console.log('[Chzzk-PIP] Updated HLS Config', config)
+  console.log('[Cheese-PIP] Updated HLS Config', config)
 }
 
 function getMemoizedState (target, stateName, maxTraversal = 100) {

@@ -27,7 +27,7 @@ const getFollowedChannels = async (): Promise<FollowApiResponse> => {
 export function FavoritesListPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {
   const div = useMemo(() => {
     const el = document.createElement('div')
-    el.id = 'chzzk-pip-favorites-list'
+    el.id = 'cheese-pip-favorites-list'
 
     return el
   }, [])

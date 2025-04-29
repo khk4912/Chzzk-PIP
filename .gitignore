@@ -217,7 +217,7 @@ build
 deploy.py
 
 Chzzk-*
-!chzzk-pip.d.ts
+!cheese-pip.d.ts
 
 vendors
 .idea

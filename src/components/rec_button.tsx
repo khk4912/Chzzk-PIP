@@ -16,7 +16,7 @@ export function RecordPortal ({ tg }: { tg: Element | undefined }): React.ReactN
   }
 
   const div = document.createElement('div')
-  div.id = 'chzzk-pip-rec-button'
+  div.id = 'cheese-pip-rec-button'
 
   tg.insertBefore(div, tg.firstChild)
   return ReactDOM.createPortal(<RecordButton />, div)
