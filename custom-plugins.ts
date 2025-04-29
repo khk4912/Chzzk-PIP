@@ -2,11 +2,11 @@ import { Plugin } from 'vite'
 import { promises as fs } from 'fs'
 import { resolve } from 'path'
 
-export function rmDotVite (): Plugin {
+export function rmDotVite ({ firefox = false } : { firefox?: boolean }): Plugin {
   return {
     name: 'rm-dot-vite',
     async buildEnd () {
-      const buildDir = resolve(__dirname, '../dist-firefox')
+      const buildDir = resolve(__dirname, firefox ? '../dist-firefox' : 'dist')
       const dotViteDir = resolve(buildDir, '.vite')
 
       try {

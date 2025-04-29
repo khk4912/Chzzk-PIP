@@ -12,7 +12,7 @@ import zipPack from 'vite-plugin-zip-pack'
 const isWatch = process.argv.includes('--watch')
 
 export default defineConfig({
-  plugins: [react(), crx({ manifest, browser: 'firefox' }), svgr(), rmDotVite(),
+  plugins: [react(), crx({ manifest, browser: 'firefox' }), svgr(), rmDotVite({ firefox: true }),
     isWatch
       ? null
       : zipPack(

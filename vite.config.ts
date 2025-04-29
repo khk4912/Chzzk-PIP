@@ -7,11 +7,12 @@ import svgr from 'vite-plugin-svgr'
 import zipPack from 'vite-plugin-zip-pack'
 
 import manifest from './manifest.json'
+import { rmDotVite } from './custom-plugins'
 
 const isWatch = process.argv.includes('--watch')
 
 export default defineConfig({
-  plugins: [react(), crx({ manifest }), svgr(),
+  plugins: [react(), crx({ manifest }), svgr(), rmDotVite({ firefox: false }),
     isWatch
       ? null
       : zipPack(
