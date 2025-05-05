@@ -1,17 +1,14 @@
 {
   "name": "cheese-pip",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "description": "",
   "main": "index.js",
   "type": "module",
   "module": "ESNext",
   "scripts": {
-    "dev": "vite",
-    "postinstall": "pnpm wxt prepare",
-    "build": "pnpm build:chrome && pnpm build:firefox",
-    "build:chrome": "vite build --config vite.config.ts",
-    "build:firefox": "vite build --config vite.config.firefox.ts",
-    "release": "vite build --mode release && vite build --mode release --config vite.config.firefox.ts"
+    "dev": "pnpm wxt",
+    "build": "pnpm wxt build --mode production",
+    "postinstall": "pnpm wxt prepare"
   },
   "keywords": [],
   "author": "",
