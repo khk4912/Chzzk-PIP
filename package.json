@@ -36,7 +36,8 @@
     "typescript-eslint": "^8.31.1",
     "vite": "^6.3.4",
     "vite-plugin-svgr": "^4.3.0",
-    "vite-plugin-zip-pack": "^1.2.4"
+    "vite-plugin-zip-pack": "^1.2.4",
+    "wxt": "^0.20.6"
   },
   "dependencies": {
     "@ffmpeg/ffmpeg": "^0.12.15",
