@@ -223,3 +223,6 @@ vendors
 .idea
 dist-firefox
 packages
+
+.output
+.wxt
