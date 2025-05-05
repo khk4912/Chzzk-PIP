@@ -16,13 +16,13 @@ export default defineConfig({
     isWatch
       ? null
       : zipPack(
-        {
-          outDir: 'packages',
-          inDir: 'dist-firefox',
-          outFileName: `${manifest.name.replaceAll(' ', '-')}-v${manifest.version}-Firefox.zip`,
-        }
+          {
+            outDir: 'packages',
+            inDir: 'dist-firefox',
+            outFileName: `${manifest.name.replaceAll(' ', '-')}-v${manifest.version}-Firefox.zip`,
+          }
 
-      )],
+        )],
   root: resolve(__dirname, ''),
   build: {
     outDir: resolve(__dirname, 'dist-firefox'),

@@ -16,12 +16,12 @@ export default defineConfig({
     isWatch
       ? null
       : zipPack(
-        {
-          outDir: 'packages',
-          inDir: 'dist',
-          outFileName: `${manifest.name.replaceAll(' ', '-')}-v${manifest.version}.zip`,
-        }
-      )],
+          {
+            outDir: 'packages',
+            inDir: 'dist',
+            outFileName: `${manifest.name.replaceAll(' ', '-')}-v${manifest.version}.zip`,
+          }
+        )],
   root: resolve(__dirname, ''),
   build: {
     rollupOptions: {
