@@ -7,7 +7,7 @@ interface ImportMetaEnv {
   readonly SAFARI: boolean;
   readonly EDGE: boolean;
   readonly OPERA: boolean;
-  readonly COMMAND: "build" | "serve";
+  readonly COMMAND: 'build' | 'serve';
   readonly ENTRYPOINT: string;
 }
 interface ImportMeta {

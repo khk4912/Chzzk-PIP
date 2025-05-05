@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 
-import RecIcon from '../../static/rec.svg?react'
+import RecIcon from '../static/rec.svg?react'
 import { useShortcut } from '../utils/hooks'
-import { startHighFrameRateRecord, startRecord, stopRecord } from '../utils/record/record'
+
 import { RecordOverlayPortal } from './rec_overlay'
-import { getKeyBindings, getOption } from '../../types/options'
-import { sanitizeFileName } from '../utils/record/save'
+import { getKeyBindings, getOption } from '../types/options'
 
 const isMoz = navigator.userAgent.includes('Firefox')
 

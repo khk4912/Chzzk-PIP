@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from 'react'
 import style from './OptionView.module.css'
-import { type Option as OptionType, DEFAULT_OPTIONS, getOption } from '../../../../types/options'
+import { type Option as OptionType, DEFAULT_OPTIONS, getOption } from '../../../types/options'
 
 type Context<T> = [T, React.Dispatch<React.SetStateAction<T>>]
 export const OptionContext = createContext < Context < OptionType>>([DEFAULT_OPTIONS, () => {}])

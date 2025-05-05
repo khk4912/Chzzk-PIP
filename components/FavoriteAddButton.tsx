@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import ReactDOM from 'react-dom'
-import { addFavorite, getFavorites, removeFavorite } from '../../types/options'
+import { addFavorite, getFavorites, removeFavorite } from '../types/options'
 
 const StrokeColor = {
   dark: 'rgb(223,226,234)',

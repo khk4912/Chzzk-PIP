@@ -3,11 +3,10 @@ import { useRef, useState } from 'react'
 
 import { ModalBase } from './ModalBase'
 import type { FFmpeg } from '@ffmpeg/ffmpeg'
-import type { DownloadInfo } from '../../../../types/record_info'
-import { trim } from '../../../utils/record/transcode'
+import type { DownloadInfo } from '../../../types/record_info'
+
 import style from './TrimModal.module.css'
 import { ButtonBase } from './Button'
-import { sanitizeFileName } from '../../../utils/record/save'
 import { ProgressModalPortal } from './ProgressModal'
 
 export function TrimModalPortal ({ setModalState, downloadInfo, ffmpeg, progress }: { setModalState: (x: boolean) => void, downloadInfo: DownloadInfo | undefined, ffmpeg: FFmpeg | undefined, progress: number }): React.ReactNode {

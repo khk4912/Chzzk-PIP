@@ -1,12 +1,10 @@
 import ReactDOM from 'react-dom'
 
-import ScreenshotIcon from '../../static/screenshot.svg?react'
-import { getKeyBindings, getOption } from '../../types/options'
+import ScreenshotIcon from '../static/screenshot.svg?react'
+import { getKeyBindings, getOption } from '../types/options'
 import { useShortcut } from '../utils/hooks'
 import { getStreamInfo } from '../utils/stream_info'
-import { createDraggablePreview } from '../utils/screenshot/screenshot_preview'
-import { download } from '../utils/download/download'
-import { sanitizeFileName } from '../utils/record/save'
+
 import { useEffect, useState } from 'react'
 
 export function ScreenShotPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {

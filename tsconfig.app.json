@@ -23,5 +23,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["entrypoints/**/*", "types", "./cheese-pip.d.ts", ".wxt/types/*.d.ts"]
+  "include": ["entrypoints/**/*", "types/**/*", "*.d.ts", ".wxt/types/**/*", "components/**/*", "utils/**/*"],
 }

@@ -1,5 +1,4 @@
 import ReactDOM from 'react-dom'
-
 import './ProgressModal.css'
 
 export function ProgressModalPortal ({ progress }: { progress: number }): React.ReactNode {

@@ -1,7 +1,5 @@
-import { getOption } from '../../../types/options'
-import type { RecordInfo } from '../../../types/record_info'
-import { getStreamInfo } from '../stream_info'
-import { getRecordInfo, setRecordInfo } from './record_info_helper'
+import { getOption } from '../types/options'
+import type { RecordInfo } from '../types/record_info'
 
 /**
  * 사용자의 Chrome 버전을 User-Agent 문자열에서 추출합니다.

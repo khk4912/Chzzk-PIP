@@ -1,4 +1,4 @@
-import type { StreamInfo } from '../../types/record_info'
+import type { StreamInfo } from '../types/record_info'
 
 /**
  * 스트리머 이름, 방송 제목을 추출합니다.

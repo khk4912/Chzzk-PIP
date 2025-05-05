@@ -1,5 +1,4 @@
-import type { DownloadMessage } from '../../../types/message'
-import { sanitizeFileName } from '../record/save'
+import type { DownloadMessage } from '../types/message'
 
 /*
   현재 페이지가 VOD, Clip, Shorts(새로운 클립 페이지) 페이지인지

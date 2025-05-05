@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import type { DownloadInfo, RecordInfo } from '../../../../types/record_info'
-import { getRecordInfo } from '../../../utils/record/record_info_helper'
+import type { DownloadInfo, RecordInfo } from '../../../types/record_info'
 
 const isMoz = navigator.userAgent.includes('Firefox')
 

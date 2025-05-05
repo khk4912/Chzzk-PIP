@@ -1,14 +1,13 @@
 import ReactDOM from 'react-dom'
 
 import { ModalBase } from './ModalBase'
-import type { DownloadInfo } from '../../../../types/record_info'
+import type { DownloadInfo } from '../../../types/record_info'
 import style from './SegmentizeModal.module.css'
 import { ButtonBase } from './Button'
 import { useRef, useState } from 'react'
-import { segmentize } from '../../../utils/record/transcode'
+
 import type { FFmpeg } from '@ffmpeg/ffmpeg'
 import { ProgressModal } from './ProgressModal'
-import { sanitizeFileName } from '../../../utils/record/save'
 
 export function SegmentizeModalPortal ({ setModalState, downloadInfo, ffmpeg, progress }: { setModalState: (x: boolean) => void, downloadInfo: DownloadInfo | undefined, ffmpeg: FFmpeg | undefined, progress: number }): React.ReactNode {
   const segmentModal = document.getElementById('segmentize-modal')

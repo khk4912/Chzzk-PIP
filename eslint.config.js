@@ -9,11 +9,11 @@ import autoImports from './.wxt/eslint-auto-imports.mjs'
 export default tseslint.config(
   autoImports,
   ...neostandard({
-    ignores: ['dist*', 'Cheese-PIP-*', 'public/**/*', 'packages/**/*'],
+    ignores: ['dist*', 'Cheese-PIP-*', 'public/**/*', 'packages/**/*', '.wxt'],
     filesTs: ['**/*.{ts,tsx}'],
     ts: true
   }),
-  { ignores: ['dist*', 'Cheese-PIP-*', 'public/**/*', 'packages/**/*'] },
+  { ignores: ['dist*', 'Cheese-PIP-*', 'public/**/*', 'packages/**/*', '.wxt'] },
   {
     extends: [
       js.configs.recommended,
