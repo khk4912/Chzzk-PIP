@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom'
 import { useEffect, useMemo, useState } from 'react'
-import { FollowApiResponse, FollowingItem } from '../types/follows'
-import { getFavorites, removeFavorite } from '../types/options'
+import { FollowApiResponse, FollowingItem } from '@/types/follows'
+import { getFavorites, removeFavorite } from '@/types/options'
 
 const getFollowedChannels = async (): Promise<FollowApiResponse> => {
   const res = await fetch(

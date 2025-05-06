@@ -1,9 +1,18 @@
 import { defineConfig } from 'wxt'
 import svgr from 'vite-plugin-svgr'
+import path from 'path'
 
 export default defineConfig({
+  srcDir: 'src',
   modules: ['@wxt-dev/module-react'],
+  outDir: 'dist',
+  zip: {
+    artifactTemplate: "Cheese-PIP-v{{version}}-{{browser}}.zip",
+
+    exclude: [".DS_Store"]
+  },
   manifest: {
+    name: 'Cheese-PIP',
     description: "치지직에 녹화, 스크린샷 등 다양한 기능을 추가합니다.",
     action: {
       default_title: "Cheese-PIP"
@@ -11,7 +20,7 @@ export default defineConfig({
     permissions: ["storage", "downloads"],
     web_accessible_resources: [
       {
-        resources: ["src/*", "ffmpeg/*", "pages/*", "monkeypatch/*"],
+        resources: ["src/*", "ffmpeg/*", "pages/*", "monkeypatch/*", '*.html'],
         matches: ["<all_urls>"]
       }
     ],
@@ -27,12 +36,21 @@ export default defineConfig({
   },
 
   vite: () =>
-    ({
+  ({
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, '.'),
+        '@/entrypoints': path.resolve(__dirname, 'src/entrypoints'),
+        '@/components': path.resolve(__dirname, 'src/components'),
+        '@/utils': path.resolve(__dirname, 'src/utils'),
+        '@/types': path.resolve(__dirname, 'src/types'),
+        '@/assets': path.resolve(__dirname, 'src/assets'),
+        }
+      },
       plugins: [svgr()],
       css: {
         modules: {
           localsConvention: 'camelCase',
-          generateScopedName: '[name]__[local]___[hash:base64:5]',
         }
       },
       optimizeDeps: {

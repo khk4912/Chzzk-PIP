@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 
 import './seek.css'
-import LeftSVG from '../static/seek_left.svg?react'
-import RightSVG from '../static/seek_right.svg?react'
-import { useShortcut } from '../utils/hooks'
-import { waitForElement } from '../entrypoints/content/inject_btn'
+import LeftSVG from '@/assets/static/seek_left.svg?react'
+import RightSVG from '@/assets/static/seek_right.svg?react'
+
+import { waitForElement } from '@/entrypoints/content/inject_btn'
 
 function SeekLeft ({ state }: { state: boolean }): React.ReactNode {
   return (

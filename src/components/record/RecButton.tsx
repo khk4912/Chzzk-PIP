@@ -1,11 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
+import RecIcon from '@/assets/static/rec.svg?react'
 
-import RecIcon from '../static/rec.svg?react'
-import { useShortcut } from '../utils/hooks'
-
-import { RecordOverlayPortal } from './rec_overlay'
-import { getKeyBindings, getOption } from '../types/options'
+import { RecordOverlayPortal } from './RecOverlay'
+import { getKeyBindings, getOption } from '@/types/options'
 
 const isMoz = navigator.userAgent.includes('Firefox')
 
@@ -81,7 +79,7 @@ async function _stopRecord (
   }
 
   // '영상 빠른 저장' 미사용시 결과 페이지 표시
-  window.open(chrome.runtime.getURL('/pages/record_result/index.html'))
+  window.open(chrome.runtime.getURL('/record_result.html'))
   setTimeout(() => {
     if (isMoz) { // Firefox 브라우저에서 녹화 Blob을 메시지로
       fetch(info.resultBlobURL)

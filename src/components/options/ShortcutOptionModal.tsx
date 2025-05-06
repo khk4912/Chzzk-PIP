@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { getKeyBindings, type KeyBindings, setKeyBindings } from '../../../types/options'
 import style from './ShortcutOptionModal.module.css'
-import { useModal } from './Modal'
-import { koreanToEnglish } from '../../../utils/hooks'
+
+import { getKeyBindings, type KeyBindings, setKeyBindings } from '@/types/options'
+import { useModal } from '@/components/ui/Modal'
 
 const sanitizeKey = (key: string): string => {
   const isKorean = /[ㄱ-ㅎ|ㅏ-ㅣ]/.test(key)

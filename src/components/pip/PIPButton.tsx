@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom'
 
-import PIPIcon from '../static/pip.svg?react'
-import { getKeyBindings } from '..//types/options'
+import PIPIcon from '@/assets/static/pip.svg?react'
+import { getKeyBindings } from '@/types/options'
 import { useEffect, useState } from 'react'
 
 export function PIPPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {

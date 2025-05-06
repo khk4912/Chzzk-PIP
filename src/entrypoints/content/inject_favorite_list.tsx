@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { inject, waitForElement } from './inject_btn'
-import { DEFAULT_OPTIONS, getOption } from '../../types/options'
+import { DEFAULT_OPTIONS, getOption } from '@/types/options'
 
 export function InjectFavoriteList () {
   const [options, setOptions] = useState<typeof DEFAULT_OPTIONS>()

@@ -1,9 +1,7 @@
 import ReactDOM from 'react-dom'
 
-import ScreenshotIcon from '../static/screenshot.svg?react'
-import { getKeyBindings, getOption } from '../types/options'
-import { useShortcut } from '../utils/hooks'
-import { getStreamInfo } from '../utils/stream_info'
+import ScreenshotIcon from '@/assets/static/screenshot.svg?react'
+import { getKeyBindings, getOption } from '@/types/options'
 
 import { useEffect, useState } from 'react'
 

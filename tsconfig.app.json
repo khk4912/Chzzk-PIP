@@ -21,7 +21,19 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    /* Type aliases */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@/components/*": ["src/components/*"],
+      "@/utils/*": ["src/utils/*"],
+      "@/entrypoints/*": ["src/entrypoints/*"],
+      "@/types/*": ["src/types/*"],
+      "@/assets/*": ["src/assets/*"]
+    }
   },
-  "include": ["entrypoints/**/*", "types/**/*", "*.d.ts", ".wxt/types/**/*", "components/**/*", "utils/**/*"],
+  "include": ["src/**/*", "*.d.ts", ".wxt/types/**/*"],
+  "exclude": ["src/public/**/*"]
 }

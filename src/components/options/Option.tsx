@@ -1,6 +1,6 @@
 import { useContext, useRef } from 'react'
 
-import { DEFAULT_OPTIONS, setOption, type Option as OptionType, type OtherOptions } from '../../../types/options'
+import { DEFAULT_OPTIONS, setOption, type Option as OptionType, type OtherOptions } from '@/types/options'
 import style from './Option.module.css'
 import { OptionContext } from './OptionView'
 

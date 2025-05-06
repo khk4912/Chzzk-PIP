@@ -1,11 +1,5 @@
-import { Header } from './components/Header'
-import { OptionView } from './components/OptionView'
-import Option from './components/Option'
 import './style.css'
-import { Collapsable } from './components/Collapsable'
-import { ResetButton } from './components/ResetButton'
-import { Modal, ModalProvider } from './components/Modal'
-import { ShortcutOptionButton } from './components/ShortcutOptionButton'
+import Option from '@/components/options/Option'
 
 export default function App (): React.ReactNode {
   return (

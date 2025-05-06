@@ -1,5 +1,5 @@
 import style from './Header.module.css'
-import logo from '../../../logos/logo.png'
+import logo from '@/assets/logos/logo.png'
 
 /**
  * Header component

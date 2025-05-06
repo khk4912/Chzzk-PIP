@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
-import type { DEFAULT_OPTIONS } from '../../types/options'
-import { getOption } from '../../types/options'
+import type { DEFAULT_OPTIONS } from '@/types/options'
+import { getOption } from '@/types/options'
 import { waitForElement } from './inject_btn'
 
 /**

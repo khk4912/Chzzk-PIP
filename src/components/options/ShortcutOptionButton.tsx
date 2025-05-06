@@ -1,4 +1,4 @@
-import { useModal } from './Modal'
+import { useModal } from '@/components/ui/Modal'
 import style from './ResetButton.module.css'
 import { ShortcutOptionModal } from './ShortcutOptionModal'
 

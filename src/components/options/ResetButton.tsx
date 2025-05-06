@@ -2,7 +2,7 @@ import { useContext } from 'react'
 
 import style from './ResetButton.module.css'
 import { OptionContext } from './OptionView'
-import { DEFAULT_OPTIONS } from '../../../types/options'
+import { DEFAULT_OPTIONS } from '@/types/options'
 
 export function ResetButton (): React.ReactNode {
   const [, setOptionContext] = useContext(OptionContext)
