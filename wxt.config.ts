@@ -1,3 +1,4 @@
+import { version } from './package.json'
 import { defineConfig } from 'wxt'
 import svgr from 'vite-plugin-svgr'
 import path from 'path'
@@ -8,7 +9,6 @@ export default defineConfig({
   outDir: 'dist',
   zip: {
     artifactTemplate: 'Cheese-PIP-v{{version}}-{{browser}}.zip',
-
     exclude: ['.DS_Store']
   },
   manifest: {
@@ -37,6 +37,9 @@ export default defineConfig({
 
   vite: () =>
     ({
+      define: {
+        'import.meta.env.VITE_APP_VERSION': JSON.stringify(version)
+      },
       resolve: {
         alias: {
           '@': path.resolve(__dirname, '.'),
