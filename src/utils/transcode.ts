@@ -2,16 +2,19 @@ import { FFmpeg } from '@ffmpeg/ffmpeg'
 import { fetchFile } from '@ffmpeg/util'
 import { useEffect, useRef, useState } from 'react'
 
+import workerURL from '@ffmpeg/ffmpeg/worker?worker&url'
+
 const FFMPEG_OPTION = {
   coreURL: chrome.runtime.getURL('ffmpeg/ffmpeg-core.js'),
   wasmURL: chrome.runtime.getURL('ffmpeg/ffmpeg-core.wasm'),
-  workerURL: chrome.runtime.getURL('ffmpeg/ffmpeg-core.worker.js')
+  workerURL: chrome.runtime.getURL('ffmpeg/ffmpeg-core.worker.js'),
+  classWorkerURL: new URL(workerURL, import.meta.url).href,
 }
 
 /**
  * FFmpeg 인스턴스를 생성하고 초기화해주는 hook입니다.
  *
- * @param videoDur 작업할 비디오의 길이 (초, progress 계산에 사용됨)
+ * @param videoDur 작업할 비디오의 길이 (초, progress 계산에 사용됨
  * @returns [FFmpeg instance ref, 준비 여부, 진행률 state, 진행률 state setter]
  */
 export function useFFmpeg (videoDur: number): readonly [React.MutableRefObject<FFmpeg>, boolean, number, React.Dispatch<React.SetStateAction<number>> ] {

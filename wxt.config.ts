@@ -20,7 +20,7 @@ export default defineConfig({
     permissions: ['storage', 'downloads'],
     web_accessible_resources: [
       {
-        resources: ['src/*', 'ffmpeg/*', 'pages/*', 'monkeypatch/*', '*.html'],
+        resources: ['src/*', 'pages/*', 'chunks/*', 'assets/*', 'ffmpeg/*', 'monkeypatch/*', '*.html'],
         matches: ['<all_urls>']
       }
     ],
@@ -54,7 +54,7 @@ export default defineConfig({
         }
       },
       optimizeDeps: {
-        exclude: ['@ffmpeg/ffmpeg']
+        exclude: ['@ffmpeg/ffmpeg', '@ffmpeg/util'],
       },
     }),
 
