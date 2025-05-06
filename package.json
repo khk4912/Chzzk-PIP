@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "pnpm wxt",
     "build": "pnpm wxt build --mode production",
+    "release": "pnpm wxt zip -b chrome && pnpm wxt zip -b firefox",
     "postinstall": "pnpm wxt prepare"
   },
   "keywords": [],
