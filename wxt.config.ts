@@ -4,7 +4,7 @@ import path from 'path'
 
 export default defineConfig({
   srcDir: 'src',
-  modules: ['@wxt-dev/module-react'],
+  modules: ['@wxt-dev/module-react', '@wxt-dev/auto-icons'],
   outDir: 'dist',
   zip: {
     artifactTemplate: 'Cheese-PIP-v{{version}}-{{browser}}.zip',
