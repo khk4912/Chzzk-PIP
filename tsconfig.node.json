@@ -21,5 +21,10 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["vite.config*.ts", "cheese-pip.d.ts", "custom-plugins.ts", ".wxt/types/*.d.ts"]
+  "include": [
+    "wxt.config.ts",
+    "cheese-pip.d.ts",
+    "custom-plugins.ts",
+    ".wxt/types/*.d.ts"
+  ]
 }

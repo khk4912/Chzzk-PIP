@@ -12,26 +12,26 @@ export default tseslint.config(
     ignores: [
       'dist*',
       'Cheese-PIP-*',
-      'src/public/**/*',
+      'public/**/*',
       'packages/**/*',
-      '.wxt',
+      '.wxt'
     ],
     filesTs: ['**/*.{ts,tsx}'],
-    ts: true,
+    ts: true
   }),
   {
     ignores: [
       'dist*',
       'Cheese-PIP-*',
-      'src/public/**/*',
+      'public/**/*',
       'packages/**/*',
-      '.wxt',
-    ],
+      '.wxt'
+    ]
   },
   {
     extends: [
       js.configs.recommended,
-      ...tseslint.configs.recommendedTypeChecked,
+      ...tseslint.configs.recommendedTypeChecked
     ],
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
@@ -39,19 +39,19 @@ export default tseslint.config(
       globals: globals.browser,
       parserOptions: {
         project: ['./tsconfig.app.json', './tsconfig.node.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
+        tsconfigRootDir: import.meta.dirname
+      }
     },
     plugins: {
       'react-hooks': reactHooks,
-      'react-refresh': reactRefresh,
+      'react-refresh': reactRefresh
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': [
         'warn',
-        { allowConstantExport: true },
-      ],
-    },
+        { allowConstantExport: true }
+      ]
+    }
   }
 )

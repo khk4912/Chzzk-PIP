@@ -35,5 +35,5 @@
     }
   },
   "include": ["src/**/*", "*.d.ts", ".wxt/types/**/*"],
-  "exclude": ["src/public/**/*"]
+  "exclude": ["public/**/*"]
 }

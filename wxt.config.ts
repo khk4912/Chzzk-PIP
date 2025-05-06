@@ -7,21 +7,21 @@ export default defineConfig({
   modules: ['@wxt-dev/module-react'],
   outDir: 'dist',
   zip: {
-    artifactTemplate: "Cheese-PIP-v{{version}}-{{browser}}.zip",
+    artifactTemplate: 'Cheese-PIP-v{{version}}-{{browser}}.zip',
 
-    exclude: [".DS_Store"]
+    exclude: ['.DS_Store']
   },
   manifest: {
     name: 'Cheese-PIP',
-    description: "치지직에 녹화, 스크린샷 등 다양한 기능을 추가합니다.",
+    description: '치지직에 녹화, 스크린샷 등 다양한 기능을 추가합니다.',
     action: {
-      default_title: "Cheese-PIP"
+      default_title: 'Cheese-PIP'
     },
-    permissions: ["storage", "downloads"],
+    permissions: ['storage', 'downloads'],
     web_accessible_resources: [
       {
-        resources: ["src/*", "ffmpeg/*", "pages/*", "monkeypatch/*", '*.html'],
-        matches: ["<all_urls>"]
+        resources: ['src/*', 'ffmpeg/*', 'pages/*', 'monkeypatch/*', '*.html'],
+        matches: ['<all_urls>']
       }
     ],
     content_security_policy: {
@@ -36,15 +36,15 @@ export default defineConfig({
   },
 
   vite: () =>
-  ({
-    resolve: {
-      alias: {
-        '@': path.resolve(__dirname, '.'),
-        '@/entrypoints': path.resolve(__dirname, 'src/entrypoints'),
-        '@/components': path.resolve(__dirname, 'src/components'),
-        '@/utils': path.resolve(__dirname, 'src/utils'),
-        '@/types': path.resolve(__dirname, 'src/types'),
-        '@/assets': path.resolve(__dirname, 'src/assets'),
+    ({
+      resolve: {
+        alias: {
+          '@': path.resolve(__dirname, '.'),
+          '@/entrypoints': path.resolve(__dirname, 'src/entrypoints'),
+          '@/components': path.resolve(__dirname, 'src/components'),
+          '@/utils': path.resolve(__dirname, 'src/utils'),
+          '@/types': path.resolve(__dirname, 'src/types'),
+          '@/assets': path.resolve(__dirname, 'src/assets'),
         }
       },
       plugins: [svgr()],
@@ -58,9 +58,9 @@ export default defineConfig({
       },
     }),
 
-    imports: {
-       eslintrc: {
-        enabled: 9
-       }  
-    }  
+  imports: {
+    eslintrc: {
+      enabled: 9
+    }
+  }
 })
