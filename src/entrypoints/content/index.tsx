@@ -3,6 +3,7 @@ import { injectFavoriteListComponent } from './inject_favorite_list'
 
 const contentScript = defineContentScript({
   matches: ['https://chzzk.naver.com/*'],
+  allFrames: true,
   main (_) {
     injectButton() // .catch(console.error)
     injectFavoriteListComponent()
