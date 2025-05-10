@@ -28,6 +28,13 @@ function DocumentPIPInside ({ mediaStream, originalVideo, originalDocument }: { 
   const controlVisibilityTimeout = useRef<NodeJS.Timeout | null>(null)
   const streamInfoTimeout = useRef<NodeJS.Timeout | null>(null)
 
+  // 버튼 초기화
+  useEffect(() => {
+    setIsPlaying(!originalVideo.paused)
+    setIsMuted(originalVideo.muted)
+  }, [originalVideo])
+
+  // PIP Video init
   useEffect(() => {
     if (videoRef.current) {
       console.log(mediaStream)
@@ -35,11 +42,12 @@ function DocumentPIPInside ({ mediaStream, originalVideo, originalDocument }: { 
     }
   }, [mediaStream])
 
+  // 스트리머 정보 주기적 fetching
   useEffect(() => {
     const getInfo = () => {
       const infos = getStreamInfo(originalDocument)
-
-      const preViewerCount = originalDocument.querySelector('[class^="video_information_count"]')?.textContent ?? '0'
+      const preViewerCount = originalDocument.querySelector('[class^="video_information_count"]')?.textContent ??
+                             originalDocument.querySelector('[class^="live_information_player_count"]')?.textContent ?? '0'
       const viewerCount = preViewerCount ? parseInt(preViewerCount.replace(/[^0-9]/g, '')) : 0
 
       setStreamInfo({
@@ -121,7 +129,7 @@ function DocumentPIPInside ({ mediaStream, originalVideo, originalDocument }: { 
         <div className='broadcast-title'>{streamInfo.title}</div>
         <div className='viewer-count'>
           <ViewerIcon />
-          <span>{streamInfo.viewerCount.toLocaleString()}</span>
+          <span>{streamInfo.viewerCount.toLocaleString()}명</span>
         </div>
       </div>
 
