@@ -12,14 +12,21 @@ import VolumeUpIcon from '@/assets/static/volume-up.svg?react'
 import VolumeMuteIcon from '@/assets/static/volume-mute.svg?react'
 import ViewerIcon from '@/assets/static/viewer.svg?react'
 
-function DocumentPIPInside ({ mediaStream, originalVideo }: { mediaStream: MediaStream, originalVideo: HTMLVideoElement }): React.ReactNode {
+function DocumentPIPInside ({ mediaStream, originalVideo, originalDocument }: { mediaStream: MediaStream, originalVideo: HTMLVideoElement, originalDocument: Document }): React.ReactNode {
   const videoRef = useRef<HTMLVideoElement | null>(null)
 
   const [isPlaying, setIsPlaying] = useState<boolean>(true)
   const [isMuted, setIsMuted] = useState<boolean>(true)
   const [isControlVisible, setIsControlVisible] = useState<boolean>(false)
 
+  const [streamInfo, setStreamInfo] = useState<{ name: string, title: string, viewerCount: number }>({
+    name: 'Streamer',
+    title: 'Title',
+    viewerCount: 12345
+  })
+
   const controlVisibilityTimeout = useRef<NodeJS.Timeout | null>(null)
+  const streamInfoTimeout = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
     if (videoRef.current) {
@@ -27,6 +34,30 @@ function DocumentPIPInside ({ mediaStream, originalVideo }: { mediaStream: Media
       videoRef.current.srcObject = mediaStream
     }
   }, [mediaStream])
+
+  useEffect(() => {
+    const getInfo = () => {
+      const infos = getStreamInfo(originalDocument)
+
+      const preViewerCount = originalDocument.querySelector('[class^="video_information_count"]')?.textContent ?? '0'
+      const viewerCount = preViewerCount ? parseInt(preViewerCount.replace(/[^0-9]/g, '')) : 0
+
+      setStreamInfo({
+        name: infos.streamerName ?? '스트리머',
+        title: infos.streamTitle ?? '제목',
+        viewerCount
+      })
+    }
+
+    getInfo()
+    streamInfoTimeout.current = setInterval(() => { getInfo() }, 30000)
+
+    return () => {
+      if (streamInfoTimeout.current) {
+        clearInterval(streamInfoTimeout.current)
+      }
+    }
+  }, [originalDocument])
 
   const handlePlayPause = () => {
     if (!videoRef.current) return
@@ -68,6 +99,10 @@ function DocumentPIPInside ({ mediaStream, originalVideo }: { mediaStream: Media
       if (controlVisibilityTimeout.current) {
         clearTimeout(controlVisibilityTimeout.current)
       }
+
+      if (streamInfoTimeout.current) {
+        clearInterval(streamInfoTimeout.current)
+      }
     }
   }, [])
 
@@ -82,11 +117,11 @@ function DocumentPIPInside ({ mediaStream, originalVideo }: { mediaStream: Media
 
       {/* 스트리머 정보  */}
       <div className={`stream-info-container ${isControlVisible ? 'visible' : ''}`}>
-        <div className='streamer-name'>스트리머 이름</div>
-        <div className='broadcast-title'>방송 제목 더미 텍스트</div>
+        <div className='streamer-name'>{streamInfo.name}</div>
+        <div className='broadcast-title'>{streamInfo.title}</div>
         <div className='viewer-count'>
           <ViewerIcon />
-          <span>12,345</span>
+          <span>{streamInfo.viewerCount.toLocaleString()}</span>
         </div>
       </div>
 
@@ -163,6 +198,7 @@ function DocumentPIP ({ targetElementQuerySelector }: { targetElementQuerySelect
     root.render(<DocumentPIPInside
       mediaStream={videoStream}
       originalVideo={videoRef.current}
+      originalDocument={document}
                 />)
 
     newPipWindow.onbeforeunload = () => {
