@@ -12,7 +12,7 @@ import VolumeUpIcon from '@/assets/static/volume-up.svg?react'
 import VolumeMuteIcon from '@/assets/static/volume-mute.svg?react'
 import ViewerIcon from '@/assets/static/viewer.svg?react'
 
-function DocumentPIPInside ({ mediaStream }: { mediaStream: MediaStream }): React.ReactNode {
+function DocumentPIPInside ({ mediaStream, originalVideo }: { mediaStream: MediaStream, originalVideo: HTMLVideoElement }): React.ReactNode {
   const videoRef = useRef<HTMLVideoElement | null>(null)
 
   const [isPlaying, setIsPlaying] = useState<boolean>(true)
@@ -33,8 +33,10 @@ function DocumentPIPInside ({ mediaStream }: { mediaStream: MediaStream }): Reac
 
     if (isPlaying) {
       videoRef.current.pause()
+      originalVideo.pause()
     } else {
       videoRef.current.play().catch(console.error)
+      originalVideo.play().catch(console.error)
     }
     setIsPlaying(!isPlaying)
   }
@@ -43,6 +45,7 @@ function DocumentPIPInside ({ mediaStream }: { mediaStream: MediaStream }): Reac
     if (!videoRef.current) return
 
     videoRef.current.muted = !isMuted
+    originalVideo.muted = !isMuted
     setIsMuted(!isMuted)
   }
 
@@ -157,7 +160,10 @@ function DocumentPIP ({ targetElementQuerySelector }: { targetElementQuerySelect
     newPipWindow.document.body.appendChild(pipContainer)
 
     const root = createRoot(pipContainer)
-    root.render(<DocumentPIPInside mediaStream={videoStream} />)
+    root.render(<DocumentPIPInside
+      mediaStream={videoStream}
+      originalVideo={videoRef.current}
+                />)
 
     newPipWindow.onbeforeunload = () => {
       if (videoRef.current) {
