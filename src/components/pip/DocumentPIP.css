@@ -88,14 +88,18 @@ video {
 }
 
 .video-controls-container {
+  width: 100%;
+
   position: absolute;
+  left: 0px;
   bottom: 15px;
-  left: 15px;
   display: flex;
+  justify-content: space-between;
   align-items: center;
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: 10;
+  gap: 10px;
 }
 
 .video-controls-container.visible {
@@ -112,7 +116,6 @@ video {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  margin-right: 10px;
   color: white;
   padding: 0;
 }
@@ -125,4 +128,16 @@ video {
 
 .control-button:hover {
   background: rgba(0, 0, 0, 0.7);
+}
+
+.controls {
+  width: fit-content;
+  display: flex;
+  gap: 10px;
+  margin-inline: 10px;
+}
+
+.right {
+  display: flex;
+  justify-content: flex-end;
 }

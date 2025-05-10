@@ -135,12 +135,23 @@ function DocumentPIPInside ({ mediaStream, originalVideo, originalDocument }: { 
 
       {/* 비디오 컨트롤 */}
       <div className={`video-controls-container ${isControlVisible ? 'visible' : ''}`}>
-        <button className='control-button' onClick={handlePlayPause}>
-          {isPlaying ? <PauseIcon /> : <PlayIcon />}
-        </button>
-        <button className='control-button' onClick={handleMuteToggle}>
-          {isMuted ? <VolumeMuteIcon /> : <VolumeUpIcon />}
-        </button>
+        <div className='left controls'>
+          <button className='control-button' onClick={handlePlayPause}>
+            {isPlaying ? <PauseIcon /> : <PlayIcon />}
+          </button>
+          <button className='control-button' onClick={handleMuteToggle}>
+            {isMuted ? <VolumeMuteIcon /> : <VolumeUpIcon />}
+          </button>
+        </div>
+
+        {/* <div className='right controls'>
+          <button className='control-button' onClick={handlePlayPause}>
+            {isPlaying ? <PauseIcon /> : <PlayIcon />}
+          </button>
+          <button className='control-button' onClick={handleMuteToggle}>
+            {isMuted ? <VolumeMuteIcon /> : <VolumeUpIcon />}
+          </button>
+        </div> */}
       </div>
     </div>
   )
