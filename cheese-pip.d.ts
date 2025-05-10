@@ -61,11 +61,10 @@ interface DocumentPictureInPictureEventMap {
 }
 
 interface DocumentPictureInPictureOptions {
-  width?: number;
-  height?: number;
-  initialAspectRatio?: number;
-  lockAspectRatio?: boolean;
-  copyStyleSheets?: boolean;
+  width?: number
+  height?: number
+  disallowReturnToOpener?: boolean
+  preferInitialWindowPlacement?: boolean
 }
 
 declare class DocumentPictureInPictureEvent {
@@ -79,13 +78,4 @@ interface DocumentPictureInPictureEventInit {
 
 interface Window {
   documentPictureInPicture: DocumentPictureInPicture
-  documentPictureInPictureEnabled: boolean
-  documentPictureInPictureWindow: Window
-  documentPictureInPictureWindowId: string
-  documentPictureInPictureWindowState: string
-  documentPictureInPictureWindowWidth: number
-  documentPictureInPictureWindowHeight: number
-  documentPictureInPictureWindowAspectRatio: number
-  documentPictureInPictureWindowLockAspectRatio: boolean
-  documentPictureInPictureWindowCopyStyleSheets: boolean
 }
