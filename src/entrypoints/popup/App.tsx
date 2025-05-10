@@ -35,21 +35,25 @@ export default function App (): React.ReactNode {
           </Option>
           <Option>
             <Option.Header
-              title='팔로우 즐겨찾기(베타)'
+              title='팔로우 즐겨찾기 (베타)'
               desc='팔로우 중인 스트리머 중 특정 스트리머를 즐겨찾기 탭에 추가할 수 있습니다.'
             />
             <Option.CheckButton optionID='favorites' />
           </Option>
           <Option>
             <Option.Header
-              title='자동 해상도 변경(베타)'
+              title='자동 해상도 변경 (베타)'
               desc='방송 해상도를 최고 품질로 자동선택합니다.
                   (활성화 시 수동 해상도 선택이 불가능한 오류가 발생할 수 있습니다.)'
             />
             <Option.CheckButton optionID='preferHQ' />
           </Option>
           <Option>
-            <Option.Header title='PIP' desc='방송 화면에 PIP 버튼을 추가합니다.' />
+            <Option.Header
+              title='PIP+ (베타)'
+              desc='방송 화면에 PIP+ 버튼을 추가합니다.
+                    PIP+는 기본 PIP 보다 확장된 기능을 제공합니다.'
+            />
             <Option.CheckButton optionID='pip' />
           </Option>
 
