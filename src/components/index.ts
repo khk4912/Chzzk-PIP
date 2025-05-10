@@ -11,6 +11,7 @@ export * from './options/ShortcutOptionButton'
 export * from './options/ShortcutOptionModal'
 
 export * from './pip/PIPButton'
+export * from './pip/DocumentPIP'
 
 export * from './record/RecButton'
 export * from './record/RecOverlay'
@@ -21,5 +22,3 @@ export * from './seek/Seek'
 
 export * from './favorites/FavoriteAddButton'
 export * from './favorites/FavoritesList'
-
-// CSS 모듈은 직접 임포트해야 하므로 여기서는 내보내지 않습니다.
