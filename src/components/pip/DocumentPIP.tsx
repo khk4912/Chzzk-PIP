@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import PIPIcon from '@/assets/static/pip.svg?react'
-import { getKeyBindings } from '@/types/options'
-import { renderToString } from 'react-dom/server'
 import { createRoot } from 'react-dom/client'
+
+import { getKeyBindings } from '@/types/options'
+
+import PIPIcon from '@/assets/static/pip.svg?react'
 
 function DocumentPIPInside ({ mediaStream }: { mediaStream: MediaStream }): React.ReactNode {
   const videoRef = useRef<HTMLVideoElement | null>(null)
@@ -16,7 +17,7 @@ function DocumentPIPInside ({ mediaStream }: { mediaStream: MediaStream }): Reac
 
   return (
     <>
-      <video ref={videoRef} className='pip+-video' autoPlay playsInline muted />
+      <video ref={videoRef} className='pip-plus-video' autoPlay playsInline muted />
     </>
 
   )
@@ -48,10 +49,24 @@ function DocumentPIP ({ targetElementQuerySelector }: { targetElementQuerySelect
 
     const videoStream = videoRef.current.captureStream?.()
 
-    const newPipWindow = await window.documentPictureInPicture.requestWindow()
-    const root = createRoot(newPipWindow.document.body)
+    // 오디오 트랙 제거, PIP 창에서 오디오가 나오는 것을 방지
+    // TODO:  documentPIP에서의 volume 컨트롤은 원본 윈도우의 컨트롤과 싱크하게 구현..
+    const audioTracks = videoStream?.getAudioTracks()
+    if (audioTracks) {
+      audioTracks.forEach((track) => {
+        videoStream?.removeTrack(track)
+      })
+    }
 
-    newPipWindow.document.title = 'PIP+'
+    const newPipWindow = await window.documentPictureInPicture.requestWindow()
+
+    const pipContainer = document.createElement('div')
+    pipContainer.id = 'pip-plus-container'
+
+    newPipWindow.document.body.appendChild(pipContainer)
+    const root = createRoot(pipContainer)
+
+    newPipWindow.document.title = 'Cheese-PIP PIP+'
     root.render(<DocumentPIPInside mediaStream={videoStream} />)
 
     setPipWindow(newPipWindow)
