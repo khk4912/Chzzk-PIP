@@ -68,7 +68,7 @@ export function InjectButtons (): React.ReactNode {
 
       {(isLivePage() || isVODPage()) &&
         <>
-          {((options?.pip) ?? false) && <PIPPortal tg={target} />}
+          {((options?.pip) ?? false) && isLivePage() && <PIPPortal tg={target} />}
           {((options?.screenshot) ?? false) && !isClipPage() && <ScreenShotPortal tg={target} />}
           {((options?.rec) ?? false) && <RecordPortal tg={target} />}
         </>}
