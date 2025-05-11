@@ -17,16 +17,17 @@ export function useMediaStream ({ videoRef, originalVideo, mediaStream }: UseMed
   // 원본 비디오 소스 변경 감지
   useEffect(() => {
     const handleSourceChange = () => {
-      if (videoRef.current && originalVideo.srcObject) {
+      if (videoRef.current) {
         const newStream = originalVideo.captureStream?.()
-        if (newStream && videoRef.current.srcObject !== newStream) {
-          // Remove audio tracks to prevent autoplay issues
+
+        if (newStream) {
           const audioTracks = newStream.getAudioTracks()
           if (audioTracks) {
             audioTracks.forEach((track) => {
               newStream.removeTrack(track)
             })
           }
+
           videoRef.current.srcObject = newStream
         }
       }
@@ -35,7 +36,7 @@ export function useMediaStream ({ videoRef, originalVideo, mediaStream }: UseMed
     handleSourceChange()
 
     const observer = new MutationObserver(handleSourceChange)
-    observer.observe(originalVideo, { attributes: true, attributeFilter: ['src', 'srcObject'] })
+    observer.observe(originalVideo, { attributes: true, attributeOldValue: true, attributeFilter: ['src'] })
 
     return () => {
       observer.disconnect()
