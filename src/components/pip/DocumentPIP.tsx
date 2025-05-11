@@ -39,6 +39,13 @@ function DocumentPIP ({ targetElementQuerySelector }: { targetElementQuerySelect
   }, [togglePictureInPicture])
 
   useEffect(() => {
+    const button = document.querySelector('.pzp-button.pzp-pip-button')
+    if (button !== null) {
+      button.remove()
+    }
+  }, [])
+
+  useEffect(() => {
     getKeyBindings()
       .then((res) => {
         setKey(res.pip)
