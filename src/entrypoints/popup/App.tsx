@@ -52,7 +52,7 @@ export default function App (): React.ReactNode {
             <Option.Header
               title='PIP+ (베타)'
               desc='방송 화면에 PIP+ 버튼을 추가합니다.
-                    PIP+는 기본 PIP 보다 확장된 기능을 제공합니다.'
+                    PIP+는 기본 PIP보다 확장된 기능을 제공합니다.'
             />
             <Option.CheckButton optionID='pip' />
           </Option>
