@@ -54,7 +54,7 @@ function DocumentPIP ({ targetElementQuerySelector }: { targetElementQuerySelect
         onClick={() => { handleClick().catch(console.error) }}
         className='pzp-button pzp-setting-button pzp-pc-setting-button pzp-pc__setting-button cheese-pip-plus-button'
       >
-        <span className='pzp-button__tooltip pzp-button__tooltip--top'>PIP ({key})</span>
+        <span className='pzp-button__tooltip pzp-button__tooltip--top'>PIP+ ({key})</span>
         <span className='pzp-ui-icon pzp-pc-setting-button__icon'>
           <PIPIcon />
         </span>
