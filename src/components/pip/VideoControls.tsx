@@ -3,7 +3,6 @@ import PauseIcon from '@/assets/static/pause.svg?react'
 import RecIcon from '@/assets/static/rec.svg?react'
 import VolumeUpIcon from '@/assets/static/volume-up.svg?react'
 import VolumeMuteIcon from '@/assets/static/volume-mute.svg?react'
-import { useOptions } from '@/src/hooks/options'
 
 interface VideoControlsProps {
   isPlaying: boolean;
