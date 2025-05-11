@@ -9,19 +9,18 @@ import StreamInfo from './StreamInfo'
 import VideoControls from './VideoControls'
 
 interface DocumentPIPInsideProps {
-  mediaStream: MediaStream;
-  originalVideo: HTMLVideoElement;
-  originalDocument: Document;
+  originalVideo: HTMLVideoElement | null
+  originalDocument: Document
+  stream: MediaStream | undefined
 }
 
-function DocumentPIPInside ({ mediaStream, originalVideo, originalDocument }: DocumentPIPInsideProps): React.ReactNode {
+function DocumentPIPInside ({ originalVideo, originalDocument, stream }: DocumentPIPInsideProps): React.ReactNode {
   const videoRef = useRef<HTMLVideoElement | null>(null)
 
-  // 미디어 스트림 관리
   useMediaStream({
     videoRef,
     originalVideo,
-    mediaStream
+    mediaStream: stream
   })
 
   // 비디오 컨트롤 관리

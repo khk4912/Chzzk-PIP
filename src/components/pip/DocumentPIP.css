@@ -124,10 +124,12 @@ video {
   width: 24px;
   height: 24px;
   fill: currentColor;
+  
 }
 
 .control-button:hover {
   background: rgba(0, 0, 0, 0.7);
+  cursor: pointer;
 }
 
 .controls {

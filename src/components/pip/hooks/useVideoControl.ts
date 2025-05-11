@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 
 interface UseVideoControlProps {
   videoRef: React.RefObject<HTMLVideoElement>;
-  originalVideo: HTMLVideoElement;
+  originalVideo: HTMLVideoElement | null;
 }
 
 export function useVideoControl ({ videoRef, originalVideo }: UseVideoControlProps) {
@@ -11,12 +11,14 @@ export function useVideoControl ({ videoRef, originalVideo }: UseVideoControlPro
 
   // 비디오 상태 초기화
   useEffect(() => {
-    setIsPlaying(!originalVideo.paused)
-    setIsMuted(originalVideo.muted)
+    if (originalVideo) {
+      setIsPlaying(!originalVideo.paused)
+      setIsMuted(originalVideo.muted)
+    }
   }, [originalVideo])
 
   const handlePlayPause = () => {
-    if (!videoRef.current) return
+    if (!videoRef.current || originalVideo === null) return
 
     if (isPlaying) {
       videoRef.current.pause()
@@ -29,7 +31,7 @@ export function useVideoControl ({ videoRef, originalVideo }: UseVideoControlPro
   }
 
   const handleMuteToggle = () => {
-    if (!videoRef.current) return
+    if (!videoRef.current || originalVideo === null) return
 
     videoRef.current.muted = !isMuted
     originalVideo.muted = !isMuted

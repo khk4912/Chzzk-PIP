@@ -5,11 +5,11 @@ import VolumeUpIcon from '@/assets/static/volume-up.svg?react'
 import VolumeMuteIcon from '@/assets/static/volume-mute.svg?react'
 
 interface VideoControlsProps {
-  isPlaying: boolean;
-  isMuted: boolean;
-  isVisible: boolean;
-  handlePlayPause: () => void;
-  handleMuteToggle: () => void;
+  isPlaying: boolean
+  isMuted: boolean
+  isVisible: boolean
+  handlePlayPause: () => void
+  handleMuteToggle: () => void
 }
 
 function VideoControls ({
@@ -20,6 +20,7 @@ function VideoControls ({
   handleMuteToggle,
 }: VideoControlsProps): React.ReactNode {
   const { options } = useOptions()
+  const { clickHandler, isRecording } = useRecord()
 
   return (
     <div className={`video-controls-container ${isVisible ? 'visible' : ''}`}>
@@ -34,8 +35,8 @@ function VideoControls ({
 
       <div className='right controls'>
         {options.rec &&
-          <button className='control-button' onClick={() => {}}>
-            <RecIcon />
+          <button className='control-button' onClick={() => { clickHandler().catch(console.error) }}>
+            <RecIcon style={{ fill: isRecording ? 'red' : 'white' }} />
           </button>}
       </div>
     </div>
