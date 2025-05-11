@@ -1,175 +1,16 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 
 import { getKeyBindings } from '@/types/options'
+import { usePIPWindow } from './hooks/usePIPWindow'
 
 import style from './DocumentPIP.css?inline'
-
 import PIPIcon from '@/assets/static/pip.svg?react'
-import PlayIcon from '@/assets/static/play.svg?react'
-import PauseIcon from '@/assets/static/pause.svg?react'
-import VolumeUpIcon from '@/assets/static/volume-up.svg?react'
-import VolumeMuteIcon from '@/assets/static/volume-mute.svg?react'
-import ViewerIcon from '@/assets/static/viewer.svg?react'
-
-function DocumentPIPInside ({ mediaStream, originalVideo, originalDocument }: { mediaStream: MediaStream, originalVideo: HTMLVideoElement, originalDocument: Document }): React.ReactNode {
-  const videoRef = useRef<HTMLVideoElement | null>(null)
-
-  const [isPlaying, setIsPlaying] = useState<boolean>(true)
-  const [isMuted, setIsMuted] = useState<boolean>(true)
-  const [isControlVisible, setIsControlVisible] = useState<boolean>(false)
-
-  const [streamInfo, setStreamInfo] = useState<{ name: string, title: string, viewerCount: number }>({
-    name: 'Streamer',
-    title: 'Title',
-    viewerCount: 12345
-  })
-
-  const controlVisibilityTimeout = useRef<NodeJS.Timeout | null>(null)
-  const streamInfoTimeout = useRef<NodeJS.Timeout | null>(null)
-
-  // 버튼 초기화
-  useEffect(() => {
-    setIsPlaying(!originalVideo.paused)
-    setIsMuted(originalVideo.muted)
-  }, [originalVideo])
-
-  // PIP Video init
-  useEffect(() => {
-    if (videoRef.current) {
-      console.log(mediaStream)
-      videoRef.current.srcObject = mediaStream
-    }
-  }, [mediaStream])
-
-  // 스트리머 정보 주기적 fetching
-  useEffect(() => {
-    const getInfo = () => {
-      const infos = getStreamInfo(originalDocument)
-      const preViewerCount = originalDocument.querySelector('[class^="video_information_count"]')?.textContent ??
-                             originalDocument.querySelector('[class^="live_information_player_count"]')?.textContent ?? '0'
-      const viewerCount = preViewerCount ? parseInt(preViewerCount.replace(/[^0-9]/g, '')) : 0
-
-      setStreamInfo({
-        name: infos.streamerName ?? '스트리머',
-        title: infos.streamTitle ?? '제목',
-        viewerCount
-      })
-    }
-
-    getInfo()
-    streamInfoTimeout.current = setInterval(() => { getInfo() }, 30000)
-
-    return () => {
-      if (streamInfoTimeout.current) {
-        clearInterval(streamInfoTimeout.current)
-      }
-    }
-  }, [originalDocument])
-
-  const handlePlayPause = () => {
-    if (!videoRef.current) return
-
-    if (isPlaying) {
-      videoRef.current.pause()
-      originalVideo.pause()
-    } else {
-      videoRef.current.play().catch(console.error)
-      originalVideo.play().catch(console.error)
-    }
-    setIsPlaying(!isPlaying)
-  }
-
-  const handleMuteToggle = () => {
-    if (!videoRef.current) return
-
-    videoRef.current.muted = !isMuted
-    originalVideo.muted = !isMuted
-    setIsMuted(!isMuted)
-  }
-
-  const showControls = () => {
-    setIsControlVisible(true)
-
-    if (controlVisibilityTimeout.current) {
-      clearTimeout(controlVisibilityTimeout.current)
-    }
-
-    controlVisibilityTimeout.current = setTimeout(() => {
-      setIsControlVisible(false)
-    }, 800)
-  }
-
-  useEffect(() => {
-    showControls()
-
-    return () => {
-      if (controlVisibilityTimeout.current) {
-        clearTimeout(controlVisibilityTimeout.current)
-      }
-
-      if (streamInfoTimeout.current) {
-        clearInterval(streamInfoTimeout.current)
-      }
-    }
-  }, [])
-
-  return (
-    <div
-      id='pip-main-container'
-      onMouseMove={showControls}
-      onMouseEnter={showControls}
-    >
-      <div id='video-cover' />
-      <video ref={videoRef} autoPlay playsInline muted />
-
-      {/* 스트리머 정보  */}
-      <div className={`stream-info-container ${isControlVisible ? 'visible' : ''}`}>
-        <div className='streamer-name'>{streamInfo.name}</div>
-        <div className='broadcast-title'>{streamInfo.title}</div>
-        <div className='viewer-count'>
-          <ViewerIcon />
-          <span>{streamInfo.viewerCount.toLocaleString()}명</span>
-        </div>
-      </div>
-
-      {/* 비디오 컨트롤 */}
-      <div className={`video-controls-container ${isControlVisible ? 'visible' : ''}`}>
-        <div className='left controls'>
-          <button className='control-button' onClick={handlePlayPause}>
-            {isPlaying ? <PauseIcon /> : <PlayIcon />}
-          </button>
-          <button className='control-button' onClick={handleMuteToggle}>
-            {isMuted ? <VolumeMuteIcon /> : <VolumeUpIcon />}
-          </button>
-        </div>
-
-        {/* <div className='right controls'>
-          <button className='control-button' onClick={handlePlayPause}>
-            {isPlaying ? <PauseIcon /> : <PlayIcon />}
-          </button>
-          <button className='control-button' onClick={handleMuteToggle}>
-            {isMuted ? <VolumeMuteIcon /> : <VolumeUpIcon />}
-          </button>
-        </div> */}
-      </div>
-    </div>
-  )
-}
+import DocumentPIPInside from './DocumentPIPInside'
 
 function DocumentPIP ({ targetElementQuerySelector }: { targetElementQuerySelector: string }): React.ReactNode {
   const [key, setKey] = useState<string>('p')
-  const [pipWindow, setPipWindow] = useState<Window | null>(null)
-  const videoRef = useRef<HTMLVideoElement | null>(null)
-
-  useEffect(() => {
-    return () => {
-      if (pipWindow) {
-        pipWindow.close()
-        setPipWindow(null)
-      }
-    }
-  }, [pipWindow])
+  const { pipWindow, setPipWindow, videoRef } = usePIPWindow()
 
   const handleClick = async () => {
     if (pipWindow) {
@@ -177,34 +18,46 @@ function DocumentPIP ({ targetElementQuerySelector }: { targetElementQuerySelect
       setPipWindow(null)
       return
     }
+
     const targetElement = document.querySelector(targetElementQuerySelector) as HTMLElement
-
-    if (!targetElement) {
-      return
-    }
-
-    if (!((targetElement instanceof HTMLVideoElement))) {
+    if (!targetElement || !(targetElement instanceof HTMLVideoElement)) {
       return
     }
 
     videoRef.current = targetElement
     const videoStream = videoRef.current.captureStream?.()
-
-    // 오디오 트랙 제거, PIP 창에서 오디오가 나오는 것을 방지 (auto-play 정책 때문)
-    // TODO:  documentPIP에서의 volume 컨트롤은 원본 윈도우의 컨트롤과 싱크하게 구현..
-    const audioTracks = videoStream?.getAudioTracks()
-    if (audioTracks) {
-      audioTracks.forEach((track) => {
-        videoStream?.removeTrack(track)
-      })
-    } const docPIPOptions: DocumentPictureInPictureOptions = {
-      width: 640,
-      height: 360
+    if (!videoStream) {
+      return
     }
 
-    const newPipWindow = await window.documentPictureInPicture.requestWindow(docPIPOptions)
+    removeAudioTracks(videoStream)
+
+    const docPIPOptions = createPIPOptions(videoRef.current)
+    const newPipWindow = await createPIPWindow(docPIPOptions, videoStream)
+
+    setPipWindow(newPipWindow)
+  }
+
+  // 오디오 트랙 제거, PIP 창에서 오디오가 나오는 것을 방지 (auto-play 정책 때문)
+  const removeAudioTracks = (stream: MediaStream) => {
+    const audioTracks = stream.getAudioTracks()
+    if (audioTracks) {
+      audioTracks.forEach(track => stream.removeTrack(track))
+    }
+  }
+
+  const createPIPOptions = (video: HTMLVideoElement): DocumentPictureInPictureOptions => {
+    return {
+      width: video?.clientWidth / 2 || 640,
+      height: video?.clientHeight / 2 || 360
+    }
+  }
+
+  const createPIPWindow = async (options: DocumentPictureInPictureOptions, videoStream: MediaStream): Promise<Window> => {
+    const newPipWindow = await window.documentPictureInPicture.requestWindow(options)
     newPipWindow.document.title = 'Cheese-PIP PIP+'
 
+    // 스타일 추가
     const css = newPipWindow.document.createElement('style')
     css.innerHTML = style
     newPipWindow.document.head.appendChild(css)
@@ -214,11 +67,13 @@ function DocumentPIP ({ targetElementQuerySelector }: { targetElementQuerySelect
     newPipWindow.document.body.appendChild(pipContainer)
 
     const root = createRoot(pipContainer)
-    root.render(<DocumentPIPInside
-      mediaStream={videoStream}
-      originalVideo={videoRef.current}
-      originalDocument={document}
-                />)
+    root.render(
+      <DocumentPIPInside
+        mediaStream={videoStream}
+        originalVideo={videoRef.current!}
+        originalDocument={document}
+      />
+    )
 
     newPipWindow.onbeforeunload = () => {
       if (videoRef.current) {
@@ -227,7 +82,7 @@ function DocumentPIP ({ targetElementQuerySelector }: { targetElementQuerySelect
       setPipWindow(null)
     }
 
-    setPipWindow(newPipWindow)
+    return newPipWindow
   }
 
   useEffect(() => {
