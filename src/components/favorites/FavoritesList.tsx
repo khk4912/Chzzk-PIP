@@ -1,5 +1,4 @@
-import ReactDOM from 'react-dom'
-import { useEffect, useMemo, useState } from 'react'
+import ReactDOM from 'react-dom' // Removed useEffect, useMemo, useState
 import { FollowApiResponse, FollowingItem } from '@/types/follows'
 import { getFavorites, removeFavorite } from '@/types/options'
 
@@ -105,10 +104,8 @@ function FavoritesList (): React.ReactElement | null {
     }
   }, [])
 
-  useEffect(() => {
-    const interval = setInterval(() => { fetchFavorites().catch(console.error) }, 300000)
-    return () => clearInterval(interval)
-  }, [])
+  // Removed redundant useEffect that called fetchFavorites every 300 seconds.
+  // The existing 30-second interval and storage listener should be sufficient.
 
   useEffect(() => {
     const targetNav = document.querySelector('nav#navigation')

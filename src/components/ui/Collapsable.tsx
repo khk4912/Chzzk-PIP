@@ -1,4 +1,4 @@
-import { useState } from 'react'
+// Removed useState from imports
 import style from './Collapsable.module.css'
 
 /**

@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
-import ReactDOM from 'react-dom'
+import ReactDOM from 'react-dom' // Removed useEffect, useMemo, useState
 import { addFavorite, getFavorites, removeFavorite } from '@/types/options'
 
 const StrokeColor = {

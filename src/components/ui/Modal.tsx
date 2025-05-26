@@ -1,4 +1,4 @@
-import { type ReactNode, createContext, useContext, useRef, useState } from 'react'
+import { type ReactNode, createContext } from 'react' // Removed useContext, useRef, useState
 import { createPortal } from 'react-dom'
 
 export interface ModalContextType {
@@ -37,7 +37,8 @@ export function useModal (): ModalContextType {
 
 export function Modal (): ReactNode {
   const { modals } = useModal()
-  const rootRef = useRef<HTMLElement | null>(document.getElementById('modal-root'))
+  // Initialize ref directly. Assumes 'modal-root' exists or will exist when this component is used.
+  const rootRef = useRef(document.getElementById('modal-root') as HTMLElement | null)
 
   return (rootRef.current != null) ? createPortal(modals, rootRef.current) : null
 }

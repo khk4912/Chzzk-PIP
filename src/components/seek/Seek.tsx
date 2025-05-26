@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+// Removed React, useEffect, useRef, useState from imports
 import ReactDOM from 'react-dom'
 
 import './seek.css'

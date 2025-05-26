@@ -1,4 +1,4 @@
-import { useEffect, RefObject } from 'react'
+import { type RefObject } from 'react' // Removed useEffect
 
 interface UseMediaStreamProps {
   videoRef: RefObject<HTMLVideoElement>;
@@ -6,54 +6,53 @@ interface UseMediaStreamProps {
   mediaStream?: MediaStream;
 }
 
+// Helper function to capture stream and remove audio tracks
+function captureAndProcessStream (sourceVideo: HTMLVideoElement): MediaStream | undefined {
+  const newStream = sourceVideo.captureStream?.()
+  if (newStream) {
+    const audioTracks = newStream.getAudioTracks()
+    audioTracks.forEach((track) => {
+      newStream.removeTrack(track)
+    })
+  }
+  return newStream
+}
+
 export function useMediaStream ({ videoRef, originalVideo, mediaStream }: UseMediaStreamProps) {
   // PIP Video 초기화
   useEffect(() => {
-    if (originalVideo === null) {
+    if (!videoRef.current || !originalVideo) {
       return
     }
 
-    if (mediaStream === undefined) {
-      const newStream = originalVideo.captureStream?.()
-
-      if (newStream) {
-        const audioTracks = newStream.getAudioTracks()
-        if (audioTracks) {
-          audioTracks.forEach((track) => {
-            newStream.removeTrack(track)
-          })
-        }
-      }
-    }
-
-    if (videoRef.current && mediaStream) {
+    if (mediaStream) {
+      // If a specific mediaStream is provided, use it.
       videoRef.current.srcObject = mediaStream
+    } else {
+      // Otherwise, capture from the original video.
+      const processedStream = captureAndProcessStream(originalVideo)
+      if (processedStream) {
+        videoRef.current.srcObject = processedStream
+      }
     }
   }, [videoRef, mediaStream, originalVideo])
 
   // 원본 비디오 소스 변경 감지
   useEffect(() => {
-    if (originalVideo === null) {
+    if (!originalVideo || !videoRef.current) {
       return
     }
 
     const handleSourceChange = () => {
-      if (videoRef.current) {
-        const newStream = originalVideo.captureStream?.()
-
-        if (newStream) {
-          const audioTracks = newStream.getAudioTracks()
-          if (audioTracks) {
-            audioTracks.forEach((track) => {
-              newStream.removeTrack(track)
-            })
-          }
-
-          videoRef.current.srcObject = newStream
+      if (videoRef.current && originalVideo) { // Ensure refs are still current
+        const processedStream = captureAndProcessStream(originalVideo)
+        if (processedStream) {
+          videoRef.current.srcObject = processedStream
         }
       }
     }
 
+    // Initial sync in case the source is already set or changed before observer attaches
     handleSourceChange()
 
     const observer = new MutationObserver(handleSourceChange)

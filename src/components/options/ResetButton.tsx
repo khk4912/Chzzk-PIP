@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+// Removed useContext from imports
 
 import style from './ResetButton.module.css'
 import { OptionContext } from './OptionView'

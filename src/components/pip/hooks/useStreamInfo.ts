@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+// Removed useState, useEffect, useRef from imports
 import { getStreamInfo } from '@/utils/stream_info'
 
 export interface StreamInfoData {

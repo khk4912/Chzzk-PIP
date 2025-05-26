@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react'
+// Removed createContext, useEffect, useState from imports
 import style from './OptionView.module.css'
 import { type Option as OptionType, DEFAULT_OPTIONS, getOption } from '@/types/options'
 

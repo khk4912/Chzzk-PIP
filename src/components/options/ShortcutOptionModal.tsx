@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+// Removed React, useEffect, useState from imports
 import style from './ShortcutOptionModal.module.css'
 
 import { getKeyBindings, type KeyBindings, setKeyBindings } from '@/types/options'
@@ -73,7 +73,7 @@ function ShortcutKey ({ keyName, optionID }: { keyName: string, optionID: keyof 
           setKey(keyBind[optionID])
         })
       .catch(console.error)
-  })
+  }, [optionID]) // Added optionID to dependency array
 
   return (
     <div className={style.shortcutItem} onClick={(e) => { e.stopPropagation() }}>

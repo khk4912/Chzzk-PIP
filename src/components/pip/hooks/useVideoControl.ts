@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+// Removed useState, useEffect from imports
+// Added useCallback for memoizing handlers
 
 interface UseVideoControlProps {
   videoRef: React.RefObject<HTMLVideoElement>;
@@ -17,8 +18,8 @@ export function useVideoControl ({ videoRef, originalVideo }: UseVideoControlPro
     }
   }, [originalVideo])
 
-  const handlePlayPause = () => {
-    if (!videoRef.current || originalVideo === null) return
+  const handlePlayPause = useCallback(() => {
+    if (!videoRef.current || !originalVideo) return
 
     if (isPlaying) {
       videoRef.current.pause()
@@ -27,16 +28,16 @@ export function useVideoControl ({ videoRef, originalVideo }: UseVideoControlPro
       videoRef.current.play().catch(console.error)
       originalVideo.play().catch(console.error)
     }
-    setIsPlaying(!isPlaying)
-  }
+    setIsPlaying(prevIsPlaying => !prevIsPlaying)
+  }, [videoRef, originalVideo, isPlaying])
 
-  const handleMuteToggle = () => {
-    if (!videoRef.current || originalVideo === null) return
+  const handleMuteToggle = useCallback(() => {
+    if (!videoRef.current || !originalVideo) return
 
     videoRef.current.muted = !isMuted
     originalVideo.muted = !isMuted
-    setIsMuted(!isMuted)
-  }
+    setIsMuted(prevIsMuted => !prevIsMuted)
+  }, [videoRef, originalVideo, isMuted])
 
   return {
     isPlaying,

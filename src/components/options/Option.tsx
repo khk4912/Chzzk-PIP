@@ -1,8 +1,27 @@
-import { useContext, useRef } from 'react'
+import { useContext, useRef, type Dispatch, type SetStateAction } from 'react'
 
 import { DEFAULT_OPTIONS, setOption, type Option as OptionType, type OtherOptions } from '@/types/options'
 import style from './Option.module.css'
 import { OptionContext } from './OptionView'
+
+// Helper function to update option value
+async function updateOptionValue<T extends keyof OptionType>(
+  optionID: T,
+  newValue: OptionType[T],
+  setOptionContext: Dispatch<SetStateAction<OptionType>>
+): Promise<void> {
+  setOptionContext((prev) => {
+    const next = { ...prev }
+    next[optionID] = newValue
+    return next
+  })
+
+  try {
+    await setOption(optionID, newValue)
+  } catch (error) {
+    console.error(error)
+  }
+}
 
 /**
  * Option component
@@ -47,18 +66,10 @@ function CheckButton ({ optionID }: { optionID: Exclude<keyof OptionType, keyof 
   }
 
   const handleClick = (): void => {
-    setOptionContext((prev) => {
-      const next = { ...prev }
-
-      if (typeof next[optionID] === 'boolean') {
-        next[optionID] = !next[optionID]
-      }
-
-      return next
-    })
-
-    setOption(optionID, !(optionContext[optionID] ?? false))
-      .catch(console.error)
+    const currentValue = optionContext[optionID] ?? DEFAULT_OPTIONS[optionID]
+    if (typeof currentValue === 'boolean') {
+      void updateOptionValue(optionID, !currentValue, setOptionContext)
+    }
   }
 
   return (
@@ -83,37 +94,30 @@ function NumberInput ({ optionID, max, min }: { optionID: keyof OtherOptions, ma
   const input = useRef<HTMLInputElement>(null)
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setOptionContext((prev) => {
-      const next = { ...prev }
-      let newValue = Number(e.target.value)
+    let newValue = Number(e.target.value)
 
-      if (Number.isNaN(newValue)) {
-        newValue = DEFAULT_OPTIONS[optionID]
-      }
+    if (Number.isNaN(newValue)) {
+      newValue = DEFAULT_OPTIONS[optionID] as number
+    }
 
-      if (typeof next[optionID] !== 'number') {
-        return next
-      }
+    if (typeof optionContext[optionID] !== 'number') {
+      return
+    }
 
-      if (max !== undefined && newValue > max) {
-        newValue = max
-      }
+    if (max !== undefined && newValue > max) {
+      newValue = max
+    }
 
-      if (min !== undefined && newValue < min) {
-        newValue = min
-      }
+    if (min !== undefined && newValue < min) {
+      newValue = min
+    }
 
-      next[optionID] = newValue
+    // Update input field immediately for responsiveness
+    if (input.current !== null) {
+      input.current.value = String(newValue)
+    }
 
-      if (input.current !== null) {
-        input.current.value = String(next[optionID])
-      }
-
-      return next
-    })
-
-    setOption(optionID, Number(e.target.value))
-      .catch(console.error)
+    void updateOptionValue(optionID, newValue, setOptionContext)
   }
 
   if (typeof option !== 'number') {
@@ -125,7 +129,7 @@ function NumberInput ({ optionID, max, min }: { optionID: keyof OtherOptions, ma
       ref={input}
       onChange={onChange}
       className={style.numberInput}
-      value={optionContext[optionID] ?? DEFAULT_OPTIONS[optionID]}
+      defaultValue={optionContext[optionID] ?? DEFAULT_OPTIONS[optionID]} // Use defaultValue for better UX with controlled input by helper
       type='number'
     />
   )

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import ScreenshotIcon from '@/assets/static/screenshot.svg?react'
 import { getKeyBindings, getOption } from '@/types/options'
 
-import { useEffect, useState } from 'react'
+// Removed useEffect, useState from imports
 
 export function ScreenShotPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {
   if (tg === undefined) {

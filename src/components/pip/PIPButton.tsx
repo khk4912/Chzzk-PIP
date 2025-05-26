@@ -12,44 +12,6 @@ export function PIPPortal ({ tg }: { tg: Element | undefined }): React.ReactNode
   return ReactDOM.createPortal(<DocumentPIP targetElementQuerySelector='video' />, div)
 }
 
-/**
- * PIPButton component
- *
- * PIP 버튼 컴포넌트입니다.
- */
-// function PIPButton (): React.ReactNode {
-//   const clickHandler = (): void => { makeVideoPIP().catch(console.info) }
-//   const [key, setKey] = useState<string>('')
-
-//   return (
-//     // <button
-//     //   onClick={clickHandler}
-//     //   className='pzp-button pzp-setting-button pzp-pc-setting-button pzp-pc__setting-button cheese-pip-button'
-//     // >
-//     //   <span className='pzp-button__tooltip pzp-button__tooltip--top'>PIP ({key})</span>
-//     //   <span className='pzp-ui-icon pzp-pc-setting-button__icon'>
-//     //     <PIPIcon />
-//     //   </span>
-//     // </button>
-//     <DocumentPIP targetElementQuerySelector='.live_information_player__uFFcH' buttonText='PIP 창 열기/닫기' />
-//   )
-// }
-
-// async function makeVideoPIP (): Promise<void> {
-//   const video = document.querySelector('video')
-
-//   if (video === null) {
-//     return
-//   }
-
-//   try {
-//     video.disablePictureInPicture = false
-//     if (document.pictureInPictureElement != null) {
-//       await document.exitPictureInPicture()
-//     } else {
-//       await video.requestPictureInPicture()
-//     }
-//   } catch {
-//     // Metadata 로드 안될 경우 오류 발생하므로 오류 무시
-//   }
-// }
+// Commented out code removed for clarity as it appears to be superseded by DocumentPIP.tsx
+// and related functionalities. If this logic is still needed, it should be re-evaluated
+// and potentially integrated into the new component structure.

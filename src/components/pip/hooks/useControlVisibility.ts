@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+// Removed useState, useEffect, useRef from imports
 
 export function useControlVisibility () {
   const [isControlVisible, setIsControlVisible] = useState<boolean>(false)

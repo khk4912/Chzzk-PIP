@@ -3,30 +3,16 @@ import ReactDOM from 'react-dom'
 
 import { getKeyBindings } from '@/types/options'
 import { useShortcut } from '@/utils/hooks'
+import { useVideoElement } from '@/hooks/useVideoElement' // Import the moved hook
 
 import PIPIcon from '@/assets/static/pip.svg?react'
 import DocumentPIPInside from './DocumentPIPInside'
 
 import { usePictureInPicture } from './hooks/usePictureInPicture'
 
-function useVideoElement (selector: string) {
-  const videoRef = useRef<HTMLVideoElement | null>(null)
-
-  useEffect(() => {
-    const element = document.querySelector(selector)
-    if (element instanceof HTMLVideoElement) {
-      videoRef.current = element
-    } else {
-      videoRef.current = null
-    }
-  }, [selector])
-
-  return videoRef
-}
-
 function DocumentPIP ({ targetElementQuerySelector }: { targetElementQuerySelector: string }): JSX.Element {
   const [key, setKey] = useState<string>('p')
-  const videoRef = useVideoElement(targetElementQuerySelector)
+  const videoRef = useVideoElement(targetElementQuerySelector) // Use the imported hook
   const { pipWindow, togglePictureInPicture, removeAudioTracks } = usePictureInPicture(videoRef)
 
   // 스트림 생성 및 오디오 트랙 제거
@@ -39,6 +25,8 @@ function DocumentPIP ({ targetElementQuerySelector }: { targetElementQuerySelect
   }, [togglePictureInPicture])
 
   useEffect(() => {
+    // Removes the default Naver Player PIP button to prevent conflicts or UI clutter.
+    // This extension provides its own PIP button and functionality.
     const button = document.querySelector('.pzp-button.pzp-pip-button')
     if (button !== null) {
       button.remove()

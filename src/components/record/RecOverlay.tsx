@@ -1,6 +1,5 @@
 import './rec_overlay.css'
 import ReactDOM from 'react-dom'
-import { useEffect, useRef, useState } from 'react'
 
 const secondsToTime = (seconds: number): string => {
   const minutes = Math.floor(seconds / 60).toString().padStart(2, '0')
@@ -48,7 +47,7 @@ export function RecordOverlayPortal (): React.ReactNode {
     return () => {
       overlay.remove()
     }
-  })
+  }, [])
 
   if (target === null) {
     return null
