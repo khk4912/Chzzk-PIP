@@ -1,7 +1,9 @@
-// Removed React, useEffect, useRef, useState from imports
 import ReactDOM from 'react-dom'
+// Removed React specific imports like useEffect, useRef, useState as they are now encapsulated in useFlash or not needed.
+// Unimport will handle useState, useEffect for SeekPortal if still used there.
 
 import './seek.css'
+import { useFlash } from '@/hooks/useFlash' // Import the new hook
 import LeftSVG from '@/assets/static/seek_left.svg?react'
 import RightSVG from '@/assets/static/seek_right.svg?react'
 
@@ -48,51 +50,37 @@ export function SeekPortal (): React.ReactNode {
  *
  * 스트림을 앞뒤로 탐색하고,
  * 스트림 화면에 탐색 중임을 표시해주는 컴포넌트입니다.
+ * It uses the useFlash hook to manage the visibility of seek indicators.
  */
 function Seek (): React.ReactNode {
-  const [left, setLeft] = useState(false)
-  const [right, setRight] = useState(false)
+  // Use the useFlash hook for left and right seek indicators.
+  // Duration is 1000ms (1 second).
+  const [isLeftVisible, triggerLeftFlash] = useFlash(1000)
+  const [isRightVisible, triggerRightFlash] = useFlash(1000)
 
-  const leftTimer = useRef<number | undefined>(undefined)
-  const rightTimer = useRef<number | undefined>(undefined)
-
-  useEffect(() => {
-    return () => {
-      window.clearTimeout(leftTimer.current)
-      window.clearTimeout(rightTimer.current)
-      setLeft(false)
-      setRight(false)
-    }
-  }, [])
+  // The useEffect for clearing timers is no longer needed here,
+  // as useFlash handles its own timer cleanup internally.
 
   useShortcut('ArrowLeft', () => {
     const video = document.querySelector('.webplayer-internal-video')
-    seekLeft(video as HTMLVideoElement)
-
-    setLeft(true)
-
-    window.clearTimeout(leftTimer.current)
-    leftTimer.current = window.setTimeout(() => {
-      setLeft(false)
-    }, 1000)
+    if (video instanceof HTMLVideoElement) {
+      seekLeft(video) // Assumes seekLeft is available globally or via import
+    }
+    triggerLeftFlash() // Trigger the flash for the left indicator
   })
 
   useShortcut('ArrowRight', () => {
     const video = document.querySelector('.webplayer-internal-video')
-    seekRight(video as HTMLVideoElement)
-
-    setRight(true)
-
-    window.clearTimeout(rightTimer.current)
-    rightTimer.current = window.setTimeout(() => {
-      setRight(false)
-    }, 1000)
+    if (video instanceof HTMLVideoElement) {
+      seekRight(video) // Assumes seekRight is available globally or via import
+    }
+    triggerRightFlash() // Trigger the flash for the right indicator
   })
 
   return (
     <>
-      <SeekLeft state={left} />
-      <SeekRight state={right} />
+      <SeekLeft state={isLeftVisible} />
+      <SeekRight state={isRightVisible} />
     </>
   )
 }

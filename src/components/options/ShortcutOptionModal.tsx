@@ -1,8 +1,9 @@
 // Removed React, useEffect, useState from imports
 import style from './ShortcutOptionModal.module.css'
 
-import { getKeyBindings, type KeyBindings, setKeyBindings } from '@/types/options'
+import { type KeyBindings, setKeyBindings } from '@/types/options' // Removed getKeyBindings
 import { useModal } from '@/components/ui/Modal'
+import { useKeyBinding } from '@/hooks/useKeyBinding' // Import the new hook
 
 const sanitizeKey = (key: string): string => {
   const isKorean = /[ㄱ-ㅎ|ㅏ-ㅣ]/.test(key)
@@ -63,22 +64,22 @@ export function KeyPendingModal ({ optionID }: { optionID: keyof KeyBindings }):
   )
 }
 
+/**
+ * Displays a single shortcut key setting, including its name, current key, and a button to change it.
+ * Uses the useKeyBinding hook to fetch and display the current key.
+ */
 function ShortcutKey ({ keyName, optionID }: { keyName: string, optionID: keyof KeyBindings }): React.ReactNode {
-  const [key, setKey] = useState<string>('')
-
-  useEffect(() => {
-    getKeyBindings()
-      .then(
-        (keyBind) => {
-          setKey(keyBind[optionID])
-        })
-      .catch(console.error)
-  }, [optionID]) // Added optionID to dependency array
+  // Use the useKeyBinding hook to get the current key and loading state for this specific optionID.
+  const { key, isLoading } = useKeyBinding(optionID)
 
   return (
     <div className={style.shortcutItem} onClick={(e) => { e.stopPropagation() }}>
       <div className={style.shortcutHeader}>
         <span className={style.shortcutKeyName}>{keyName}</span>
+        {/* Display the key. If isLoading, it will show the default and then update.
+            Alternatively, a loading indicator could be shown:
+            <span className={style.shortcutNowKey}>현재 설정 - {isLoading ? '로딩중...' : key}</span> 
+        */}
         <span className={style.shortcutNowKey}>현재 설정 - {key}</span>
       </div>
       <ShortcutSetButton optionID={optionID} />

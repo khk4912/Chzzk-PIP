@@ -1,9 +1,10 @@
-import { useEffect, useState, useRef, useCallback } from 'react'
+import { useRef, useCallback } from 'react' // Removed useEffect, useState
 import ReactDOM from 'react-dom'
 
-import { getKeyBindings } from '@/types/options'
+// Removed getKeyBindings as it's now used by useKeyBinding hook
 import { useShortcut } from '@/utils/hooks'
-import { useVideoElement } from '@/hooks/useVideoElement' // Import the moved hook
+import { useVideoElement } from '@/hooks/useVideoElement'
+import { useKeyBinding } from '@/hooks/useKeyBinding' // Import the new hook
 
 import PIPIcon from '@/assets/static/pip.svg?react'
 import DocumentPIPInside from './DocumentPIPInside'
@@ -11,8 +12,9 @@ import DocumentPIPInside from './DocumentPIPInside'
 import { usePictureInPicture } from './hooks/usePictureInPicture'
 
 function DocumentPIP ({ targetElementQuerySelector }: { targetElementQuerySelector: string }): JSX.Element {
-  const [key, setKey] = useState<string>('p')
-  const videoRef = useVideoElement(targetElementQuerySelector) // Use the imported hook
+  // Use the useKeyBinding hook to get the PIP shortcut key
+  const { key: pipKey, isLoading: isPipKeyLoading } = useKeyBinding('pip')
+  const videoRef = useVideoElement(targetElementQuerySelector)
   const { pipWindow, togglePictureInPicture, removeAudioTracks } = usePictureInPicture(videoRef)
 
   // 스트림 생성 및 오디오 트랙 제거
@@ -33,15 +35,10 @@ function DocumentPIP ({ targetElementQuerySelector }: { targetElementQuerySelect
     }
   }, [])
 
-  useEffect(() => {
-    getKeyBindings()
-      .then((res) => {
-        setKey(res.pip)
-      })
-      .catch(console.error)
-  }, [])
+  // The useEffect for fetching getKeyBindings is removed, now handled by useKeyBinding.
 
-  useShortcut(key, () => { handleClick().catch(console.error) })
+  // useShortcut will automatically update if pipKey changes.
+  useShortcut(pipKey, () => { handleClick().catch(console.error) })
 
   return (
     <>
@@ -49,7 +46,11 @@ function DocumentPIP ({ targetElementQuerySelector }: { targetElementQuerySelect
         onClick={() => { handleClick().catch(console.error) }}
         className='pzp-button pzp-setting-button pzp-pc-setting-button pzp-pc__setting-button cheese-pip-plus-button'
       >
-        <span className='pzp-button__tooltip pzp-button__tooltip--top'>PIP+ ({key})</span>
+        {/* Display the pipKey. If isPipKeyLoading, it will show the default then update.
+            A loading indicator could be added:
+            <span className='pzp-button__tooltip pzp-button__tooltip--top'>PIP+ ({isPipKeyLoading ? '...' : pipKey})</span>
+        */}
+        <span className='pzp-button__tooltip pzp-button__tooltip--top'>PIP+ ({pipKey})</span>
         <span className='pzp-ui-icon pzp-pc-setting-button__icon'>
           <PIPIcon />
         </span>

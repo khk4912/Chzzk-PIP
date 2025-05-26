@@ -1,29 +1,13 @@
-import ReactDOM from 'react-dom' // Removed useEffect, useMemo, useState
-import { FollowApiResponse, FollowingItem } from '@/types/follows'
-import { getFavorites, removeFavorite } from '@/types/options'
-
-const getFollowedChannels = async (): Promise<FollowApiResponse> => {
-  const res = await fetch(
-    'https://api.chzzk.naver.com/service/v1/channels/followings?page=0&size=505&sortType=FOLLOW',
-    { credentials: 'include' }
-  )
-  // check 401
-  if (res.status !== 200) {
-    return {
-      code: res.status,
-      message: 'Error',
-      content: {
-        totalCount: 0,
-        totalPage: 0,
-        followingList: []
-      }
-    }
-  }
-
-  return (await res.json()) as FollowApiResponse
-}
+import ReactDOM from 'react-dom'
+// Removed FollowingItem, getFavorites, removeFavorite imports as they are now handled by useFavorites hook.
+// Unimport will handle useState, useEffect for FavoritesListPortal and the isExpanded logic if still used there.
+import type { FollowingItem } from '@/types/follows'
+import { useFavorites } from '@/hooks/useFavorites' // Import the new hook
 
 export function FavoritesListPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {
+  // useMemo and useEffect for portal div creation can remain if unimport handles them.
+  // Otherwise, explicit imports might be needed if unimport is not configured for them.
+  // For this refactor, we assume unimport handles useState, useEffect, useMemo if they are used here.
   const div = useMemo(() => {
     const el = document.createElement('div')
     el.id = 'cheese-pip-favorites-list'
@@ -49,68 +33,25 @@ export function FavoritesListPortal ({ tg }: { tg: Element | undefined }): React
   return ReactDOM.createPortal(<FavoritesList />, div)
 }
 
+/**
+ * Renders the list of favorite channels.
+ * It uses the useFavorites hook to fetch and manage favorite channel data.
+ * The component also observes the navigation panel's expanded state to adjust its rendering.
+ */
 function FavoritesList (): React.ReactElement | null {
-  const [isExpanded, setIsExpanded] = useState(true)
-  const [favoriteChannels, setFavoriteChannels] = useState<FollowingItem[]>([])
+  const [isExpanded, setIsExpanded] = useState(true) // State for UI presentation
+  const { favoriteChannels, isLoading, error } = useFavorites() // Use the new hook
 
-  const fetchFavorites = async () => {
-    try {
-      const favorites = await getFavorites()
-      const res = await getFollowedChannels()
-      const followingChannels = res.content.followingList
-
-      // 즐겨찾기에 추가된 채널만 필터링
-      const favoriteChannels = followingChannels.filter(channel => favorites.has(channel.channelId))
-
-      // favorites 에는 있지만, followingChannels 에는 없는 경우 favorites에서 삭제
-      const followingChannelIds = followingChannels.map(channel => channel.channelId)
-      const toRemove = [...favorites].filter(channelId => !followingChannelIds.includes(channelId))
-
-      await Promise.all(toRemove.map(channelId => removeFavorite(channelId)))
-      toRemove.forEach(channelId => favorites.delete(channelId))
-
-      // openLive 가 true 인 채널을 위로 정렬
-      favoriteChannels.sort((a, _) => (a.streamer.openLive ? -1 : 1))
-      setFavoriteChannels(favoriteChannels)
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  useEffect(() => {
-    const interval = setInterval(() => { fetchFavorites().catch(console.error) }, 30000)
-
-    return () => {
-      window.clearInterval(interval)
-    }
-  }, [])
-
-  useEffect(() => {
-    const storageChanged = (changes: { [key: string]: chrome.storage.StorageChange }, areaName: string) => {
-      if (areaName !== 'local') return
-
-      if (changes.favorites) {
-        fetchFavorites().catch(console.error)
-      }
-    }
-
-    fetchFavorites().catch(console.error)
-
-    // storage change event listener 등록
-    chrome.storage.onChanged.addListener(storageChanged)
-
-    return () => {
-      chrome.storage.onChanged.removeListener(storageChanged)
-    }
-  }, [])
-
-  // Removed redundant useEffect that called fetchFavorites every 300 seconds.
-  // The existing 30-second interval and storage listener should be sufficient.
-
+  // Effect for observing navigation panel's expanded state (UI specific)
   useEffect(() => {
     const targetNav = document.querySelector('nav#navigation')
-    if (!targetNav) return
+    if (!targetNav) {
+      // If targetNav is not found, perhaps set isExpanded to a default or handle appropriately
+      setIsExpanded(false) // Example: default to collapsed if nav not found
+      return
+    }
 
+    // Set initial state based on current class
     setIsExpanded(targetNav.className.includes('is_expanded'))
 
     const observer = new MutationObserver(() => {
@@ -119,9 +60,39 @@ function FavoritesList (): React.ReactElement | null {
     observer.observe(targetNav, { attributes: true, attributeFilter: ['class'] })
 
     return () => observer.disconnect()
-  }, [])
+  }, []) // Empty dependency array: runs once on mount
 
-  if (favoriteChannels.length === 0) return null
+  if (isLoading) {
+    // Optional: Render a specific loading indicator for the favorites list itself
+    // For now, returning null or a minimal placeholder if it's part of a larger loading UI.
+    // If isExpanded is true, show a loading message.
+    return isExpanded ? (
+      <div className={`navigator_wrapper__ruh6f ${isExpanded ? 'navigator_is_expanded__4Q1h9' : ''}`} style={{ paddingBottom: isExpanded ? '5px' : '' }}>
+        <div className='navigator_header__inwmE'>
+          <h2 className='navigator_title__9RhVJ'>즐겨찾기 로딩 중...</h2>
+        </div>
+      </div>
+    ) : null;
+  }
+
+  if (error) {
+    // Optional: Render a specific error message
+    console.error('Error in FavoritesList:', error.message)
+    return isExpanded ? (
+      <div className={`navigator_wrapper__ruh6f ${isExpanded ? 'navigator_is_expanded__4Q1h9' : ''}`} style={{ paddingBottom: isExpanded ? '5px' : '' }}>
+        <div className='navigator_header__inwmE'>
+          <h2 className='navigator_title__9RhVJ'>즐겨찾기 오류</h2>
+        </div>
+        <p style={{ padding: '0 10px', color: 'red' }}>{error.message}</p>
+      </div>
+    ) : null;
+  }
+
+  if (favoriteChannels.length === 0) {
+    // If there are no favorite channels, don't render the section.
+    // Optionally, a "No favorites yet" message could be shown if isExpanded.
+    return null
+  }
 
   return (
     <div className={`navigator_wrapper__ruh6f ${isExpanded ? 'navigator_is_expanded__4Q1h9' : ''}`} style={{ paddingBottom: isExpanded ? '5px' : '' }}>
