@@ -5,8 +5,6 @@ import './seek.css'
 import LeftSVG from '@/assets/static/seek_left.svg?react'
 import RightSVG from '@/assets/static/seek_right.svg?react'
 
-import { waitForElement } from '@/entrypoints/content/inject_btn'
-
 function SeekLeft ({ state }: { state: boolean }): React.ReactNode {
   return (
     <div className='chzzk-seek-overlay seek-left' style={{ opacity: Number(state) }}>
@@ -26,21 +24,21 @@ function SeekRight ({ state }: { state: boolean }): React.ReactNode {
 }
 
 export function SeekPortal (): React.ReactNode {
-  const [target, setTarget] = useState<Element | null>(null)
+  const target = usePortal({
+    id: 'chzzk-seek-portal',
+    targetSelector: '.pzp-command-icon',
+    position: 'after'
+  })
 
-  useEffect(() => {
-    waitForElement('.pzp-command-icon')
-      .then(
-        (element) => {
-          const div = document.createElement('div')
-          div.id = 'chzzk-seek-portal'
+  return (
+    <SeekPortalContainer target={target}>
+      <Seek />
+    </SeekPortalContainer>
+  )
+}
 
-          element.insertAdjacentElement('afterend', div)
-          setTarget(div)
-        }).catch(console.error)
-  }, [])
-
-  return target === null ? target : ReactDOM.createPortal(<Seek />, target)
+function SeekPortalContainer ({ target, children }: { target: Element | null, children: React.ReactNode }) {
+  return target ? ReactDOM.createPortal(children, target) : null
 }
 
 /**

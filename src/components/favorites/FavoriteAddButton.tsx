@@ -1,4 +1,3 @@
-import { useEffect, useMemo, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { addFavorite, getFavorites, removeFavorite } from '@/types/options'
 
@@ -24,29 +23,22 @@ const StarIcon = ({ fill = StrokeColor.dark, checked = false } : { fill?: string
     </svg>
   </>
 
-export function FavoritesButtonPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {
-  const div = useMemo(() => {
-    const el = document.createElement('div')
-    el.id = 'cheese-pip-favorites-add-button'
-    return el
-  }, [])
+export function FavoritesButtonPortal (): React.ReactNode {
+  const target = usePortal({
+    id: 'cheese-pip-favorites-add-button',
+    targetSelector: '[class*="video_information_alarm"], [class*="channel_profile_alarm"]',
+    position: 'before'
+  })
 
-  useEffect(() => {
-    if (tg === undefined) {
-      return
-    }
+  return (
+    <FavoritesPortalContainer target={target}>
+      <FavoritesButton />
+    </FavoritesPortalContainer>
+  )
+}
 
-    tg.parentNode?.insertBefore(div, tg)
-    return () => {
-      div.remove()
-    }
-  }, [tg, div])
-
-  if (tg === undefined) {
-    return null
-  }
-
-  return ReactDOM.createPortal(<FavoritesButton />, div)
+function FavoritesPortalContainer ({ target, children }: { target: Element | null, children: React.ReactNode }) {
+  return target ? ReactDOM.createPortal(children, target) : null
 }
 
 function FavoritesButton () {

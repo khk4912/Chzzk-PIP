@@ -1,15 +1,22 @@
 import ReactDOM from 'react-dom'
+import DocumentPIP from './DocumentPIP'
 
-export function PIPPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {
-  if (tg === undefined) {
-    return null
-  }
+export function PIPPortal (): React.ReactNode {
+  const target = usePortal({
+    id: 'cheese-pip-pip-button',
+    targetSelector: '.pzp-pc__bottom-buttons-right',
+    position: 'prepend'
+  })
 
-  const div = document.createElement('div')
-  div.id = 'cheese-pip-pip-button'
+  return (
+    <PIPPortalContainer target={target}>
+      <DocumentPIP targetElementQuerySelector='video' />
+    </PIPPortalContainer>
+  )
+}
 
-  tg.insertBefore(div, tg.firstChild)
-  return ReactDOM.createPortal(<DocumentPIP targetElementQuerySelector='video' />, div)
+function PIPPortalContainer ({ target, children }: { target: Element | null, children: React.ReactNode }) {
+  return target ? ReactDOM.createPortal(children, target) : null
 }
 
 /**

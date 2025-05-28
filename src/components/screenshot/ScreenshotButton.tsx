@@ -3,18 +3,22 @@ import ReactDOM from 'react-dom'
 import ScreenshotIcon from '@/assets/static/screenshot.svg?react'
 import { getKeyBindings, getOption } from '@/types/options'
 
-import { useEffect, useState } from 'react'
+export function ScreenShotPortal (): React.ReactNode {
+  const target = usePortal({
+    id: 'chzzk-screenshot-portal',
+    targetSelector: '.pzp-pc__bottom-buttons-right',
+    position: 'prepend'
+  })
 
-export function ScreenShotPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {
-  if (tg === undefined) {
-    return null
-  }
+  return (
+    <ScreenShotPortalContainer target={target}>
+      <ScreenshotButton />
+    </ScreenShotPortalContainer>
+  )
+}
 
-  const div = document.createElement('div')
-  div.id = 'cheese-pip-screenshot-button'
-
-  tg.insertBefore(div, tg.firstChild)
-  return ReactDOM.createPortal(<ScreenshotButton />, div)
+function ScreenShotPortalContainer ({ target, children }: { target: Element | null, children: React.ReactNode }) {
+  return target ? ReactDOM.createPortal(children, target) : null
 }
 
 /**

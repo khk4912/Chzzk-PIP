@@ -6,7 +6,7 @@ const contentScript = defineContentScript({
   allFrames: true,
   main (_) {
     injectButton() // .catch(console.error)
-    injectFavoriteListComponent()
+    // injectFavoriteListComponent()
   }
 })
 

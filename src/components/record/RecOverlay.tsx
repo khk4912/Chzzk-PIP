@@ -37,22 +37,30 @@ function RecordOverlay (): React.ReactNode {
 }
 
 export function RecordOverlayPortal (): React.ReactNode {
-  // const target = document.querySelector('[class^=live_information_player_area]')
   const target = document.querySelector('.header_info')
-
-  const overlay = document.createElement('div')
-  overlay.id = 'timer-wrapper'
-  target?.insertBefore(overlay, target.firstChild)
-
-  useEffect(() => {
-    return () => {
-      overlay.remove()
-    }
-  })
 
   if (target === null) {
     return null
   }
 
-  return ReactDOM.createPortal(<RecordOverlay />, overlay)
+  const overlay = document.createElement('div')
+  overlay.id = 'timer-wrapper'
+  target.insertBefore(overlay, target.firstChild)
+
+  return (
+    <RecordOverlayPortalContainer target={overlay}>
+      <RecordOverlay />
+    </RecordOverlayPortalContainer>
+  )
+}
+
+// Portal 컨테이너 컴포넌트
+function RecordOverlayPortalContainer ({ target, children }: { target: HTMLElement, children: React.ReactNode }) {
+  useEffect(() => {
+    return () => {
+      target.remove()
+    }
+  }, [target])
+
+  return ReactDOM.createPortal(children, target)
 }

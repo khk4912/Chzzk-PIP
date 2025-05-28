@@ -1,19 +1,26 @@
+import { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import RecIcon from '@/assets/static/rec.svg?react'
 
 import { RecordOverlayPortal } from './RecOverlay'
 import { getKeyBindings } from '@/types/options'
 
-export function RecordPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {
-  if (tg === undefined) {
-    return null
-  }
+export function RecordPortal (): React.ReactNode {
+  const target = usePortal({
+    id: 'chzzk-record-portal',
+    targetSelector: '.pzp-pc__bottom-buttons-right',
+    position: 'prepend',
+  })
 
-  const div = document.createElement('div')
-  div.id = 'cheese-pip-rec-button'
+  return (
+    <RecordPortalContainer target={target}>
+      <RecordButton />
+    </RecordPortalContainer>
+  )
+}
 
-  tg.insertBefore(div, tg.firstChild)
-  return ReactDOM.createPortal(<RecordButton />, div)
+function RecordPortalContainer ({ target, children }: { target: Element | null, children: React.ReactNode }) {
+  return target ? ReactDOM.createPortal(children, target) : null
 }
 
 /**

@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FollowApiResponse, FollowingItem } from '@/types/follows'
 import { getFavorites, removeFavorite } from '@/types/options'
 
@@ -24,30 +24,29 @@ const getFollowedChannels = async (): Promise<FollowApiResponse> => {
   return (await res.json()) as FollowApiResponse
 }
 
-export function FavoritesListPortal ({ tg }: { tg: Element | undefined }): React.ReactNode {
-  const div = useMemo(() => {
-    const el = document.createElement('div')
-    el.id = 'cheese-pip-favorites-list'
+export function FavoritesListPortal (): React.ReactNode {
+  const target = usePortal({
+    id: 'cheese-pip-favorites-list',
+    targetSelector: '[class^="header_service"]',
+    position: 'after'
+  })
 
-    return el
-  }, [])
+  return (
+    <FavoritesListPortalContainer target={target}>
+      <FavoritesList />
+    </FavoritesListPortalContainer>
+  )
+}
 
+// Portal 컨테이너 컴포넌트
+function FavoritesListPortalContainer ({ target, children }: { target: HTMLElement, children: React.ReactNode }) {
   useEffect(() => {
-    if (tg === undefined) {
-      return
-    }
-
-    tg.parentNode?.insertBefore(div, tg.nextSibling)
     return () => {
-      div.remove()
+      target.remove()
     }
-  }, [tg, div])
+  }, [target])
 
-  if (tg === undefined) {
-    return null
-  }
-
-  return ReactDOM.createPortal(<FavoritesList />, div)
+  return ReactDOM.createPortal(children, target)
 }
 
 function FavoritesList (): React.ReactElement | null {

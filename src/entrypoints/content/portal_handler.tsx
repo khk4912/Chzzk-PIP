@@ -1,8 +1,16 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 
-import type { DEFAULT_OPTIONS } from '@/types/options'
 import { getOption } from '@/types/options'
-import { waitForElement } from './inject_btn'
+import type { DEFAULT_OPTIONS } from '@/types/options'
+
+const SELECTORS = {
+  FAVORITE_BUTTON: '[class*="video_information_alarm"], [class*="channel_profile_alarm"]',
+  CONTROL_BUTTONS: '.pzp-pc__bottom-buttons-right'
+} as const
+
+const DELAYS = {
+  PREFER_HQ: 1000
+} as const
 
 /**
  * InjectButtons component
@@ -12,66 +20,81 @@ import { waitForElement } from './inject_btn'
  * @returns 주입될 버튼 컴포넌트
  */
 export function InjectButtons (): React.ReactNode {
-  const [target, setTarget] = useState<Element | undefined>(undefined)
-  const [favoriteButtonTarget, setFavoriteButtonTarget] = useState<Element | undefined>(undefined)
   const [options, setOptions] = useState<typeof DEFAULT_OPTIONS>()
 
+  // DOM 요소 targeting
+  const controlTarget = useElementTarget(SELECTORS.CONTROL_BUTTONS)
+
+  // 페이지 타입 확인
+  const pageType = usePageType()
+
+  // 옵션 로드
   useEffect(() => {
     getOption()
       .then(setOptions)
       .catch(console.error)
   }, [])
 
-  // 즐겨찾기 추가 버튼
-  useEffect(() => {
-    if (favoriteButtonTarget === undefined) {
-      waitForElement('[class*="video_information_alarm"], [class*="channel_profile_alarm"]')
-        .then(setFavoriteButtonTarget)
-        .catch(console.error)
-    }
-  }, [favoriteButtonTarget])
+  // monekypatching
+  useSeekScript(options?.seek ?? false, controlTarget !== undefined)
 
-  useEffect(() => {
-    if (target === undefined) {
-      waitForElement('.pzp-pc__bottom-buttons-right')
-        .then(setTarget)
-        .then(() => {
-          getOption().then(
-            (options) => {
-              if (options.seek) {
-                const script = document.createElement('script')
-                script.src = chrome.runtime.getURL('monkeypatch/seek.js')
-                document.body.appendChild(script)
-              }
-            }
-          ).catch(console.error)
-        })
-        .catch(console.error)
-    }
-  }, [target])
+  // 최고 화질 선호 설정
+  usePreferHQ(options?.preferHQ ?? false)
 
-  // Inject preferHQ
-  useEffect(() => {
-    setTimeout(() => {
-      if ((options?.preferHQ) ?? false) {
-        setMaxHQ()
-          .catch(console.info)
-      }
-    }, 1000)
-  }, [options?.preferHQ])
+  const shouldShowFavorites = options?.favorites
+  const shouldShowSeek = (options?.seek ?? false) && !(pageType.isVOD || pageType.isClip)
+  const shouldShowVideoControls = pageType.isLive || pageType.isVOD
+  const shouldShowPIP = (options?.pip ?? false) && pageType.isLive
+  const shouldShowScreenshot = (options?.screenshot ?? false) && !pageType.isClip
+  const shouldShowRecord = options?.rec ?? false
 
   return (
     <>
-      {/* {(isVODPage() || isClipPage()) && <DownloadPortal tg={target} />} */}
-      {(options?.favorites) && <FavoritesButtonPortal tg={favoriteButtonTarget} />}
-      {((options?.seek) ?? false) && (!(isVODPage() || isClipPage())) && <SeekPortal />}
+      {/* 즐겨찾기 버튼 */}
+      {shouldShowFavorites && <FavoritesButtonPortal />}
+      {shouldShowFavorites && <FavoritesListPortal />}
 
-      {(isLivePage() || isVODPage()) &&
+      {/* Seek 포털 */}
+      {shouldShowSeek && <SeekPortal />}
+
+      {/* Buttons */}
+      {shouldShowVideoControls && (
         <>
-          {((options?.pip) ?? false) && isLivePage() && <PIPPortal tg={target} />}
-          {((options?.screenshot) ?? false) && !isClipPage() && <ScreenShotPortal tg={target} />}
-          {((options?.rec) ?? false) && <RecordPortal tg={target} />}
-        </>}
+          {shouldShowPIP && <PIPPortal />}
+          {shouldShowScreenshot && <ScreenShotPortal />}
+          {shouldShowRecord && <RecordPortal />}
+        </>
+      )}
     </>
   )
+}
+
+function useSeekScript (enabled: boolean, targetReady: boolean) {
+  useEffect(() => {
+    if (!enabled || !targetReady) return
+
+    const script = document.createElement('script')
+    script.src = chrome.runtime.getURL('monkeypatch/seek.js')
+    document.body.appendChild(script)
+  }, [enabled, targetReady])
+}
+
+function usePreferHQ (enabled: boolean) {
+  useEffect(() => {
+    if (!enabled) return
+
+    const timer = setTimeout(() => {
+      setMaxHQ().catch(console.info)
+    }, DELAYS.PREFER_HQ)
+
+    return () => clearTimeout(timer)
+  }, [enabled])
+}
+
+function usePageType () {
+  return useMemo(() => ({
+    isLive: isLivePage(),
+    isVOD: isVODPage(),
+    isClip: isClipPage()
+  }), [])
 }
