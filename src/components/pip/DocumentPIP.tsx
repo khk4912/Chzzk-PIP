@@ -11,15 +11,11 @@ import { usePictureInPicture } from './hooks/usePictureInPicture'
 
 function useVideoElement (selector: string) {
   const videoRef = useRef<HTMLVideoElement | null>(null)
+  const video = useElementTarget(selector) as HTMLVideoElement | null
 
   useEffect(() => {
-    const element = document.querySelector(selector)
-    if (element instanceof HTMLVideoElement) {
-      videoRef.current = element
-    } else {
-      videoRef.current = null
-    }
-  }, [selector])
+    videoRef.current = video
+  }, [video])
 
   return videoRef
 }
@@ -39,10 +35,13 @@ function DocumentPIP ({ targetElementQuerySelector }: { targetElementQuerySelect
   }, [togglePictureInPicture])
 
   useEffect(() => {
-    const button = document.querySelector('.pzp-button.pzp-pip-button')
-    if (button !== null) {
-      button.remove()
-    }
+    waitForElement('.pzp-button.pzp-pip-button')
+      .then((button) => {
+        if (button !== null) {
+          button.remove()
+        }
+      })
+      .catch(console.log)
   }, [])
 
   useEffect(() => {
@@ -52,6 +51,14 @@ function DocumentPIP ({ targetElementQuerySelector }: { targetElementQuerySelect
       })
       .catch(console.error)
   }, [])
+
+  useEffect(() => {
+    return () => {
+      if (pipWindow) {
+        pipWindow.close()
+      }
+    }
+  })
 
   useShortcut(key, () => { handleClick().catch(console.error) })
 
@@ -68,11 +75,11 @@ function DocumentPIP ({ targetElementQuerySelector }: { targetElementQuerySelect
       </button>
 
       <PIPContainer pipWindow={pipWindow}>
-        <DocumentPIPInside
+        {videoRef.current && <DocumentPIPInside
           originalVideo={videoRef.current}
           originalDocument={document}
           stream={processedStream}
-        />
+                             />}
       </PIPContainer>
     </>
   )

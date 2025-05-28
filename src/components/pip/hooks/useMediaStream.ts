@@ -9,7 +9,7 @@ interface UseMediaStreamProps {
 export function useMediaStream ({ videoRef, originalVideo, mediaStream }: UseMediaStreamProps) {
   // PIP Video 초기화
   useEffect(() => {
-    if (originalVideo === null) {
+    if (!originalVideo || !videoRef.current) {
       return
     }
 
@@ -38,7 +38,7 @@ export function useMediaStream ({ videoRef, originalVideo, mediaStream }: UseMed
     }
 
     const handleSourceChange = () => {
-      if (videoRef.current) {
+      if (videoRef.current && originalVideo) {
         const newStream = originalVideo.captureStream?.()
 
         if (newStream) {
