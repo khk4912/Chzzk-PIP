@@ -25,7 +25,6 @@
     "wxt.config.ts",
     "web-ext.config.ts",
     "cheese-pip.d.ts",
-    "custom-plugins.ts",
     ".wxt/types/*.d.ts"
   ]
 }
