@@ -20,8 +20,6 @@ const DELAYS = {
  * @returns 주입될 버튼 컴포넌트
  */
 export function InjectButtons (): React.ReactNode {
-  const [options, setOptions] = useState<typeof DEFAULT_OPTIONS>()
-
   // DOM 요소 targeting
   const controlTarget = useElementTarget(SELECTORS.CONTROL_BUTTONS)
 
@@ -29,11 +27,7 @@ export function InjectButtons (): React.ReactNode {
   const pageType = usePageType()
 
   // 옵션 로드
-  useEffect(() => {
-    getOption()
-      .then(setOptions)
-      .catch(console.error)
-  }, [])
+  const { options } = useOptions()
 
   // monekypatching
   useSeekScript(options?.seek ?? false, controlTarget !== undefined)
