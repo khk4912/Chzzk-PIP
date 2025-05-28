@@ -18,7 +18,11 @@ export default function App (): React.ReactNode {
             <Option.CheckButton optionID='screenshot' />
           </Option>
           <Option>
-            <Option.Header title='방향키 탐색' desc='방향키를 이용하여 방송의 이전 내용으로 돌아갈 수 있습니다.' />
+            <Option.Header
+              title='방향키 탐색'
+              desc='방향키를 이용하여 방송의 이전 내용으로 돌아갈 수 있습니다.
+                   (타임머신 기능과 충돌이 있을 수 있어요.)'
+            />
             <Option.CheckButton optionID='seek' />
           </Option>
           <Option>
