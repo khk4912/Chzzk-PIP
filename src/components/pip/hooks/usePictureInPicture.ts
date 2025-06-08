@@ -29,7 +29,6 @@ export function usePictureInPicture (videoRef: React.RefObject<HTMLVideoElement>
 
       // 비디오 요소가 없으면 중단
       if (!videoRef.current) {
-        console.warn('비디오 요소를 찾을 수 없습니다.')
         return
       }
 
