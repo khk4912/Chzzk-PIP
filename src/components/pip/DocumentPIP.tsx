@@ -9,9 +9,9 @@ import DocumentPIPInside from './DocumentPIPInside'
 
 import { usePictureInPicture } from './hooks/usePictureInPicture'
 
-function useVideoElement (selector: string) {
+function useVideoElement () {
   const videoRef = useRef<HTMLVideoElement | null>(null)
-  const video = useElementTarget(selector) as HTMLVideoElement | null
+  const video = useElementTarget('.webplayer-internal-video:not(.knife-preview .webplayer-internal-video)') as HTMLVideoElement | null
 
   useEffect(() => {
     videoRef.current = video
@@ -20,9 +20,9 @@ function useVideoElement (selector: string) {
   return videoRef
 }
 
-function DocumentPIP ({ targetElementQuerySelector }: { targetElementQuerySelector: string }): JSX.Element {
+function DocumentPIP (): JSX.Element {
   const [key, setKey] = useState<string>('p')
-  const videoRef = useVideoElement(targetElementQuerySelector)
+  const videoRef = useVideoElement()
   const { pipWindow, togglePictureInPicture, removeAudioTracks } = usePictureInPicture(videoRef)
 
   // 스트림 생성 및 오디오 트랙 제거

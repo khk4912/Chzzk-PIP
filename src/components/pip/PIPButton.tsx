@@ -10,7 +10,7 @@ export function PIPPortal (): React.ReactNode {
 
   return (
     <PIPPortalContainer target={target}>
-      <DocumentPIP targetElementQuerySelector='.webplayer-internal-video' />
+      <DocumentPIP />
     </PIPPortalContainer>
   )
 }
