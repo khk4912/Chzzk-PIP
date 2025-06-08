@@ -73,12 +73,12 @@ function FavoritesList (): React.ReactElement | null {
       favoriteChannels.sort((a, _) => (a.streamer.openLive ? -1 : 1))
       setFavoriteChannels(favoriteChannels)
     } catch (error) {
-      console.error(error)
+      console.log(error)
     }
   }
 
   useEffect(() => {
-    const interval = setInterval(() => { fetchFavorites().catch(console.error) }, 30000)
+    const interval = setInterval(() => { fetchFavorites().catch(console.log) }, 30000)
 
     return () => {
       window.clearInterval(interval)
@@ -90,11 +90,11 @@ function FavoritesList (): React.ReactElement | null {
       if (areaName !== 'local') return
 
       if (changes.favorites) {
-        fetchFavorites().catch(console.error)
+        fetchFavorites().catch(console.log)
       }
     }
 
-    fetchFavorites().catch(console.error)
+    fetchFavorites().catch(console.log)
 
     // storage change event listener 등록
     chrome.storage.onChanged.addListener(storageChanged)
