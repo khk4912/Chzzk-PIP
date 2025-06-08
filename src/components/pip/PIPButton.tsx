@@ -4,8 +4,8 @@ import DocumentPIP from './DocumentPIP'
 export function PIPPortal (): React.ReactNode {
   const target = usePortal({
     id: 'cheese-pip-pip-button',
-    targetSelector: '.pzp-pc__bottom-buttons-right',
-    position: 'prepend'
+    targetSelector: '.custom__clip-button',
+    position: 'before'
   })
 
   return (
