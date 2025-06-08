@@ -1,7 +1,4 @@
-import { useEffect, useState, useMemo } from 'react'
-
-import { getOption } from '@/types/options'
-import type { DEFAULT_OPTIONS } from '@/types/options'
+import { useEffect, useMemo } from 'react'
 
 const SELECTORS = {
   FAVORITE_BUTTON: '[class*="video_information_alarm"], [class*="channel_profile_alarm"]',
@@ -46,7 +43,6 @@ export function InjectButtons (): React.ReactNode {
     <>
       {/* 즐겨찾기 버튼 */}
       {shouldShowFavorites && <FavoritesButtonPortal />}
-      {shouldShowFavorites && <FavoritesListPortal />}
 
       {/* Seek 포털 */}
       {shouldShowSeek && <SeekPortal />}
