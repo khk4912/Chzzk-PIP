@@ -9,6 +9,7 @@
 .chzzk-seek-overlay {
   position: absolute;
   height: 30%;
+  max-height: 180px;
   aspect-ratio: 1 / 1;
   background-color: rgba(0, 0, 0, 0.6);
   top: 35%;

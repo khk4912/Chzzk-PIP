@@ -82,4 +82,4 @@ async function waitForElement (selector, threshold = 3000) {
   })
 }
 
-patchPlayer().catch(console.error)
+// patchPlayer().catch(console.error)
