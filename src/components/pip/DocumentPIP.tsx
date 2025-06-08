@@ -75,11 +75,12 @@ function DocumentPIP ({ targetElementQuerySelector }: { targetElementQuerySelect
       </button>
 
       <PIPContainer pipWindow={pipWindow}>
-        {videoRef.current && <DocumentPIPInside
-          originalVideo={videoRef.current}
-          originalDocument={document}
-          stream={processedStream}
-                             />}
+        {videoRef.current &&
+          <DocumentPIPInside
+            originalVideo={videoRef.current}
+            originalDocument={document}
+            stream={processedStream}
+          />}
       </PIPContainer>
     </>
   )
