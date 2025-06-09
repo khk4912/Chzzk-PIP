@@ -105,11 +105,6 @@ function FavoritesList (): React.ReactElement | null {
   }, [])
 
   useEffect(() => {
-    const interval = setInterval(() => { fetchFavorites().catch(console.error) }, 300000)
-    return () => clearInterval(interval)
-  }, [])
-
-  useEffect(() => {
     const targetNav = document.querySelector('nav#navigation')
     if (!targetNav) return
 
