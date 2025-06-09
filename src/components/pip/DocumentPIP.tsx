@@ -58,7 +58,7 @@ function DocumentPIP (): JSX.Element {
         pipWindow.close()
       }
     }
-  })
+  }, [pipWindow])
 
   useShortcut(key, () => { handleClick().catch(console.error) })
 
